@@ -157,3 +157,95 @@ function ReplaceText() {
   });
   alertMsg('#isfileload', 'green', 'Replace successful!');
 }
+
+// Chữ => Vị trí (あか => A1 A2)
+var HiraMap = {};
+var HiraTbl = [
+  'あかさたなはまらがざばぱや',
+  'いきしちにひみりぎじびぴゆ',
+  'うくすつぬふむるぐずぶぷよ',
+  'えけせてねへめれげぜべぺわ',
+  'おこそとのほもろごぞぼぽ',
+];
+var colLabels = '123456789ABCD'.split('');
+const rowLabels = 'ABCDE'.split('');
+for (let row = 0; row < HiraTbl.length; row++) {
+  const cols = HiraTbl[row].split('');
+  for (var col = 0; col < cols.length; col++) {
+    HiraMap[cols[col]] = rowLabels[row] + colLabels[col];
+  }
+}
+
+// Vị trí -> Chữ (A1 A2 => A F)
+var AbMap = {};
+const AbTbl = [
+  'A F K P U Z e j o t y 4 9',
+  'B G L Q V a f k p u z 5 0',
+  'C H M R W b g l q v 1 6 +',
+  'D I N S X c h m r w 2 7 ,',
+  'E J O T Y d i n s x 3 8',
+];
+
+for (let row = 0; row < AbTbl.length; row++) {
+  const cols = AbTbl[row].replace(/\s/g, '').split('');
+  for (var col = 0; col < cols.length; col++) {
+    AbMap[rowLabels[row] + colLabels[col]] = cols[col];
+  }
+}
+
+document.getElementById('pwdFile').addEventListener('change', function (event) {
+  pwdData = '';
+  const file = event.target.files[0];
+  if (!file) return;
+  if (file.type !== 'text/plain') {
+    alert('Chỉ chấp nhận file .txt');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    $('#pwdTxt').val(e.target.result);
+  };
+  reader.readAsText(file, 'utf-8');
+});
+
+function convertHira() {
+  var pwdTxt = $('#pwdTxt').val();
+  var pwdOut = [];
+  for (var r of pwdTxt.split('\n')) {
+    r = r.trim();
+    if (r.length == 24) {
+      var x = [];
+      r = r.replace(/\s/g, '');
+      x.push(r.substr(0, 2));
+      r = r.substr(2, r.length);
+      r.split('').forEach((v) => x.push(HiraMap[v] || v));
+      pwdOut.push(x.join(' '));
+    } else if (r.length == 56) {
+      var x = [];
+      r = r.split(' ');
+      r.forEach((v, i) => {
+        x.push(AbMap[v] || v);
+        [0, 5, 10, 15].includes(i) && x.push(' ');
+      });
+      pwdOut.push(x.join(''));
+    } else {
+      pwdOut.push(r);
+    }
+  }
+  $('#pwdTxt').val(pwdOut.join('\n'));
+}
+
+function copyDivContent() {
+  const cp = $('#copy');
+  const el = $('#pwdTxt');
+  navigator.clipboard
+    .writeText(el.val())
+    .then(() => {
+      cp.text('Copied...');
+      setTimeout(() => cp.text('Copy'), 2000);
+    })
+    .catch((err) => {
+      console.error('Lỗi khi copy: ', err);
+      alert('Không thể copy.');
+    });
+}

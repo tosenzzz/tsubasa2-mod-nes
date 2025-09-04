@@ -117,7 +117,7 @@ button {
     overflow: hidden;
     display: inline-block;
     *display: inline;
-    *zoom: 1
+    *zoom: 1;
 }
 
     .a-upload input {
@@ -127,14 +127,14 @@ button {
         top: 0;
         opacity: 0;
         filter: alpha(opacity=0);
-        cursor: pointer
+        cursor: pointer;
     }
 
     .a-upload:hover {
         color: #444;
         background: #eee;
         border-color: #ccc;
-        text-decoration: none
+        text-decoration: none;
     }
 
 .colorpanle {
@@ -144,7 +144,7 @@ button {
 ul, li {
     margin: 0;
     padding: 0;
-    list-style: none
+    list-style: none;
 }
 
 #menu li {
@@ -165,16 +165,18 @@ ul, li {
 #content {
     clear: left;
     position: relative;
-    top: -1px
+    top: -1px;
+    width: 100%;
 }
 
     #content li {
-        display: none
+        display: none;
+        width: 100%;
     }
 
-        #content li.c {
-            display: block
-        }
+    #content li.c {
+        display: block;
+    }
 
 .tab_content {
     border: 1px solid #999;
@@ -194,5 +196,5 @@ table, td {
 }
 
     #canvasmod:hover {
-        transform: scale(2)
+        transform: scale(2);
     }

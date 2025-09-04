@@ -18,9 +18,10 @@
 <body>
 	<div id="main">
 		<div>
-			<p style="font-size: 1.1em" id="updated_at">by tosenzzz 2025-09-04 10:57:37</p>
-			<a href="http://daymoe.com/rom/" rel="nofollow noopener noreferrer">RomMarket</a>&nbsp;
-			<a href="https://daymoe.com/rom/Hack%20CT2.html" rel="nofollow noopener noreferrer">Original</a><br>
+			<p style="font-size: 1.1em" id="updated_at">by tosenzzz 2025-09-04 21:27:22</p>
+			<a href="http://daymoe.com/rom/" target="_blank">RomMarket</a>&nbsp;
+			<a href="https://daymoe.com/rom/Hack%20CT2.html" target="_blank">Original</a>
+			<a href="https://www.marcrobledo.com/RomPatcher.js" target="_blank">Rom Patcher</a><br>
 
 			<a href="javascript:;" class="a-upload">Open File<input type="file" name="" id="Nesfileupload"
 					accept=".nes"></a>&nbsp;<span id="isfileload">Page Loading...</span><br>
@@ -44,6 +45,7 @@
 				<li class="ctab">CHR</li>
 				<li class="ctab">Patch</li>
 				<li class="ctab">Replace Text</li>
+				<li class="ctab">Password</li>
 				<li class="tabFocus ctab">About</li>
 			</ul>
 			<ul id="content">
@@ -156,6 +158,12 @@
 					<span id="replaceCnt"></span><br>
 					<span id="replaceRs"></span><br>
 					<button onclick="ReplaceText()">Replace Text </button>
+				</li>
+				<li class="ctab">
+					<input type="file" id="pwdFile" accept=".txt" /><br>
+					<textarea id="pwdTxt" rows="10" cols="50" placeholder="Nhập nội dung tại đây..."></textarea><br>
+					<button onclick="convertHira()">Convert あ=>A1=>A</button>
+					<button onclick="copyDivContent()" id="copy">Copy</button><br>
 				</li>
 				<li class="c ctab" style="pointer-events: auto;">
 					<span>On mobile, it’s recommended to use Chrome or Microsoft Edge.<br>Switching your phone to landscape
