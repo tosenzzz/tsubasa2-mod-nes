@@ -198,3 +198,19 @@ table, td {
     #canvasmod:hover {
         transform: scale(2);
     }
+
+#HexPreView tr:first-child pre, #HexPreView td:first-child pre {
+    color: #5f7bd7;
+}
+
+#HexPreView {
+    display: flex;
+    align-items: center;
+}
+#pgchange {
+    font-size: 30px;
+}
+#pgchange div {
+    cursor: pointer;
+    margin: 10px;
+}

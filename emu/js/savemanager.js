@@ -353,9 +353,10 @@
     let ui = document.createElement('div');
     ui.id = 'saveManagerUI';
     ui.style.position = 'fixed';
-    ui.style.top = '1%';
-    ui.style.left = '50%';
-    ui.style.transform = 'translateX(-50%)';
+    ui.style.top = '60px';
+    // ui.style.top = '1%';
+    // ui.style.left = '50%';
+    // ui.style.transform = 'translateX(-50%)';
     ui.style.background = '#fff';
     ui.style.border = '2px solid #888';
     ui.style.borderRadius = '8px';

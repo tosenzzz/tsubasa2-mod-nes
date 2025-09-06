@@ -88,7 +88,7 @@ function checkramtype(bytearry) {
     document.getElementById('ramtype').innerText = 'Ram Plus Type:RamCn768';
   }
   if (IsCn == true) {
-    document.getElementById('ramtype').innerText += ' 中文版';
+    document.getElementById('ramtype').innerText += ' Chinese version';
   }
   if (Is1v32 == true) {
     document.getElementById('ramtype').innerText = 'Ram Plus Type:1.32';
@@ -116,7 +116,7 @@ function ChangeTeam() {
     alertMsg('#isfileload', 'green', 'Team data updated successfully!');
   } else {
     var datas = (addteam_temp2 + addteam_temp3).split(' ');
-    var newaddr = $('#addteamusenewaddr').is(':checked');
+    var newaddr = $('#addTeamUseNewAddr').is(':checked');
     if (datas.length <= addteamdeflen || newaddr == false) {
       for (var i = 0; i < datas.length; i++) {
         NesHex[addteam_def_add + i] = parseInt(datas[i], 16);
@@ -173,7 +173,7 @@ function ChangeTeam() {
         ) {
           dz = ramcheck(defaddr, NesHex);
         } else {
-          dz = CheckTempaddr1(dz);
+          dz = CheckTempaddr1(dz) - 0x10;
         }
         开关索引1 = parseInt(toHex16(dz - 0x73000, 4).substr(2, 2), 16);
         开关索引2 = parseInt(toHex16(dz - 0x73000, 4).substr(0, 2), 16);
@@ -191,7 +191,7 @@ function ChangeTeam() {
         ) {
           dz = ramcheck(defaddr, NesHex);
         } else {
-          dz = CheckTempaddr2(dz);
+          dz = CheckTempaddr2(dz) - 0x10;
         }
 
         开关索引1 = parseInt(toHex16(dz, 4).substr(2, 2), 16);
@@ -257,7 +257,7 @@ function Add_TeamSelectChange() {
       selectitems[i].options[0].selected = true;
     }
   } catch {}
-  $('#addteamusenewaddr').prop('checked', false);
+  $('#addTeamUseNewAddr').prop('checked', false);
   addteamdeflen = 0;
   addteam_temp1 = '';
   addteam_temp2 = '';
@@ -408,9 +408,9 @@ function addteamclick() {
 
   var datas = (addteam_temp2 + addteam_temp3).split(' ');
   if (datas.length <= addteamdeflen) {
-    $('#addteamusenewaddr').prop('checked', false);
+    $('#addTeamUseNewAddr').prop('checked', false);
   } else {
-    $('#addteamusenewaddr').prop('checked', true);
+    $('#addTeamUseNewAddr').prop('checked', true);
   }
 }
 

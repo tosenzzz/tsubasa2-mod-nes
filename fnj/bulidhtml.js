@@ -225,7 +225,7 @@ function BulidHTML_Team_Player() {
 
   // Add team UI
   Team_player_list =
-    "<div id='addteam' style='float:left; display:none;'>Use free space <input id='addteamusenewaddr' type='checkbox'><br>";
+    "<div id='addteam' style='float:left; display:none;'>Use free space <input id='addTeamUseNewAddr' type='checkbox'><br>";
   for (var i = 11; i > 0; i--) {
     if (i == 1) {
       Team_player_list +=
@@ -348,8 +348,8 @@ function LoadPlayerEditHtml() {
     '<br><span>Notes:<br>- Mod preview loads only when a selection is chosen.<br>- From player #0x76 (Tsubasa Ozora) head model is not present.<br>- If preview image fails, click refresh again.<br></span>';
   $('#playeredit_a_0').html(htmlstr);
   $('#PlayerEditNameList').empty();
-  for (var i = 0; i < PlayerName.length; i++) {
-    fillSelectlist_x($('#PlayerEditNameList'), i, PlayerName[i]);
+  for (var i = 0; i < PlayerColorList.length; i++) {
+    fillSelectlist_x($('#PlayerEditNameList'), i, PlayerColorList[i]);
   }
   InputPlayerColorData('#PlayerSkincolourSe');
   InputPlayerColorData('#PlayerHaircolorSe');
@@ -852,22 +852,20 @@ function BulidInstructTabHtml() {
     "<div id='Instructedit_a_0'><div><span>Note: Aggressiveness/Power should not exceed 0xFC.<br>Stamina/One-two distance can be edited. Web version doesn’t show linked 0440/0443 data.<br>Command editing supports only original-address data.</span></div>";
   htmlstr +=
     "<div><span>Command Set:</span><select id='InstructList' onchange='GetInstruct();'>";
-  htmlstr = fillSelectlist_S(htmlstr, 指令文本);
-  htmlstr += '</select><br></div>';
+  htmlstr = fillSelectlist_S(htmlstr, AllSkills);
+  htmlstr += '</select> <span id="InstructTempText"></span><br></div>';
 
   htmlstr +=
-    "<div><span>Aggressiveness:</span><select id='InstructB' onchange='CheckInstructB();'>";
-  htmlstr = fillSelectlist_S_16(htmlstr, 0x100);
-  htmlstr += '</select><br></div>';
-
-  htmlstr += "<div><span>Power:</span><select id='InstructW'>";
-  htmlstr = fillSelectlist_S_16(htmlstr, 0x100);
-  htmlstr += '</select><br></div>';
+    "<div><span>Aggressiveness (0~255):</span><input id='InstructB' onchange='CheckInstructB();' type='number' min=0 max=255>";
+  htmlstr += '</input><br></div>';
 
   htmlstr +=
-    "<div><span>Stamina:</span><select id='InstructT' onchange='CheckInstructT();'>";
-  htmlstr = fillSelectlist_S_10(htmlstr, 501);
-  htmlstr += '</select></div>';
+    "<div><span>Power (0~255):</span><input id='InstructW' type='number' min=0 max=255>";
+  htmlstr += '</input><br></div>';
+
+  htmlstr +=
+    "<div><span>Stamina (0~500):</span><input id='InstructT' onchange='CheckInstructT();' type='number' min=0 max=500>";
+  htmlstr += '</input></div>';
 
   htmlstr +=
     "<div id='Instruct2_1DIV'><span>1-2 Distance:</span><select id='Instruct2_1' style='dispaly:none;'>";
@@ -875,16 +873,16 @@ function BulidInstructTabHtml() {
   htmlstr += '</select></div>';
 
   htmlstr +=
-    "<div><span>Skill Icon ↓</span><br><select id='skill__addr' onchange='getskillimgcode();'>";
+    "<div><span>Skill Image ↓</span><br><select id='skill__addr' onchange='getskillimgcode();'>";
   htmlstr = fillSelectlist_S(htmlstr, Skill_o_str);
   htmlstr += "</select><select id='skill__code'>";
   htmlstr = fillSelectlist_S(htmlstr, Skill_o_txt);
   htmlstr += '</select></div>';
-  htmlstr += "<span id='InstructTempText'></span>";
+  htmlstr += "<span id='PortraitTempText'></span>";
   htmlstr +=
     "<div><button onclick='ChangeInstruct();'>Apply Command Changes ↑</button></div></div>";
   htmlstr +=
-    "<div id='Instructedit_a_1'><div><span>Specials view/edit supports original & some hacks.</span></div><div><span>Special:</span><select id='SikllNameList' onchange='LoadSkills();'>";
+    "<div id='Instructedit_a_1'><div><span>Specials view/edit supports original & some hacks.</span></div><div><span>Player:</span><select id='PlayerList' onchange='LoadSkills();'>";
   htmlstr = fillSelectlist_S(htmlstr, PlayerName_Skill);
   htmlstr +=
     "</select><button id='SkillViewType' onclick='ChangeSkillView();'>Toggle Mode</button></div><span id='SkillStr'></span>";
@@ -895,18 +893,18 @@ function BulidInstructTabHtml() {
 
 var SkillViewTypeVar = 1; // mode flag
 
-function GetSkillEdit() {
-  var xdz = $('#SikllNameList').get(0).selectedIndex * 2 + 球员必杀索引;
+function GetSkill4EditMode() {
+  var xdz = $('#PlayerList').get(0).selectedIndex * 2 + SkillAddr;
   var bdz = ramcheck(xdz, NesHex);
   var str =
-    '<div><span>Skill entry : 0x' +
+    '<div><span>Skill entry: ' +
     toHex16(xdz, 5) +
     '=' +
     toHex16(NesHex[xdz]) +
     ' ' +
     toHex16(NesHex[xdz + 1]);
-  str += '  Index Addr:0x' + toHex16(bdz, 5);
-  str += '</span></div><div><span>Skill index : ';
+  str += ', Index address: ' + toHex16(bdz, 5);
+  str += '</span></div><div><span>Skill index: ';
   for (var i = 0; i <= 6; i++) {
     str +=
       toHex16(NesHex[bdz + i * 2 + 0]) +
@@ -931,9 +929,8 @@ function GetSkillEdit() {
   for (var i = 0; i < skilllistshoot.length; i++) {
     let sub = '#ulshoot' + i;
     selectstr +=
-      "<li style='display:block;'><button af='ulshoot' onclick='DelSkillsub(this);'>Del (Shot)</button><span>" +
-      skilllistshoot[i] +
-      '</span></li>';
+      "<li style='display:block;'><button af='ulshoot' onclick='DelSkillsub(this);'>Del (Shot)</button>" +
+      `<span val="${skilllistshoot[i][1]}">${skilllistshoot[i][0]}</span></li>`;
   }
   selectstr += '</ul>';
 
@@ -941,13 +938,12 @@ function GetSkillEdit() {
   for (var i = 0; i < skilllistother.length; i++) {
     let sub = '#ulother' + i;
     selectstr +=
-      `<li style='display:block;'><button af='ulother' onclick='DelSkillsub(this);'>Del (${skilllistother[i][1]})</button><span>` +
-      skilllistother[i][0] +
-      '</span></li>';
+      `<li style='display:block;'><button af='ulother' onclick='DelSkillsub(this);'>Del (${skilllistother[i][1]})</button>` +
+      `<span val="${skilllistother[i][2]}">${skilllistother[i][0]}</span></li>`;
   }
   selectstr += '</ul>';
   selectstr +=
-    "<button onclick='Save_Skills();'>Apply Special Changes</button><span> Force new free space → <input id='usenewaddr' type='checkbox'>(avoid unless needed)</span><br>";
+    "<button onclick='Save_Skills();'>Apply Special Changes</button><span> Force new free space → <input id='useNewAddr' type='checkbox'> (avoid unless needed)</span><br>";
   selectstr +=
     '<div><span>Special add notes<br>The 7-class skill index uses 2*7=0x0E bytes; Special Shot max uses 0x12 bytes.<br>A generic non-shot special index uses 0x0A bytes.' +
     '<br>Single-person special max uses 0x1C bytes (for duo special, write 0xFF in the 2nd byte).<br>Forcing generic index may crash the game.<br>Generic index bytes: 01 02 03 04 05 06 81 82 83 84 00' +

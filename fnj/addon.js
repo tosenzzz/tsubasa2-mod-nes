@@ -1,10 +1,21 @@
+var ll = console.log();
+Number.prototype.hex = function () {
+  return this.toString(16).toUpperCase();
+};
+String.prototype.num = function () {
+  return +('0x' + this);
+};
+
 function ApplyPatch() {
   var codes = $('#patch_code').val().replace(/;.*/g, '').trim().split('\n');
   codes.forEach((code) => {
-    var addr = Number('0x' + code.split('=')[0]);
-    var vals = code.split('=')[1].trim().split(' ');
-    for (var i = 0; i < vals.length; i++) {
-      NesHex[addr + i] = vals[i];
+    var arr = code.split('=');
+    if (arr.length == 2) {
+      var addr = Number('0x' + arr[0].trim());
+      var vals = arr[1].trim().split(' ');
+      for (var i = 0; i < vals.length; i++) {
+        NesHex[addr + i] = +('0x' + vals[i]);
+      }
     }
   });
   alertMsg('#isfileload', 'green', 'Patch updated successfully!');
@@ -20,7 +31,7 @@ var XX = [' ', 'tsu', 'ba', 'sa', 'le', 'nn', 'ar', 'li', 'ma', 'ri', 'ni']
   .concat(['C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'])
   .concat(['P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'w'])
   .concat(['ⒼⓄ', '∆', 'er', 'st', 've', 'a', 'b', 'c', 'd', 'e', 'f', 'g'])
-  .concat(['h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'q', 'p', 'r', 's'])
+  .concat(['h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'])
   .concat(['t', 'u', 'v', ':', 'x', 'y', 'z', 'de', '~', 'lo', 'sc', 'al'])
   .concat([' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'N', 'K'])
   .concat(['M', 'P', 'L', 'S', 'U', 'V', 'W', 'Y', '..', '■']);

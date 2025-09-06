@@ -84,21 +84,24 @@ function LoadHex16() {
     'font-size': defEditFontSize,
   });
   $('#HexPreView').css('font-size', defEditFontSize);
+  $('#HexPreView').append(
+    `<div id="pgchange">
+      <div onclick='NextHexData(-0x100)'>⬆</div>
+      <div onclick='NextHexData(-0x10)'>▲</div>
+      <div onclick='NextHexData(0x10)'>▼</div>
+      <div onclick='NextHexData(0x100)'>⬇</div></div>`,
+  );
 }
 
-function NextHexData(nexttype) {
+function NextHexData(val) {
   var ff = $('#offEditNo').val();
   ff = hex2int(ff);
-  if (nexttype == 0) {
-    ff = ff - 0x100;
-  } else {
-    ff = ff + 0x100;
-  }
+  ff = ff + val;
   if (ff < 0) {
     $('#offEditNo').val(0);
-    return;
+  } else {
+    $('#offEditNo').val(ff.toString(16).toUpperCase());
   }
-  $('#offEditNo').val(ff.toString(16).toUpperCase());
   LoadHex16();
 }
 
@@ -147,7 +150,7 @@ function BulidEdit16TabHtml() {
   var edit16html = '';
   edit16html += "<button onclick='LoadHex16()'>Load/Refresh</button> ";
   edit16html +=
-    "<button onclick='NextHexData(0)'>↑(-0x100)</button> <button onclick='NextHexData(1)'>↓(+0x100)</button><br>";
+    "<button onclick='NextHexData(-0x100)'>↑(-0x100)</button> <button onclick='NextHexData(0x100)'>↓(+0x100)</button><br>";
   edit16html +=
     "<span style='color:red;'>Data Address:</span><input type='text' style='width:60px;' id='offEditNo' value='0'>";
   edit16html +=

@@ -18,7 +18,7 @@
 <body>
 	<div id="main">
 		<div>
-			<p style="font-size: 1.1em" id="updated_at">by tosenzzz 2025-09-04 21:27:22</p>
+			<p style="font-size: 1.1em" id="updated_at">by tosenzzz 2025-09-07 00:11:11</p>
 			<a href="http://daymoe.com/rom/" target="_blank">RomMarket</a>&nbsp;
 			<a href="https://daymoe.com/rom/Hack%20CT2.html" target="_blank">Original</a>
 			<a href="https://www.marcrobledo.com/RomPatcher.js" target="_blank">Rom Patcher</a><br>
@@ -139,15 +139,29 @@
 				</li>
 				<li class="ctab">
 					<span>Input patch code:</span><br>
-					<textarea id="patch_code" style="width: 100%; resize: none; height: 120px;">;Sample: can select stage on start
-127=A9;
-12E=A9;</textarea><br>
+					<textarea id="patch_code" style="width: 100%; resize: none; height: 300px;">
+; +0x1e0b3 for new block
+21C6D=10 fd
+; code for Illusion Save: ramcheck('21C6D'.num(), NesHex).hex()
+3FD20=F7 30 F9 02 17 96 6A 3A 20 F9 02 1F F7 1D 80 47 F0 21 FB
+; Text of button down: Supper!
+3EB30=8f 75 70 65 72 21 20 20
+; Assign special catch for Lennart
+3D2F8=02
+; Animation of Lennart when catching
+221DA=F7 02 09 0E 2C 1C FB F7 02 F9 21 2A 05 0E 17 1C FC 00 FB F7 02 10 0E 24 1E FB
+; Disable Wakashimazu has this special
+3977D=03 03
+39861=03 03
+; Image of Lennart when catching
+237B2=33 93
+					</textarea><br>
 					<button onclick="ApplyPatch()">Apply</button><br>
 				</li>
 				<li class="ctab">
 					<span>Search text: </span> <input type="text" style="width:120px;" id="searchTxt" value="">
 					<button onclick="SearchInCHR('search')">Search in CHR</button>
-					Limit: <input type="number" style="width:30px;" id="searchLimit" value="0">
+					Limit: <input type="number" id="searchLimit" value="0" min=0 max=99>
 					<span id="searchCnt"></span><br>
 					<span id="searchRs"></span><br>
 					<button onclick="SearchInRom()">Search in ROM </button>

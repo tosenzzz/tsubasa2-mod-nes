@@ -236,7 +236,7 @@ function AiPasslistChange() {
       $('#passdata' + (i + 1)).val(NesHex[dizhi + i]);
       $('#passdata' + (i + 1)).attr('offindex', dizhi + i);
     }
-    $('#Passtext').html('传球意向类型:0x' + toHex16(dizhi, 5));
+    $('#Passtext').html('Passing intention type: ' + toHex16(dizhi, 5));
   }
   outAiStr();
 }
@@ -415,7 +415,7 @@ function ldAIData1(type) {
     for (var x = 0; x < 4; x++) {
       $('#AiEx_select_' + i + '_' + x).val(toHex16(NesHex[地址 + i * 4 + x]));
       $('#AiEx_' + i).html(
-        $('#AiEx_' + i).attr('af') + ' Addr:0x' + toHex16(地址 + i * 4, 5),
+        $('#AiEx_' + i).attr('af') + ' Addr: ' + toHex16(地址 + i * 4, 5),
       );
     }
   }
