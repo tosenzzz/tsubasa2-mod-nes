@@ -513,3 +513,6 @@ button:hover {
   background: #e0e0e0;
 }
 
+#ct2cheatlist select {
+  width: 200px;
+}

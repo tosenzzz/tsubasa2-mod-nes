@@ -777,7 +777,8 @@ function renderTransparentOverlay(editMode = false) {
     saveBtn.style.alignItems = 'center';
     saveBtn.style.justifyContent = 'center';
     saveBtn.style.cursor = 'pointer';
-    saveBtn.innerHTML = '<span style="color:#fff;font-size:0.9em;">存档</span>';
+    saveBtn.innerHTML =
+      '<span style="color:#fff;font-size:0.9em;">Stage</span>';
     saveBtn.onclick = function (e) {
       e.stopPropagation();
       // 调用存档管理界面显示函数，同时需设置全局当前卡槽(window.currentSaveSlot)

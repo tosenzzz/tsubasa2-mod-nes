@@ -72,16 +72,19 @@ var playerstrtemp2 =
 var playerstrtemp3 =
   'C8 Avalanche Matsuyama,C9 Berserk Diaz,CA Berserk Schneider,CB Musashi scrubs (2nd half)';
 
-//76-C0
+//76-C0: Appearance / Color
 var playerstrtemp4 =
   '76 Tsubasa (Japan),77 Morisaki (Japan)[GK],78 Takasugi (Japan),79 Misaki (Japan),7A Izawa (Japan),7B Taki (Japan),7C Ishizaki (Japan),7D Nitta (Japan),7E Kisugi (Japan),7F Stage 1 Common,80 Stage 2 Common,81 Stage 3 Common,82 Stage 4 Common,83 Stage 5 Common,84 Stage 6 Common,85 Stage 7 Common,86 Stage 8 Common,87 Stage 9 Common,88 Stage 10 Common,89 Stage 11 Common,8A Stage 12 Common,8B Stage 13 Common,8C Stage 14 Common,8D Stage 15 Common,8E (Invalid) Stage 16 Common,8F Stage 17 Common,90 Stage 18 Common,91 Stage 19 Common,92 Stage 20 Common,93 Stage 21 Common,94 Stage 22 Common,95 Stage 23 Common,96 Stage 24 Common,97 Stage 25 Common,98 Stage 26 Common,99 Stage 27 Common,9A Stage 28 Common,9B Stage 29 Common,9C Stage 30 Common,9D Stage 31 Common,9E Stage 32 Common,9F Stage 1 GK,A0 Stage 2 GK,A1 Stage 3 GK,A2 Stage 4 GK,A3 Stage 5 GK,A4 Stage 6 GK,A5 Stage 7 GK,A6 Stage 8 GK,A7 Stage 9 GK,A8 Stage 10 GK,A9 Stage 11 GK,AA Stage 12 GK,AB Stage 13 GK,AC Stage 14 GK,AD Stage 15 GK,AE Stage 16 GK,AF Stage 17 GK,B0 Stage 18 GK,B1 Stage 19 GK,B2 Stage 20 GK,B3 Stage 21 GK,B4 Stage 22 GK,B5 Stage 23 GK,B6 Stage 24 GK,B7 Stage 25 GK,B8 Stage 26 GK,B9 Stage 27 GK,BA Stage 28 GK,BB Stage 29 GK,BC Stage 30 GK,BD Stage 31 GK,BE Stage 32 GK,BF Stage 33 GK,C0 Stage 34 GK';
 
+// Player Abilities
 var playerstrtemp5 =
-  '00 Lima/Batista/Nakayama,01 Tsubasa,02 Misaki,03 Nitta,04 Kisugi,05 Platton,06 Tahamata,07 Babinton,08 Numa,09 Dottil,0A Urabe,0B Marini,0C Takasugi,0D Izawa,0E Ishizaki,0F Tachibana Brothers,10 Sano,11 Hyuga,12 Soda,13 Jitou,14 Matsuyama,15 Sorimachi,16 Sawada,17 Misugi,18 Stage 1 Defender,19 Stage 1 Forward,1A Stage 2 Defender,1B Stage 2 Forward,1C Sartoris,1D Libério,1E Stage 3 Defender,1F Stage 3 Forward,20 Da Silva,21 Stage 4 Defender,22 Stage 4 Forward,23 Toninho,24 Nei,25 Stage 5 Defender,26 Stage 5 Forward,27 Zagalo,28 Diuseu,29 Stage 6 Defender,2A Stage 6 Forward,2B Santana,2C Santamarino,2D Jetorio,2E Kunimi Defender,2F Kunimi Forward,30 Jito,31 Soya,32 Akita Defender,33 Akita Forward,34 Tachibana,35 Roppongi Defender,36 Roppongi Forward,37 Soda,38 Musashi Defender,39 Musashi Forward,3A Misugi,3B Furano Defender,3C Furano Forward,3D Matsuyama,3E Toho Defender,3F Toho Forward,40 Hyuga,41 Sorimachi,42 Sawada,43 Roma Defender,44 Roma Forward,45 Lampião,46 Uruguay Defender,47 Uruguay Forward,48 Victorino,49 Da Silva,4A Hamburg Defender,4B Hamburg Forward,4C Cabello,4D Kaltz,4E Mantu,4F Hyuga,50 Nitta,51 Soya,52 Misaki,53 Misugi,54 Tachibana Brothers,55 Jito,56 Ishizaki,57 Soda,58 Matsuyama,59 Syria Defender,5A Syria Forward,5B China Defender,5C China Forward,5D Li Brothers,5E Iran Defender,5F Iran Forward,60 North Korea Defender,61 North Korea Forward,62 Saudi Arabia Defender,63 Saudi Arabia Forward,64 South Korea Defender,65 South Korea Forward,66 Cha Incheon,67 Lee Longyun,68 Vasco da Gama Common,69 Poland Defender,6A Poland Forward,6B Maiha,6C England Defender,6D England Forward,6E Lolima,6F Robertson,70 Soviet Union Defender,71 Soviet Union Forward,72 Belev,73 France Defender,74 France Forward,75 Napoleon,76 Pierre,77 Mexico Defender,78 Mexico Forward,79 Espanha,7A Italy Defender,7B Italy Forward,7C Lampião,7D Netherlands Defender,7E Netherlands Forward,7F Islas,80 Libuta,81 Argentina Common,82 Pascal,83 Sartoris,84 Diaz,85 Babinton,86 Galvan,87 West Germany Common,88 Schneider,89 Margas,8A Kaltz,8B Mantu,8C Shester,8D Cabello,8E Santana,8F Zagalo,90 Libério,91 Nei,92 Santamarino,93 Toninho,94 Doutor,95 Numa,96 Diuseu,97 Jetorio,98 Coimbra,99 Avalanche Matsuyama,9A Berserk Diaz,9B Berserk Schneider,9C Avalanche Furano Common';
+  '00 Lima/Batista/Nakayama,01 Tsubasa,02 Misaki(Nank),03 Nitta(Nank),04 Kisugi(Nank),05 Platton(SPL),06 Tahamata(SPL),07 Babinton(SPL),08 Numa(?),09 Dottil(SPL),0A Urabe(Nank),0B Marini(SPL),0C Takasugi(JP),0D Izawa(JP),0E Ishizaki(JP),0F Tachibana Brothers(JP),10 Sano(JP),11 Hyuga(JP),12 Soda(JP),13 Jitou(JP),14 Matsuyama(JP),15 Sorimachi(JP),16 Sawada(JP),17 Misugi(JP),18 Stage 1 Defender,19 Stage 1 Forward,1A Stage 2 Defender,1B Stage 2 Forward,1C Sartoris,1D Libério,1E Stage 3 Defender,1F Stage 3 Forward,20 Da Silva,21 Stage 4 Defender,22 Stage 4 Forward,23 Toninho,24 Nei,25 Stage 5 Defender,26 Stage 5 Forward,27 Zagalo,28 Diuseu,29 Stage 6 Defender,2A Stage 6 Forward,2B Santana,2C Santamarino,2D Jetorio,2E Kunimi Defender,2F Kunimi Forward,30 Jito,31 Soya,32 Akita Defender,33 Akita Forward,34 Tachibana,35 Roppongi Defender,36 Roppongi Forward,37 Soda,38 Musashi Defender,39 Musashi Forward,3A Misugi,3B Furano Defender,3C Furano Forward,3D Matsuyama,3E Toho Defender,3F Toho Forward,40 Hyuga,41 Sorimachi,42 Sawada,43 Roma Defender,44 Roma Forward,45 Lampião,46 Uruguay Defender,47 Uruguay Forward,48 Victorino,49 Da Silva,4A Hamburg Defender,4B Hamburg Forward,4C Cabello,4D Kaltz,4E Mantu,4F Hyuga,50 Nitta,51 Soya,52 Misaki,53 Misugi,54 Tachibana Brothers,55 Jito,56 Ishizaki,57 Soda,58 Matsuyama,59 Syria Defender,5A Syria Forward,5B China Defender,5C China Forward,5D Li Brothers,5E Iran Defender,5F Iran Forward,60 North Korea Defender,61 North Korea Forward,62 Saudi Arabia Defender,63 Saudi Arabia Forward,64 South Korea Defender,65 South Korea Forward,66 Cha Incheon,67 Lee Longyun,68 Vasco da Gama Common,69 Poland Defender,6A Poland Forward,6B Maiha,6C England Defender,6D England Forward,6E Lolima,6F Robertson,70 Soviet Union Defender,71 Soviet Union Forward,72 Belev,73 France Defender,74 France Forward,75 Napoleon,76 Pierre,77 Mexico Defender,78 Mexico Forward,79 Espanha,7A Italy Defender,7B Italy Forward,7C Lampião,7D Netherlands Defender,7E Netherlands Forward,7F Islas,80 Libuta,81 Argentina Common,82 Pascal,83 Sartoris,84 Diaz,85 Babinton,86 Galvan,87 West Germany Common,88 Schneider,89 Margas,8A Kaltz,8B Mantu,8C Shester,8D Cabello,8E Santana,8F Zagalo,90 Libério,91 Nei,92 Santamarino,93 Toninho,94 Doutor,95 Numa(?),96 Diuseu,97 Jetorio,98 Coimbra,99 Avalanche Matsuyama,9A Berserk Diaz,9B Berserk Schneider,9C Avalanche Furano Common';
 
+// GK Abilities
 var playerstrtemp6 =
-  '9D Lennart(SPL),9E Morisaki(Japan),9F Ken(Toho),A0 Genzo(Japan),A1 Stage 1 GK,A2 Stage 2 GK,A3 Mannone,A4 Stage 4 GK,A5 Stage 5 GK,A6 Stage 6 GK,A7 Kunimi GK,A8 Akita GK,A9 Nakanishi,AA Musashi GK,AB Furano GK,AC Ken,AD Roma GK,AE Uruguay GK,AF Genzo,B0 Ken,B1 Syria GK,B2 China GK,B3 Iran GK,B4 North Korea GK,B5 Saudi Arabia GK,B6 South Korea GK,B7 Vasco da Gama GK,B8 Gisecce,B9 England GK,BA Rashin,BB France GK,BC Mexico GK,BD Hernandez,BE Netherlands GK,BF Argentina GK,C0 Muller,C1 Gertis';
+  '9D Lennart(SPL),9E Morisaki(Nank),9F Ken(Toho),A0 Genzo(Japan),A1 Stage 1 GK,A2 Stage 2 GK,A3 Mannone,A4 Stage 4 GK,A5 Stage 5 GK,A6 Stage 6 GK,A7 Kunimi GK,A8 Akita GK,A9 Nakanishi,AA Musashi GK,AB Furano GK,AC Ken,AD Roma GK,AE Uruguay GK,AF Genzo,B0 Ken,B1 Syria GK,B2 China GK,B3 Iran GK,B4 North Korea GK,B5 Saudi Arabia GK,B6 South Korea GK,B7 Vasco da Gama GK,B8 Gisecce,B9 England GK,BA Rashin,BB France GK,BC Mexico GK,BD Hernandez,BE Netherlands GK,BF Argentina GK,C0 Muller,C1 Gertis';
 
+// Edit skill for Player
 var PlayerName_Skill = playerstrtemp1.split(',');
 
 //00-C7
@@ -390,8 +393,8 @@ var Ai_data_7_3 = [' 0 = Catch', ' 1 = Punch', ' 2 = Triangle Save'];
 var Ai_data_8_3 = [' 3 = Charge Out', ' 4 = Stay'];
 var Ai_data_9_3 = [' 5 = Defend Dribble', ' 6 = Defend Shot'];
 ////////////
-//01-C0
-var PlayerName = (playerstrtemp1 + ',' + playerstrtemp4).split(',');
+//01-C0: Appearance / Color
+var PlayerColorList = (playerstrtemp1 + ',' + playerstrtemp4).split(',');
 var Edit_playerColor = 0x2b821; //明星颜色
 var Edit_NpcColor = 0x2b6d7; //杂鱼颜色
 var Edit_ModType = 0x28901; //头型
@@ -408,9 +411,9 @@ var PlayModList = [
   '09 Urabe',
   '0A Lee Longyun',
   '0B Coimbra',
-  '0C Wakabayashi',
+  '0C Genzo',
   '0D Müller',
-  '0E Wakashimazu',
+  '0E Ken',
   '0F Lennart, Mannone, Rashin, Hernandez',
   '10 Morisaki',
   '11 Gisecce, Nakanishi',
@@ -1087,48 +1090,49 @@ var player_data_hp = [
 var player_data_addr = 0x39fde; //球员能力值数据地址
 var player_data_GK_addr = 0x3ae96; //守门员能力值数据地址
 
-var 指令文本 = [
+var AllSkills = [
   'Shot',
   'Volley',
-  'Header',
-  'Spinning Shot',
-  'Spinning Overhead',
-  'Falcon Shot',
-  'Falcon Volley',
-  'Razor Shot',
-  'Aerial Tornado',
-  'Twin Shot',
-  'Twin Tornado',
-  'Falcon Drive',
-  'Tiger Shot',
-  'New Tiger Shot',
-  'Overhead Kick',
-  'Power Overhead (Misugi)',
-  'Misaki Jump Volley',
-  'Drive Tiger Shot',
-  'Super Curve (Tornado)',
-  'Sano Combo Shot',
+  'Head',
+  'Drive Shot',
+  'Drive Bicycle (S)',
+  'Falcon Shot (S)',
+  'Falcon Volley (S)',
+  'Razor Shot (S)',
+  'Skylab Head',
+  'Twin Volley',
+  'Skylab 2x Head/Volley (S)',
+  'Eagle Shot (S)',
+  'Tiger Shot (S)',
+  'Neo Tiger Shot (S)',
+  'Bicycle Kick (S)',
+  'Hyper Bicycle (S)',
+  'Jumping Volley (S)',
+  'Drive Tiger Shot (S)',
+  'Cyclone Shot (S)',
+  'Sano Shot (S)',
   'Banana Shot',
-  'Nei Union Shot',
-  'Golden Eagle',
-  'Magic Cannon',
-  'Snake Shot',
-  'Curve Shot',
-  'Cannon Shot',
-  'Flame Shot',
-  'Shining Header',
-  'Power Header',
-  'Rocket Header',
-  'Rising Dragon Kick',
-  'Backheel Shot',
-  'Curve Cannon',
-  'Zagallo Power Shot',
+  'Buster Shot',
+  'Mirage Shot (S)',
+  'Mach Shot (S)',
+  'Sidewind Shot',
+  'Slider Shot (S)',
+  'Cannon Shot (S)',
+  'Fire Shot (S)',
+  'Dyna Head',
+  'CnPower Head',
+  'Rocket Head',
+  'Rising Dragon Head (S)',
+  'BackShot Volley (S)',
+  'Slider Cannon Head/Volley (S)',
+  'DblEagle Shot',
+  // END POWER SHOT
   'Pass',
-  'Spinning Pass (Tsubasa)',
+  'Drive Pass (Tsubasa)',
   'Razor Pass (Soda)',
   'High Pass (Mantou)',
   'Dribble',
-  'Chip Dribble (Tsubasa)',
+  'H. Lift Dribble (Tsubasa)',
   'Straight Break (Hyuga)',
   'Magic Breakthrough',
   'Clone Dribble',
@@ -1162,36 +1166,36 @@ var 指令文本 = [
   'GK Catch',
   'Spin Save',
   'Clone Save',
-  'Big Swing Save',
+  'Dark Illusion Save',
   'GK Punch',
   'Triangle Save',
   'GK Rush',
   'GK vs Dribble',
   'GK vs Shot',
 ];
-var 进攻指令数据 = 0x39484;
-var 防守指令数据 = 0x3956e;
-var GK指令数据 = 0x395c2;
-var 防守必杀效果代码 = 0x2077b;
-var 球员必杀索引 = 0x38e2d;
-var 肖像数据地址 = 0x22b63;
+var AttackCmdAddr = 0x39484;
+var DefendCmdAddr = 0x3956e;
+var GKcmdAddr = 0x395c2;
+var DefEffectAddr = 0x2077b;
+var SkillAddr = 0x38e2d;
+var PortraitAddr = 0x22b63;
 var Skill_TYPE_ =
-  ',Special Pass ,Special Dribble ,Special 1-2 ,Special Block ,Special Tackle ,Special Intercept ';
+  ',Special Pass,Special Dribble,Special 1-2,Special Block,Special Tackle,Special Intercept';
 var Skill_SHOT_ =
-  '0C Spinning Shot (Low),0D Spinning Shot (Mid),0E Spinning Shot (High),10 Spinning Overhead (Low),11 Spinning Overhead (Mid),12 Spinning Overhead (High),14 Falcon Shot (Low),15 Falcon Shot (Mid),16 Falcon Shot (High),18 Falcon Volley (Low),19 Falcon Volley (Mid),1A Falcon Volley (High),1C Razor Shot (Low),1D Razor Shot (Mid),1E Razor Shot (High),20 Tornado (Aerial) (Low),21 Tornado (Aerial) (Mid),22 Tornado (Aerial) (High),24 Twin Shot (Low),25 Twin Shot (Mid),26 Twin Shot (High),28 Twin Tornado (Low),29 Twin Tornado (Mid),2A Twin Tornado (High),2C Falcon Drive (Low),2D Falcon Drive (Mid),2E Falcon Drive (High),30 Tiger Shot (Low),31 Tiger Shot (Mid),32 Tiger Shot (High),34 New Tiger Shot (Low),35 New Tiger Shot (Mid),36 New Tiger Shot (High),38 Overhead Kick (Low),39 Overhead Kick (Mid),3A Overhead Kick (High),3C Misugi Power Overhead (Low),3D Misugi Power Overhead (Mid),3E Misugi Power Overhead (High),40 Misaki Jump Volley (Low),41 Misaki Jump Volley (Mid),42 Misaki Jump Volley (High),44 Drive Tiger Shot (Low),45 Drive Tiger Shot (Mid),46 Drive Tiger Shot (High),48 Super Curve (Low),49 Super Curve (Mid),4A Super Curve (High),4C Sano Combo Shot (Low),4D Sano Combo Shot (Mid),4E Sano Combo Shot (High),50 Banana Shot (Low),51 Banana Shot (Mid),52 Banana Shot (High),54 Nei Union Shot (Low),55 Nei Union Shot (Mid),56 Nei Union Shot (High),58 Golden Eagle (Low),59 Golden Eagle (Mid),5A Golden Eagle (High),5C Magic Cannon (Low),5D Magic Cannon (Mid),5E Magic Cannon (High),60 Snake Shot (Low),61 Snake Shot (Mid),62 Snake Shot (High),64 Curve Shot (Low),65 Curve Shot (Mid),66 Curve Shot (High),68 Cannon Shot (Low),69 Cannon Shot (Mid),6A Cannon Shot (High),6C Flame Shot (Low),6D Flame Shot (Mid),6E Flame Shot (High),70 Shining Header (Low),71 Shining Header (Mid),72 Shining Header (High),74 Power Header (Low),75 Power Header (Mid),76 Power Header (High),78 Rocket Header (Low),79 Rocket Header (Mid),7A Rocket Header (High),7C Rising Dragon Kick (Low),7D Rising Dragon Kick (Mid),7E Rising Dragon Kick (High),80 Backheel Shot (Low),81 Backheel Shot (Mid),82 Backheel Shot (High),84 Horizontal Cannon (Low),85 Horizontal Cannon (Mid),86 Horizontal Cannon (High),88 Zagallo Power Shot (Low),89 Zagallo Power Shot (Mid),8A Zagallo Power Shot (High)';
-var Skill_PASS_ =
-  '01 Spinning Pass (Tsubasa),02 Razor Pass (Soda),03 High Pass (Mantou)';
+  '0C Drive Shot,50 Banana Shot,54 Buster Shot,88 DblEagle Shot,14 Falcon Shot (S),1C Razor Shot (S),2C Eagle Shot (S),30 Tiger Shot (S),34 Neo Tiger Shot (S),44 Drive Tiger Shot (S),48 Cyclone Shot (S),4C Sano Shot (S),58 Mirage Shot (S),5C Mach Shot (S),60 Sidewind Shot,64 Slider Shot (S),68 Cannon Shot (S),6C Fire Shot (S),00 ==========,25 Twin Volley (?),18 Falcon Volley (S),29 Skylab 2x Volley (S),41 Jumping Volley (S),49 Cyclone Volley (S),81 BackShot Volley (S),85 Slider Cannon Volley (S),00 ==========,72 Dyna Head,76 CnPower Head,7A Rocket Head,22 Skylab Head (?),12 Drive Bicycle (?),2A Skylab 2x Head (S),3A Bicycle Kick (S),3E Hyper Bicycle (S),4A Cyclone Head (S),7E Rising Dragon Head (S),86 Slider Cannon Head (S)';
+var Skill_PASS_ = '01 Drive Pass (S),02 Razor Pass (S),03 T-Spin Pass';
 var Skill_DRIBBLE_ =
-  '01 Chip Dribble (Tsubasa),02 Straight Break (Hyuga),03 Phantom Dribble (Nei),04 Curtain of Aurora (Santana),05 Meteor Break (Islas),06 Hedgehog Dribble (Kaltz)';
+  '01 H. Lift Dribble,02 Force Dribble,03 Fake Dribble,04 Speed Dribble (S),05 Fast Dribble,06 Super Dribble (S)';
 var Skill_COMBO_ =
-  '81 Golden Combo,82 Toho Combo,83 Twin Combo,84 Eiffel Attack (France),01 Golden Combo (Not recommended),02 Toho Combo (Not recommended),03 Twin Combo (Not recommended)';
+  '81 Golden Combo (S),82 Toho Combo (S),83 Gemini Combo (S),84 Eiffel Combo (S),01 Golden Combo (?),02 Toho Combo (?),03 Twin Combo (?)';
 var Skill_BLOCK_ =
-  '81 Face Block (Ishizaki),82 High Block (Tachibana),83 Power Block (Jito),02 High Block (Not recommended)';
+  '81 Face Block,82 Skylab Block (S),83 Power Block,02 High Block (?)';
 var Skill_TACKLE_ =
-  '81 High Tackle (Tachibana),82 Razor Tackle (Soda),83 Power Tackle (Jito),84 Tiger Tackle (Hyuga),01 High Tackle (Not recommended)';
-var Skill_ICEPT_ =
-  '81 High Intercept (Tachibana),01 High Intercept (Not recommended)';
-var Skill_GK_ = '01 Spinning Save,02 Clone Save,03 Grand Rotation Save';
+  '81 Skylab Tackle (S),82 Razor Tackle (S),83 Power Tackle,84 Tiger Tackle,01 High Tackle (?)';
+var Skill_ICEPT_ = '81 High Intercept (Tachibana),01 High Intercept (?)';
+
+// Testing
+var Skill_GK_ = '01 Spin Save,02 Clone Save,03 Grand Rotation Save';
 Skill_TYPE_ += ',GK (GK) ';
 
 //128*128 256*256 40*40
@@ -1225,267 +1229,21 @@ var IMG_ModPic = [
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADUAAAA/CAMAAAB3o3AkAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABJQTFRF/wDIAADI/+TQAGQAAAAA////ndiKyQAAAAZ0Uk5T//////8As7+kvwAAAc5JREFUeNqU19FuBCEIBVB1r///yx1EEFTUug/dpDkBHcDZVGUBqK8rqSml4J+KDLG2XlVHn/p96+7SyI/UjxceY8GpWzi3L6i6uHGGvCzDVelTMyze3qze2KKe2Kpe2EY1ho72bKeqnmXEtmokGbCLCthLrJVFCnwejB5VdWhlkYJNcSnJMJaib6U0uYv6fYKXc+mSoCqCV9XKw5lJSUPC9mfOeTKWffnm7yOzCfItGwb1UKVIKp3+5rbQTVmVGRfj5FTRP8tZ/WbV4rTh5VmqtIc52FCF3aLo1OgBtdLDqiiUBsP0vCB2VRwSOyWFhEnxTOb7JlCS6aTkxtFiTNuGhEEse5a91dK+j/Xc6f6kzdG30aHbKQp+GhxLbhyYIbKfopoiRWHWekBYNEWXncHOnrC/RknZW/QUa7Aus58+D0qwmT8HdWDxvrSsjGrPJI7FHWcY7G2P82QbJ6KnyOysMFDRQUQD7zB6e2llLXzI0R+UVKvpls5wur/6p3gVx6ozcnUVxTIMBmmKkdLp71BnsTLvjTZJnGOJQpl2dqh5VQXLznBTzHyS91i1DwC3s7iXJwaPrqo9gfbm3tHpzWFjNdC7klTrP5X7zfQnwAA7vjOpB/kWsQAAAABJRU5ErkJggg==',
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADUAAABMCAMAAAD6FQ9LAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABhQTFRF/////8yZ/8xm/5lmzMyZmWYzAAAA////iq7yagAAAAh0Uk5T/////////wDeg71ZAAACBUlEQVR42rTWCXLDIAwFUIXlc/8bF8xiyQgskinTmWbxi0CIhdKjEVEoLf8XnwNgDz1RjP6Tm/MxBiYKwVIF9wlFfYLzoZuhFyqj3lxlvGODCUUhlvEUE2N5ERLk4HTle6TrFUVwgIUa6MqH95FEPvRxBc+HlVmPVVO4yCFTzl0sQOTuRbmuEhQ0KXeb0sPAUrBS5J13d8vpIC2SVDlP+cmBoq/TvFNXakPM9edb77yLpPbvVjW1yMzF2q6KgoqSnMZSHd61bvpAeqSu0HqCUoq+tljQRt2LB2VVhquDgRb5awp8ZHU1U1vJa9WfZrUzVvtSje8BAPpyWqo28FPVA9pUejALunIIZsyqFgZaRhb75qrmIRGAZFAsaK/KXW3IZIiIZpUsfZQKj9cwKP7TmH/HrpJBAWl5+GyUUhYwxMJUFe9qzLOoEYO6z6pdsJ+VzOCWkR5qfnuq9ucXVmXxjYKypmmqJzzmb38uYxpP/QhKMBLbxnQBUj6Uqq19aIt7q5QtG2oxktient9isThJZuzRk9WUyV10ms73WNoOvQhGabv+3pXa8JOS7E3pwf5Jqey/FLv7jCk1KH7haRvsgepFB5vqhd3O+/xnVxi7gVGNI75fEc5UOlL8AoITdZ80+QeM6k7INwqHCuNmZ50vdqWrAzxRff9O6SDzrQqt1Ttvzn8CDAB9xGbo+ch+JwAAAABJRU5ErkJggg==',
 ];
-var gametime = [
-  '00:00',
-  '00:10',
-  '00:20',
-  '00:30',
-  '00:40',
-  '00:50',
-  '01:00',
-  '01:10',
-  '01:20',
-  '01:30',
-  '01:40',
-  '01:50',
-  '02:00',
-  '02:10',
-  '02:20',
-  '02:30',
-  '02:40',
-  '02:50',
-  '03:00',
-  '03:10',
-  '03:20',
-  '03:30',
-  '03:40',
-  '03:50',
-  '04:00',
-  '04:10',
-  '04:20',
-  '04:30',
-  '04:40',
-  '04:50',
-  '05:00',
-  '05:10',
-  '05:20',
-  '05:30',
-  '05:40',
-  '05:50',
-  '06:00',
-  '06:10',
-  '06:20',
-  '06:30',
-  '06:40',
-  '06:50',
-  '07:00',
-  '07:10',
-  '07:20',
-  '07:30',
-  '07:40',
-  '07:50',
-  '08:00',
-  '08:10',
-  '08:20',
-  '08:30',
-  '08:40',
-  '08:50',
-  '09:00',
-  '09:10',
-  '09:20',
-  '09:30',
-  '09:40',
-  '09:50',
-  '10:00',
-  '10:10',
-  '10:20',
-  '10:30',
-  '10:40',
-  '10:50',
-  '11:00',
-  '11:10',
-  '11:20',
-  '11:30',
-  '11:40',
-  '11:50',
-  '12:00',
-  '12:10',
-  '12:20',
-  '12:30',
-  '12:40',
-  '12:50',
-  '13:00',
-  '13:10',
-  '13:20',
-  '13:30',
-  '13:40',
-  '13:50',
-  '14:00',
-  '14:10',
-  '14:20',
-  '14:30',
-  '14:40',
-  '14:50',
-  '15:00',
-  '15:10',
-  '15:20',
-  '15:30',
-  '15:40',
-  '15:50',
-  '16:00',
-  '16:10',
-  '16:20',
-  '16:30',
-  '16:40',
-  '16:50',
-  '17:00',
-  '17:10',
-  '17:20',
-  '17:30',
-  '17:40',
-  '17:50',
-  '18:00',
-  '18:10',
-  '18:20',
-  '18:30',
-  '18:40',
-  '18:50',
-  '19:00',
-  '19:10',
-  '19:20',
-  '19:30',
-  '19:40',
-  '19:50',
-  '20:00',
-  '20:10',
-  '20:20',
-  '20:30',
-  '20:40',
-  '20:50',
-  '21:00',
-  '21:10',
-  '21:20',
-  '21:30',
-  '21:40',
-  '21:50',
-  '22:00',
-  '22:10',
-  '22:20',
-  '22:30',
-  '22:40',
-  '22:50',
-  '23:00',
-  '23:10',
-  '23:20',
-  '23:30',
-  '23:40',
-  '23:50',
-  '24:00',
-  '24:10',
-  '24:20',
-  '24:30',
-  '24:40',
-  '24:50',
-  '25:00',
-  '25:10',
-  '25:20',
-  '25:30',
-  '25:40',
-  '25:50',
-  '26:00',
-  '26:10',
-  '26:20',
-  '26:30',
-  '26:40',
-  '26:50',
-  '27:00',
-  '27:10',
-  '27:20',
-  '27:30',
-  '27:40',
-  '27:50',
-  '28:00',
-  '28:10',
-  '28:20',
-  '28:30',
-  '28:40',
-  '28:50',
-  '29:00',
-  '29:10',
-  '29:20',
-  '29:30',
-  '29:40',
-  '29:50',
-  '30:00',
-  '30:10',
-  '30:20',
-  '30:30',
-  '30:40',
-  '30:50',
-  '31:00',
-  '31:10',
-  '31:20',
-  '31:30',
-  '31:40',
-  '31:50',
-  '32:00',
-  '32:10',
-  '32:20',
-  '32:30',
-  '32:40',
-  '32:50',
-  '33:00',
-  '33:10',
-  '33:20',
-  '33:30',
-  '33:40',
-  '33:50',
-  '34:00',
-  '34:10',
-  '34:20',
-  '34:30',
-  '34:40',
-  '34:50',
-  '35:00',
-  '35:10',
-  '35:20',
-  '35:30',
-  '35:40',
-  '35:50',
-  '36:00',
-  '36:10',
-  '36:20',
-  '36:30',
-  '36:40',
-  '36:50',
-  '37:00',
-  '37:10',
-  '37:20',
-  '37:30',
-  '37:40',
-  '37:50',
-  '38:00',
-  '38:10',
-  '38:20',
-  '38:30',
-  '38:40',
-  '38:50',
-  '39:00',
-  '39:10',
-  '39:20',
-  '39:30',
-  '39:40',
-  '39:50',
-  '40:00',
-  '40:10',
-  '40:20',
-  '40:30',
-  '40:40',
-  '40:50',
-  '41:00',
-  '41:10',
-  '41:20',
-  '41:30',
-  '41:40',
-  '41:50',
-  '42:00',
-  '42:10',
-  '42:20',
-  '42:30',
-];
+var gametime = [];
+for (
+  let i = new Date('2025-01-01 00:00:00').getTime();
+  i < new Date('2025-01-01 00:45:00').getTime();
+  i += 60 * 1000
+) {
+  gametime.push(
+    new Date(i).getMinutes() +
+      ':' +
+      ('0' + new Date(i).getSeconds()).substr(-2),
+  );
+}
 var Skill_o_str = [
-  'Spinning Shot (Tsubasa)',
-  'Spinning Shot (Diaz)',
+  'Drive Shot (Tsubasa)',
+  'Drive Shot (Diaz)',
   'Eagle Shot',
   'Razor Shot (Roppongi Soda)',
   'Razor Shot (Japan Soda)',
@@ -1495,8 +1253,8 @@ var Skill_o_str = [
   'Tiger Shot (Japan Hyuga)',
   'Neo Tiger Shot (Toho Hyuga)',
   'Neo Tiger Shot (Japan Hyuga)',
-  'Spinning Tiger Shot (Tsubasa) (Portrait 1)',
-  'Spinning Tiger Shot (Hyuga) (Portrait 2)',
+  'Drive Tiger Shot (Tsubasa) (Portrait 1)',
+  'Drive Tiger Shot (Hyuga) (Portrait 2)',
   'Super Drive (Portrait 1)',
   'Super Drive (Portrait 2)',
   'Sano Combination Shot (Kunimi Jito)',
@@ -1513,12 +1271,12 @@ var Skill_o_str = [
   'Backheel Shot (Portrait 2)',
   'Curve Cannon (Portrait 1)',
   'Curve Cannon (Portrait 2)',
-  'Spinning Bicycle Kick',
-  'Power Overhead (Misugi, Musashi)',
-  'Power Overhead (Misugi, Japan)',
+  'Drive Bicycle Kick',
+  'Power Bicycle (Misugi, Musashi)',
+  'Power Bicycle (Misugi, Japan)',
   'Illusion Dribble (Brazil Santana)',
   'Illusion Dribble (Flamengo)',
-  'Spinning Pass',
+  'Drive Pass',
   'Hedgehog Dribble (Kaltz, Germany)',
   'Hedgehog Dribble (Kaltz, Hamburg)',
   'Razor Pass (Japan Soda)',
@@ -1590,16 +1348,16 @@ var Skill_o_str = [
   'Diaz Rage',
   'Matsuyama Avalanche',
   'Morisaki Rage',
-  'Spinning Shot & Spinning Bicycle Kick Cutscene',
-  'Spinning Shot & Spinning Bicycle Kick Cutscene',
-  'Spinning Shot & Spinning Bicycle Kick Cutscene',
-  'Spinning Shot & Spinning Bicycle Kick Cutscene',
-  'Spinning Shot & Spinning Bicycle Kick Cutscene',
+  'Drive Shot & Drive Bicycle Kick Cutscene',
+  'Drive Shot & Drive Bicycle Kick Cutscene',
+  'Drive Shot & Drive Bicycle Kick Cutscene',
+  'Drive Shot & Drive Bicycle Kick Cutscene',
+  'Drive Shot & Drive Bicycle Kick Cutscene',
   'First Mach Shot (Morisaki)',
-  'First Mach Shot (Wakabayashi)',
-  'First Mach Shot (Wakashimazu)',
-  'After Triangle Save (Wakashimazu, Toho)',
-  'After Triangle Save (Wakashimazu, Japan)',
+  'First Mach Shot (Genzo)',
+  'First Mach Shot (Ken)',
+  'After Triangle Save (Ken, Toho)',
+  'After Triangle Save (Ken, Japan)',
   'After Jito Scores (Japan)',
   'After Jito Scores (Kunimi)',
   'Portrait after Diaz Rage dribbles past GK and scores',
@@ -1639,8 +1397,8 @@ var Skill_o_txt = [
   'A1 Japan Matsuyama',
   'A2 Japan Sawada',
   'A3 Misugi',
-  'A4 Wakabayashi',
-  'A6 Wakashimazu',
+  'A4 Genzo',
+  'A6 Ken',
   'A8 Mannone',
   'A9 Flamengo Santana',
   'AA Kunimi Jito',
