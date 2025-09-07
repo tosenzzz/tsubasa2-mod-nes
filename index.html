@@ -18,7 +18,7 @@
 <body>
 	<div id="main">
 		<div>
-			<p style="font-size: 1.1em" id="updated_at">by tosenzzz 2025-09-07 00:11:11</p>
+			<p style="font-size: 1.1em" id="updated_at">by tosenzzz 2025-09-07 22:53:24</p>
 			<a href="http://daymoe.com/rom/" target="_blank">RomMarket</a>&nbsp;
 			<a href="https://daymoe.com/rom/Hack%20CT2.html" target="_blank">Original</a>
 			<a href="https://www.marcrobledo.com/RomPatcher.js" target="_blank">Rom Patcher</a><br>
@@ -27,11 +27,11 @@
 					accept=".nes"></a>&nbsp;<span id="isfileload">Page Loading...</span><br>
 			<button onClick="LoadOldData()">Load Cache</button>&nbsp;<button id="_set_data" onClick="SetOldData()"
 				style="display: none;">Set Cache</button>
-			<div id="_run_game_div" style="display: none;"><button id="_run_data" onClick="PlayNes()">Run Online</button>
+			<div id="_run_game_div" style="display: none;">
+				<button id="_run_data" onClick="PlayNes()">Run Online</button>
+				<button id="btnsave" onClick="savefile()" style="pointer-events: none">Save File</button>
 			</div>
 			<div><span id="checknes">type:???</span>&nbsp;<span id="ramtype">Ram Plus Type:???</span></div>
-			<button id="btnsave" onClick="savefile()" style="pointer-events: none">Save File</button>
-			<br>
 		</div>
 		<p id="result" style="width: 100%; word-break: break-all; word-wrap: break-word;"></p>
 		<div id="HackDiv" style="pointer-events: none;">

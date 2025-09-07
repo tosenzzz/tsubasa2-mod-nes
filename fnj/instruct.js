@@ -45,7 +45,10 @@ function GetInstruct() {
     'Instruction data address: ' + toHex16(InstructAddr, 5),
   );
   $('#PortraitTempText').html(
-    'Portrait data address: ' + toHex16(PortraitAddr, 5),
+    'Shot address: ' +
+      toHex16(PortraitAddr - 7, 5) +
+      ', Portrait data address: ' +
+      toHex16(PortraitAddr, 5),
   );
 }
 
@@ -64,7 +67,10 @@ function CheckInstructB() {
     );
   }
   $('#PortraitTempText').html(
-    'Portrait data address: ' + toHex16(PortraitAddr, 5),
+    'Shot address: ' +
+      toHex16(PortraitAddr - 7, 5) +
+      ', Portrait data address: ' +
+      toHex16(PortraitAddr, 5),
   );
 }
 
@@ -132,10 +138,12 @@ function CheckInstructT() {
 
 var skilllistshoot = [];
 var skilllistother = [];
+var shotBytes = [];
 
 function LoadSkills() {
   skilllistshoot = [];
   skilllistother = [];
+  shotBytes = [];
   var xdz = $('#PlayerList').get(0).selectedIndex * 2 + SkillAddr;
   var bdz = ramcheck(xdz, NesHex);
   var str =
@@ -161,7 +169,7 @@ function LoadSkills() {
   var lstBLOCK = Skill_BLOCK_.split(',');
   var lstTACKLE = Skill_TACKLE_.split(',');
   var lstICEPT = Skill_ICEPT_.split(',');
-  var lstGK = Skill_GK_.split(',');
+  // var lstGK = Skill_GK_.split(',');
 
   BindSkillStrO(lstPASS, lstSTYPE, 1, bdz + 2, bdz + 3, 'Passing'); //传/过人/二过一等
   BindSkillStrO(lstDRIBB, lstSTYPE, 2, bdz + 4, bdz + 5, 'Dribble');
@@ -169,58 +177,41 @@ function LoadSkills() {
   BindSkillStrO(lstBLOCK, lstSTYPE, 4, bdz + 8, bdz + 9, 'Block');
   BindSkillStrO(lstTACKLE, lstSTYPE, 5, bdz + 10, bdz + 11, 'Tackle');
   BindSkillStrO(lstICEPT, lstSTYPE, 6, bdz + 12, bdz + 13, 'Intercept');
-  BindSkillStrO(lstGK, lstSTYPE, 7, bdz + 14, bdz + 15, 'GK');
+  // BindSkillStrO(lstGK, lstSTYPE, 7, bdz + 14, bdz + 15, 'GK');
 
+  var shotWithF = [
+    0x20, 0x21, 0x22, 0x24, 0x25, 0x26, 0x28, 0x29, 0x2a, 0x44, 0x4c, 0x4d,
+    0x4e,
+  ];
   // Bind SHOT skills list: lstSHOT
   if (NesHex[bdz] == 0x00 && NesHex[bdz + 1] == 0x00) {
-    lstSTYPE[0] = lstSTYPE[0] + 'Special Shot: none<br>';
+    lstSTYPE[0] += 'Special Shot: none<br>';
   } else {
-    var 射门索引低位 = NesHex[bdz];
-    var 射门索引高位 = NesHex[bdz + 1];
-    for (var i = 0; i < 9 * 2; i++) {
-      if (NesHex[shootaddr + i] == 0x03) {
+    var idx1 = NesHex[bdz];
+    var idx2 = NesHex[bdz + 1];
+    lstSTYPE[0] +=
+      'Special Shot: Address ' +
+      `${bdz.hex()}, Index ${toHex16(idx1)} ${toHex16(idx2)}<br>`;
+    for (var i = 0; i < 0x100; i++) {
+      let shotId = NesHex[shootaddr + i];
+      if (shotId == 0xff) {
+        continue;
+      }
+      shotBytes.push(shotId);
+      if (shotId == 0x03) {
         break;
       }
-      if (NesHex[shootaddr + i] == 0xff) {
-        i++;
-      }
       for (var x = 0; x < lstSHOT.length; x++) {
-        if (skilllistshoot.length > 7) {
-          break;
-        }
-        if (parseInt(lstSHOT[x].substr(0, 2), 16) == NesHex[shootaddr + i]) {
-          if (i == 0) {
-            lstSTYPE[0] =
-              lstSTYPE[0] +
-              'Special Shot: Index ' +
-              toHex16(射门索引低位) +
-              ' ' +
-              toHex16(射门索引高位) +
-              ' <br>';
-          }
+        if (parseInt(lstSHOT[x].substr(0, 2), 16) == shotId) {
           var txt = `Address ${toHex16(shootaddr + i, 5)}=${lstSHOT[x]}`;
           lstSTYPE[0] += 'Special Shot: ' + txt + '<br>';
           var sid = lstSHOT[x].trim().split(' ')[0];
           skilllistshoot.push([txt, sid]);
-          //SkillSTR2[0] = SkillSTR2[0] + Skill0[x] + "<br>";
         }
       }
-
-      if (
-        NesHex[shootaddr + i] == 0x20 ||
-        NesHex[shootaddr + i] == 0x21 ||
-        NesHex[shootaddr + i] == 0x22 ||
-        NesHex[shootaddr + i] == 0x24 ||
-        NesHex[shootaddr + i] == 0x25 ||
-        NesHex[shootaddr + i] == 0x26 ||
-        NesHex[shootaddr + i] == 0x28 ||
-        NesHex[shootaddr + i] == 0x29 ||
-        NesHex[shootaddr + i] == 0x2a ||
-        NesHex[shootaddr + i] == 0x4c ||
-        NesHex[shootaddr + i] == 0x4d ||
-        NesHex[shootaddr + i] == 0x4e
-      ) {
+      if (shotWithF.includes(shotId)) {
         i++;
+        shotBytes.push(0xff);
       }
     }
   }
@@ -249,7 +240,7 @@ function BindSkillStr(lstSkills, lstTypes, ix, bd1, bd2, nm) {
       var txt =
         'Address ' + toHex16(ramcheck(bd1, NesHex), 5) + '=' + lstSkills[i];
       lstTypes[ix] +=
-        `: Address ${bd1.hex()} Index ` +
+        `: Address ${bd1.hex()}, Index ` +
         toHex16(NesHex[bd1]) +
         ' ' +
         toHex16(NesHex[bd2]) +
@@ -305,13 +296,12 @@ function CheckTempaddr2(dz) {
 function Save_Skills() {
   var useNewAddr = $('#useNewAddr').is(':checked');
   var pSkAddr = $('#PlayerList').get(0).selectedIndex * 2 + SkillAddr;
-  var addr1 = 0;
-  var addr2 = 0;
   var skillothers = [
     0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x81, 0x82, 0x83, 0x84, 0x00,
   ];
   var shotWithF = [
-    0x20, 0x21, 0x22, 0x24, 0x25, 0x26, 0x28, 0x29, 0x2a, 0x4c, 0x4d, 0x4e,
+    0x20, 0x21, 0x22, 0x24, 0x25, 0x26, 0x28, 0x29, 0x2a, 0x44, 0x4c, 0x4d,
+    0x4e,
   ];
   var xx = {
     '01': [0xe5, 0xff, 0x01],
@@ -354,7 +344,11 @@ function Save_Skills() {
     };
 
     // Check empty address
-    if (NesHex[pSkAddr + 1] >= 0x50 && NesHex[pSkAddr + 1] <= 0x6f) {
+    if (
+      NesHex[pSkAddr + 1] >= 0x50 &&
+      NesHex[pSkAddr + 1] <= 0x6f &&
+      !useNewAddr
+    ) {
       dz = ramcheck(pSkAddr, NesHex);
     } else {
       dz = CheckTempaddr1(dz);
@@ -369,15 +363,14 @@ function Save_Skills() {
     }
 
     // Check empty address
+    var off1 = NesHex[pSkAddr];
+    var off2 = NesHex[pSkAddr + 1];
+    var off21 = toHex16(off2).substr(0, 1);
     if (
-      NesHex[pSkAddr + 1] == 0xbd ||
-      NesHex[pSkAddr + 1] == 0xbe ||
-      NesHex[pSkAddr + 1] == 0xbf ||
-      NesHex[pSkAddr + 1] == 0xfd ||
-      NesHex[pSkAddr + 1] == 0xfe ||
-      NesHex[pSkAddr + 1] == 0xff ||
-      (toHex16(NesHex[pSkAddr + 1]).substr(0, 1) == '6' && Is1v32 == true) ||
-      (toHex16(NesHex[pSkAddr + 1]).substr(0, 1) == '7' && Is1v32 == true)
+      (!(off1 == 0x07 && off2 == 0x8f) ||
+        [0xbd, 0xbe, 0xbf, 0xfd, 0xfe, 0xff].includes(off2) ||
+        (['6', '7'].includes(off21) && Is1v32 == true)) &&
+      !useNewAddr
     ) {
       dz = ramcheck(pSkAddr, NesHex);
     } else {
@@ -420,26 +413,52 @@ function Save_Skills() {
       dz = dz + 0x40000;
     }
   } else {
-    NesHex[pSkAddr] = parseInt(toHex16(dz - 0x10, 4).substr(2, 2), 16);
-    NesHex[pSkAddr + 1] = parseInt(toHex16(dz - 0x10, 4).substr(0, 2), 16);
-    NesHex[dz] = parseInt(toHex16(dz - 2, 4).substr(2, 2), 16);
-    NesHex[dz + 1] = parseInt(toHex16(dz - 2, 4).substr(0, 2), 16);
+    if (useNewAddr) {
+      // Pointer to new Address
+      NesHex[pSkAddr] = parseInt(toHex16(dz - 0x10, 4).substr(2, 2), 16);
+      NesHex[pSkAddr + 1] = parseInt(toHex16(dz - 0x10, 4).substr(0, 2), 16);
+      // Pointer to Shots skill
+      NesHex[dz] = parseInt(toHex16(dz - 2, 4).substr(2, 2), 16);
+      NesHex[dz + 1] = parseInt(toHex16(dz - 2, 4).substr(0, 2), 16);
+    }
   }
 
   // Fill all shot skills
   var SkillByte = [];
+  var tmpShotList = [];
   for (var i = 0; i < $('#ulshoot').children().length; i++) {
     let str = $('#ulshoot').children().eq(i).find('span').attr('val');
     let val = parseInt(str, 16);
+    tmpShotList.push(val);
     SkillByte.push(val);
     if (shotWithF.includes(val)) {
       SkillByte.push(0xff);
     }
   }
   SkillByte.push(0x03);
-  // Write shot skills to ROM
-  for (var i = 0; i < SkillByte.length; i++) {
-    NesHex[dz + 14 + i] = SkillByte[i];
+
+  var isShotChanged =
+    skilllistshoot.length != tmpShotList.length ||
+    !skilllistshoot.every((v) => tmpShotList.includes(v[1].num()));
+  if (isShotChanged) {
+    if (SkillByte.length > shotBytes.length) {
+      // Need to create new address
+      if (!useNewAddr) {
+        var ck = CheckTempaddr2(0);
+        NesHex[dz] = parseInt(toHex16(ck - 2, 4).substr(2, 2), 16);
+        NesHex[dz + 1] = parseInt(toHex16(ck - 2, 4).substr(0, 2), 16);
+      }
+    } else {
+      for (let i = SkillByte.length; i < shotBytes.length; i++) {
+        SkillByte.push(0xff);
+      }
+    }
+
+    // Write shot skills to ROM
+    var addr = ramcheck(dz, NesHex);
+    for (var i = 0; i < SkillByte.length; i++) {
+      NesHex[addr + i] = SkillByte[i];
+    }
   }
 
   // Update other skills
@@ -450,8 +469,11 @@ function Save_Skills() {
     NesHex[dz + addrtemp] = NesHex[dz + addrtemp + 1] = 0x00;
   } else {
     var cd = $('#ulother').children().eq(0).find('span').attr('val');
-    NesHex[dz + addrtemp] = xx[cd]?.[0] || 0;
-    NesHex[dz + addrtemp + 1] = xx[cd]?.[1] || 0;
+    var old = NesHex[ramcheck(dz + addrtemp, NesHex)];
+    if (old != cd.num()) {
+      NesHex[dz + addrtemp] = xx[cd]?.[0] || 0;
+      NesHex[dz + addrtemp + 1] = xx[cd]?.[1] || 0;
+    }
   }
   addrtemp += 2;
   // Special Dribble
@@ -459,8 +481,11 @@ function Save_Skills() {
     NesHex[dz + addrtemp] = NesHex[dz + addrtemp + 1] = 0x00;
   } else {
     var cd = $('#ulother').children().eq(1).find('span').attr('val');
-    NesHex[dz + addrtemp] = xx[cd]?.[0] || 0;
-    NesHex[dz + addrtemp + 1] = xx[cd]?.[1] || 0;
+    var old = NesHex[ramcheck(dz + addrtemp, NesHex)];
+    if (old != cd.num()) {
+      NesHex[dz + addrtemp] = xx[cd]?.[0] || 0;
+      NesHex[dz + addrtemp + 1] = xx[cd]?.[1] || 0;
+    }
   }
   addrtemp += 2;
   // Special 1-2
@@ -468,8 +493,11 @@ function Save_Skills() {
     NesHex[dz + addrtemp] = NesHex[dz + addrtemp + 1] = 0x00;
   } else {
     var cd = $('#ulother').children().eq(2).find('span').attr('val');
-    NesHex[dz + addrtemp] = xx[cd]?.[0] || 0;
-    NesHex[dz + addrtemp + 1] = xx[cd]?.[1] || 0;
+    var old = NesHex[ramcheck(dz + addrtemp, NesHex)];
+    if (old != cd.num()) {
+      NesHex[dz + addrtemp] = xx[cd]?.[0] || 0;
+      NesHex[dz + addrtemp + 1] = xx[cd]?.[1] || 0;
+    }
   }
   addrtemp += 2;
   // Special Block
@@ -477,8 +505,11 @@ function Save_Skills() {
     NesHex[dz + addrtemp] = NesHex[dz + addrtemp + 1] = 0x00;
   } else {
     var cd = $('#ulother').children().eq(3).find('span').attr('val');
-    NesHex[dz + addrtemp] = xx[cd]?.[0] || 0;
-    NesHex[dz + addrtemp + 1] = xx[cd]?.[1] || 0;
+    var old = NesHex[ramcheck(dz + addrtemp, NesHex)];
+    if (old != cd.num()) {
+      NesHex[dz + addrtemp] = xx[cd]?.[0] || 0;
+      NesHex[dz + addrtemp + 1] = xx[cd]?.[1] || 0;
+    }
   }
   addrtemp += 2;
   // Special Tackle
@@ -486,10 +517,13 @@ function Save_Skills() {
     NesHex[dz + addrtemp] = NesHex[dz + addrtemp + 1] = 0x00;
   } else {
     var cd = $('#ulother').children().eq(4).find('span').attr('val');
-    NesHex[dz + addrtemp] = xx[cd]?.[0] || 0;
-    NesHex[dz + addrtemp + 1] = xx[cd]?.[1] || 0;
-    NesHex[DefEffectAddr + $('#PlayerList').get(0).selectedIndex] =
-      xx[cd]?.[2] || 0; //Defense effect code
+    var old = NesHex[ramcheck(dz + addrtemp, NesHex)];
+    if (old != cd.num()) {
+      NesHex[dz + addrtemp] = xx[cd]?.[0] || 0;
+      NesHex[dz + addrtemp + 1] = xx[cd]?.[1] || 0;
+      NesHex[DefEffectAddr + $('#PlayerList').get(0).selectedIndex] =
+        xx[cd]?.[2] || 0; //Defense effect code
+    }
   }
   addrtemp += 2;
   // Special Intercept
@@ -497,8 +531,11 @@ function Save_Skills() {
     NesHex[dz + addrtemp] = NesHex[dz + addrtemp + 1] = 0x00;
   } else {
     var cd = $('#ulother').children().eq(5).find('span').attr('val');
-    NesHex[dz + addrtemp] = xx[cd]?.[0] || 0;
-    NesHex[dz + addrtemp + 1] = xx[cd]?.[1] || 0;
+    var old = NesHex[ramcheck(dz + addrtemp, NesHex)];
+    if (old != cd.num()) {
+      NesHex[dz + addrtemp] = xx[cd]?.[0] || 0;
+      NesHex[dz + addrtemp + 1] = xx[cd]?.[1] || 0;
+    }
   }
   // addrtemp += 2;
   // // Special GK
@@ -585,9 +622,8 @@ function Changeskilladdtype() {
 }
 
 function getskillimgcode() {
-  var id = $('#skill__addr').get(0).selectedIndex;
-  var codes = toHex16(NesHex[Skill_o_addr[id]]);
-  PortraitAddr = Skill_o_addr[id];
+  var addr = $('#skill__addr').val();
+  var codes = toHex16(NesHex[addr]);
   var x = 0;
   for (var i = 0; i < Skill_o_txt.length; i++) {
     if (codes == Skill_o_txt[i].substr(0, 2)) {
@@ -600,6 +636,9 @@ function getskillimgcode() {
     'Instruction data address: ' + toHex16(InstructAddr, 5),
   );
   $('#PortraitTempText').html(
-    'Portrait data address: ' + toHex16(PortraitAddr, 5),
+    'Shot address: ' +
+      toHex16(addr - 7, 5) +
+      ', Portrait data address: ' +
+      toHex16(addr, 5),
   );
 }

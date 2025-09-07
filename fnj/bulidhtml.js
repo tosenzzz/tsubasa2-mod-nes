@@ -212,7 +212,7 @@ function BulidHTML_Team_Player() {
   }
   Team_list += '</select>';
   Team_list +=
-    "<button id='showadteambtn' onclick='CAddTeam()'>Add Star Player</button>&nbsp;<button onclick='ChangeTeam()'>Apply</button><br>";
+    "<button id='showadteambtn' onclick='CAddTeam()'>Edit COM team</button>&nbsp;<button onclick='ChangeTeam()'>Apply</button><br>";
   Team_list +=
     '<div id="Team_AKDFdiv"><span>Tactics:</span><select id="Team_AK"></select>&nbsp;<span>Formation:</span><select id="Team_DF"></select><span id="TeamedStr"> </span><br></div>';
   $('#Team_list').html(Team_list);
@@ -874,7 +874,7 @@ function BulidInstructTabHtml() {
 
   htmlstr +=
     "<div><span>Skill Image ↓</span><br><select id='skill__addr' onchange='getskillimgcode();'>";
-  htmlstr = fillSelectlist_S(htmlstr, Skill_o_str);
+  htmlstr = fillSelectlist_S2(htmlstr, Skill_o_str);
   htmlstr += "</select><select id='skill__code'>";
   htmlstr = fillSelectlist_S(htmlstr, Skill_o_txt);
   htmlstr += '</select></div>';

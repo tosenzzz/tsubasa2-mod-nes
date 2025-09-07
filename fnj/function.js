@@ -232,7 +232,7 @@ function CAddTeam() {
     if ($('#Team_Select').get(0).selectedIndex == 2) {
       $('#replayerlistdiv').css('display', 'inline');
     }
-    $('#showadteambtn').html('Add Star Player');
+    $('#showadteambtn').html('Edit COM team');
     $('#Team_Select').css('display', 'inline');
     if ($('#Team_Select').get(0).selectedIndex >= 3) {
       $('#Team_AKDFdiv').css('display', 'inline');
@@ -638,6 +638,14 @@ function fillSelectlist_x(Select_, x, y) {
 function fillSelectlist_S(str, listdbs) {
   for (var i = 0; i < listdbs.length; i++) {
     str += '<option value= "' + i + '">' + listdbs[i] + '</option>';
+  }
+  return str;
+}
+function fillSelectlist_S2(str, listdbs) {
+  var tmp = [];
+  for (var i = 0; i < listdbs.length; i++) {
+    tmp = listdbs[i].split(',');
+    str += '<option value= "' + tmp[1].num() + '">' + tmp[0] + '</option>';
   }
   return str;
 }
