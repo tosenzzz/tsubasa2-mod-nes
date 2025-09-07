@@ -214,3 +214,6 @@ table, td {
     cursor: pointer;
     margin: 10px;
 }
+#ShowEditValue {
+    width: 100%;
+}

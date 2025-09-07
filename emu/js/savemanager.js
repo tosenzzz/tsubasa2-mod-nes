@@ -227,14 +227,14 @@
 
     let cancelBtn = document.createElement('button');
     cancelBtn.textContent = 'Restart';
-    cancelBtn.style.marginLeft = '10px';
+    cancelBtn.style.marginRight = '10px';
     cancelBtn.onclick = function () {
       document.body.removeChild(overlay);
       if (callback) callback();
     };
 
-    btnContainer.appendChild(loadBtn);
     btnContainer.appendChild(cancelBtn);
+    btnContainer.appendChild(loadBtn);
     dialog.appendChild(img);
     dialog.appendChild(text);
     dialog.appendChild(btnContainer);

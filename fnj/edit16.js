@@ -162,9 +162,9 @@ function BulidEdit16TabHtml() {
   edit16html +=
     "<button onclick='EditSeValue()'>Find</button> <span>Data:</span> <span id='EditAlertSpan' style='color:red;'></span>";
   edit16html += "<span id='EditSEdivSe'></span>";
+  edit16html += "<br><textarea  id='ShowEditValue' rows='5'></textarea><br>";
   edit16html +=
-    "<br><textarea  id='ShowEditValue' cols='25' rows='5'></textarea><br>";
-  edit16html += "<button onclick='WriteEdit16()'>Write Data</button>";
+    "<button onclick='WriteEdit16()'>Write Data</button> <button onclick='FormatData16()'>Format Data</button>";
   edit16html +=
     "<div><span>Warning: do not search for long runs of 00 or FF — it can <span style='color:red;'>really really really</span> freeze your browser!</span><br>";
   edit16html +=
@@ -277,20 +277,27 @@ function JumpEdit() {
   LoadHex16();
 }
 
+function FormatData16() {
+  var val = $('#ShowEditValue').val().trim().replace(/\n/g, ' ');
+  $('#ShowEditValue').val(val);
+}
+
 function WriteEdit16() {
-  if ($('#ShowEditValue').val().length <= 1) {
-    alertMsg('#isfileload', 'red', 'Please enter a byte or byte sequence!');
-    return;
-  }
   if ($('#ShowEditIndex').val().length <= 0) {
     alertMsg('#isfileload', 'red', 'Please enter the target address!');
     return;
   }
+  var val = $('#ShowEditValue').val().trim().replace(/\n/g, ' ');
+  $('#ShowEditValue').val(val);
+  if (val.length <= 1) {
+    alertMsg('#isfileload', 'red', 'Please enter a byte or byte sequence!');
+    return;
+  }
   var edindex = hex2int($('#ShowEditIndex').val());
-  if ($('#ShowEditValue').val().length == 2) {
-    NesHex[edindex] = hex2int($('#ShowEditValue').val());
+  if (val.length == 2) {
+    NesHex[edindex] = hex2int(val);
   } else {
-    var edvalue = $('#ShowEditValue').val().split(' ');
+    var edvalue = val.split(' ');
     for (var i = 0; i < edvalue.length; i++) {
       NesHex[edindex + i] = hex2int(edvalue[i]);
     }
