@@ -137,54 +137,20 @@ function ChangeTeam() {
           NesHex[0x8000d] = 0xfa;
         }
         //空地址
-        if (
-          NesHex[defaddr + 1] == 0x50 ||
-          NesHex[defaddr + 1] == 0x51 ||
-          NesHex[defaddr + 1] == 0x52 ||
-          NesHex[defaddr + 1] == 0x53 ||
-          NesHex[defaddr + 1] == 0x54 ||
-          NesHex[defaddr + 1] == 0x55 ||
-          NesHex[defaddr + 1] == 0x56 ||
-          NesHex[defaddr + 1] == 0x57 ||
-          NesHex[defaddr + 1] == 0x58 ||
-          NesHex[defaddr + 1] == 0x59 ||
-          NesHex[defaddr + 1] == 0x5a ||
-          NesHex[defaddr + 1] == 0x5b ||
-          NesHex[defaddr + 1] == 0x5c ||
-          NesHex[defaddr + 1] == 0x5d ||
-          NesHex[defaddr + 1] == 0x5e ||
-          NesHex[defaddr + 1] == 0x5f ||
-          NesHex[defaddr + 1] == 0x60 ||
-          NesHex[defaddr + 1] == 0x61 ||
-          NesHex[defaddr + 1] == 0x62 ||
-          NesHex[defaddr + 1] == 0x63 ||
-          NesHex[defaddr + 1] == 0x64 ||
-          NesHex[defaddr + 1] == 0x65 ||
-          NesHex[defaddr + 1] == 0x66 ||
-          NesHex[defaddr + 1] == 0x67 ||
-          NesHex[defaddr + 1] == 0x68 ||
-          NesHex[defaddr + 1] == 0x69 ||
-          NesHex[defaddr + 1] == 0x6a ||
-          NesHex[defaddr + 1] == 0x6b ||
-          NesHex[defaddr + 1] == 0x6c ||
-          NesHex[defaddr + 1] == 0x6d ||
-          NesHex[defaddr + 1] == 0x6e ||
-          NesHex[defaddr + 1] == 0x6f
-        ) {
+        if (NesHex[defaddr + 1] >= 0x50 && NesHex[defaddr + 1] <= 0x6f) {
           dz = ramcheck(defaddr, NesHex);
         } else {
           dz = CheckTempaddr1(dz) - 0x10;
+          if (dz < 1) {
+            alertMsg('#isfileload', 'red', 'No free space ...');
+            return;
+          }
         }
         开关索引1 = parseInt(toHex16(dz - 0x73000, 4).substr(2, 2), 16);
         开关索引2 = parseInt(toHex16(dz - 0x73000, 4).substr(0, 2), 16);
       } else {
         if (
-          NesHex[defaddr + 1] == 0xbd ||
-          NesHex[defaddr + 1] == 0xbe ||
-          NesHex[defaddr + 1] == 0xbf ||
-          NesHex[defaddr + 1] == 0xfd ||
-          NesHex[defaddr + 1] == 0xfe ||
-          NesHex[defaddr + 1] == 0xff ||
+          (NesHex[defaddr + 1] >= 0xbd && NesHex[defaddr + 1] <= 0xff) ||
           (toHex16(NesHex[defaddr + 1]).substr(0, 1) == '6' &&
             Is1v32 == true) ||
           (toHex16(NesHex[defaddr + 1]).substr(0, 1) == '7' && Is1v32 == true)
@@ -192,6 +158,10 @@ function ChangeTeam() {
           dz = ramcheck(defaddr, NesHex);
         } else {
           dz = CheckTempaddr2(dz) - 0x10;
+          if (dz < 1) {
+            alertMsg('#isfileload', 'red', 'No free space ...');
+            return;
+          }
         }
 
         开关索引1 = parseInt(toHex16(dz, 4).substr(2, 2), 16);

@@ -273,24 +273,27 @@ function CheckTempaddr1(dz) {
       return dz;
     }
   }
+  return 0;
 }
 
 function CheckTempaddr2(dz) {
   // Option 1
-  for (var i = 0; i < 700; i += 0x20) {
+  for (var i = 0; i < 0x2f0; i += 0x20) {
     dz = 0x3bd10 + i;
-    if (NesHex.slice(dz, dz + 3).every((v) => v == 0xff)) {
+    if (NesHex.slice(dz, dz + 0x20).every((v) => v == 0xff)) {
       return dz;
     }
   }
 
   // Option 2
-  for (var i = 0; i < 700; i + 0x20) {
+  for (var i = 0; i < 0x2f0; i += 0x20) {
     dz = 0x3fd10 + i;
-    if (NesHex.slice(dz, dz + 3).every((v) => v == 0xff)) {
+    if (NesHex.slice(dz, dz + 0x20).every((v) => v == 0xff)) {
       return dz;
     }
   }
+
+  return 0;
 }
 
 function Save_Skills() {
@@ -352,11 +355,13 @@ function Save_Skills() {
       dz = ramcheck(pSkAddr, NesHex);
     } else {
       dz = CheckTempaddr1(dz);
+      if (dz < 1) {
+        alertMsg('#isfileload', 'red', 'No free space ...');
+        return;
+      }
       useNewAddr = true;
     }
-  }
-  //else if (Is1v32) {}
-  else {
+  } else {
     // Define Others SKILL to using later
     for (var i = 0; i < skillothers.length; i++) {
       NesHex[0x3fff5 + i] = skillothers[i];
@@ -375,6 +380,10 @@ function Save_Skills() {
       dz = ramcheck(pSkAddr, NesHex);
     } else {
       dz = CheckTempaddr2(dz);
+      if (dz < 1) {
+        alertMsg('#isfileload', 'red', 'No free space ...');
+        return;
+      }
       useNewAddr = true;
     }
   }
@@ -442,9 +451,15 @@ function Save_Skills() {
     !skilllistshoot.every((v) => tmpShotList.includes(v[1].num()));
   if (isShotChanged) {
     if (SkillByte.length > shotBytes.length) {
+      var addr = ramcheck(dz, NesHex);
+      var ck = NesHex.slice(addr + shotBytes.length, addr + SkillByte.length);
       // Need to create new address
-      if (!useNewAddr) {
+      if (!useNewAddr && !ck.every((v) => v == 0xff)) {
         var ck = CheckTempaddr2(0);
+        if (dz < 1) {
+          alertMsg('#isfileload', 'red', 'No free space ...');
+          return;
+        }
         NesHex[dz] = parseInt(toHex16(ck - 2, 4).substr(2, 2), 16);
         NesHex[dz + 1] = parseInt(toHex16(ck - 2, 4).substr(0, 2), 16);
       }
