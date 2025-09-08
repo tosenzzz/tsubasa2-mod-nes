@@ -12,7 +12,7 @@ function ApplyPatch() {
     var arr = code.split('=');
     if (arr.length == 2) {
       var addr = Number('0x' + arr[0].trim());
-      var vals = arr[1].trim().split(' ');
+      var vals = arr[1].trim().split(/[,\s]/);
       for (var i = 0; i < vals.length; i++) {
         NesHex[addr + i] = +('0x' + vals[i]);
       }
@@ -259,4 +259,16 @@ function copyDivContent() {
       console.error('Lỗi khi copy: ', err);
       alert('Không thể copy.');
     });
+}
+
+function LoadAllPatch() {
+  let sl = $('#patchList');
+  CUS_PATCH.forEach((v, i) => {
+    sl.append(`<option value="${i}">${v[0]}</option>`);
+  });
+  $('#patch_code').val(CUS_PATCH[0][1]);
+}
+
+function PatchChanged() {
+  $('#patch_code').val(CUS_PATCH[$('#patchList').val()][1]);
 }

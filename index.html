@@ -18,7 +18,7 @@
 <body>
 	<div id="main">
 		<div>
-			<p style="font-size: 1.1em" id="updated_at">by tosenzzz 2025-09-08 15:03:33</p>
+			<p style="font-size: 1.1em" id="updated_at">by tosenzzz 2025-09-08 22:58:06</p>
 			<a href="http://daymoe.com/rom/" target="_blank">RomMarket</a>&nbsp;
 			<a href="https://daymoe.com/rom/Hack%20CT2.html" target="_blank">Original</a>
 			<a href="https://www.marcrobledo.com/RomPatcher.js" target="_blank">Rom Patcher</a><br>
@@ -138,24 +138,9 @@
 					</div>
 				</li>
 				<li class="ctab">
-					<span>Input patch code:</span><br>
-					<textarea id="patch_code" style="width: 100%; resize: none; height: 300px;">
-; +0x1e0b3 for new block
-21C6D=10 fd
-; code for Illusion Save: ramcheck('21C6D'.num(), NesHex).hex()
-3FD20=F7 30 F9 02 17 96 6A 3A 20 F9 02 1F F7 1D 80 47 F0 21 FB
-; Text of button down: Supper!
-3EB30=8f 75 70 65 72 21 20 20
-; Assign special catch for Lennart
-3D2F8=02
-; Animation of Lennart when catching
-221DA=F7 02 09 0E 2C 1C FB F7 02 F9 21 2A 05 0E 17 1C FC 00 FB F7 02 10 0E 24 1E FB
-; Disable Wakashimazu has this special
-3977D=03 03
-39861=03 03
-; Image of Lennart when catching
-237B2=33 93
-					</textarea><br>
+					<br><span>Select OR Input patch code:</span>
+					<select id='patchList' onchange='PatchChanged();'></select><br>
+					<textarea id="patch_code" style="width: 100%; resize: none; height: 300px;"></textarea><br>
 					<button onclick="ApplyPatch()">Apply</button><br>
 				</li>
 				<li class="ctab">
@@ -174,7 +159,7 @@
 					<button onclick="ReplaceText()">Replace Text </button>
 				</li>
 				<li class="ctab">
-					<input type="file" id="pwdFile" accept=".txt" /><br>
+					<br><input type="file" id="pwdFile" accept=".txt" /><br>
 					<textarea id="pwdTxt" rows="10" cols="50" placeholder="Nhập nội dung tại đây..."></textarea><br>
 					<button onclick="convertHira()">Convert あ=>A1=>A</button>
 					<button onclick="copyDivContent()" id="copy">Copy</button><br>

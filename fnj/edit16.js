@@ -278,7 +278,11 @@ function JumpEdit() {
 }
 
 function FormatData16() {
-  var val = $('#ShowEditValue').val().trim().replace(/\n/g, ' ');
+  var val = $('#ShowEditValue')
+    .val()
+    .split(/[,\s\n]/)
+    .filter((v) => !!v)
+    .join(' ');
   $('#ShowEditValue').val(val);
 }
 

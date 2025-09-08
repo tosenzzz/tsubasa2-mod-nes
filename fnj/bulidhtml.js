@@ -35,6 +35,7 @@ function LoadHtmlInner() {
   BulidHTML_ChrHTML();
   BulidInstructTabHtml();
   BulidHTML_BG_View_Html(); // Build CHR extended HTML
+  LoadAllPatch();
 }
 
 // CHR quick editor

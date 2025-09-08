@@ -116,8 +116,8 @@ button {
     border-radius: 4px;
     overflow: hidden;
     display: inline-block;
-    *display: inline;
-    *zoom: 1;
+    /* *display: inline;
+    *zoom: 1; */
 }
 
     .a-upload input {
