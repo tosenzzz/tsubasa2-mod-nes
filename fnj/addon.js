@@ -6,21 +6,6 @@ String.prototype.num = function () {
   return +('0x' + this);
 };
 
-function ApplyPatch() {
-  var codes = $('#patch_code').val().replace(/;.*/g, '').trim().split('\n');
-  codes.forEach((code) => {
-    var arr = code.split('=');
-    if (arr.length == 2) {
-      var addr = Number('0x' + arr[0].trim());
-      var vals = arr[1].trim().split(/[,\s]/);
-      for (var i = 0; i < vals.length; i++) {
-        NesHex[addr + i] = +('0x' + vals[i]);
-      }
-    }
-  });
-  alertMsg('#isfileload', 'green', 'Patch updated successfully!');
-}
-
 // https://www.fontchanger.net
 var XX = [' ', 'tsu', 'ba', 'sa', 'le', 'nn', 'ar', 'li', 'ma', 'ri', 'ni']
   .concat(['ra', 'tt', 'il', 'mb', 'is', 'ta', 'ha', 'in', 'on', 'la', 'be'])
@@ -205,7 +190,6 @@ for (let row = 0; row < AbTbl.length; row++) {
 }
 
 document.getElementById('pwdFile').addEventListener('change', function (event) {
-  pwdData = '';
   const file = event.target.files[0];
   if (!file) return;
   if (file.type !== 'text/plain') {
@@ -267,8 +251,103 @@ function LoadAllPatch() {
     sl.append(`<option value="${i}">${v[0]}</option>`);
   });
   $('#patch_code').val(CUS_PATCH[0][1]);
+  // Load password list
+  $('#pwdTxt').val(PWD_CODE);
 }
 
 function PatchChanged() {
   $('#patch_code').val(CUS_PATCH[$('#patchList').val()][1]);
+}
+
+function ApplyPatch() {
+  var codes = $('#patch_code').val().replace(/;.*/g, '').trim().split('\n');
+  codes.forEach((code) => {
+    var arr = code.split('=');
+    if (arr.length == 2) {
+      var addr = Number('0x' + arr[0].trim());
+      var vals = arr[1].trim().split(/[,\s]/);
+      for (var i = 0; i < vals.length; i++) {
+        NesHex[addr + i] = +('0x' + vals[i]);
+      }
+    }
+  });
+  alertMsg('#isfileload', 'green', 'Patch updated successfully!');
+}
+
+document.getElementById('ipsFile').addEventListener('change', function (event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    try {
+      parseIPS(e.target.result);
+    } catch (e) {
+      alertMsg('#isfileload', 'red', e.message);
+    }
+  };
+  reader.readAsArrayBuffer(file);
+});
+
+function printChunksToLines(off, bytes, wrap = true) {
+  const lines = [];
+  if (!wrap) {
+    lines.push(`${off.hex()}=${[...bytes].map((b) => toHex16(b)).join(' ')}`);
+    return lines;
+  }
+  for (let i = 0; i < bytes.length; i += 16) {
+    const chunk = bytes.subarray(i, i + 16);
+    const addr = off + i;
+    lines.push(`${addr.hex()}=${[...chunk].map((b) => toHex16(b)).join(' ')}`);
+  }
+  return lines;
+}
+
+function parseIPS(buf, wrap = true) {
+  const u8 = new Uint8Array(buf);
+
+  // Header "PATCH"
+  if (u8.length < 8 || String.fromCharCode(...u8.slice(0, 5)) !== 'PATCH') {
+    throw new Error('File không hợp lệ: thiếu header "PATCH".');
+  }
+  let i = 5;
+  const lines = [];
+
+  while (i + 3 <= u8.length) {
+    // EOF?
+    if (u8[i] === 0x45 && u8[i + 1] === 0x4f && u8[i + 2] === 0x46) {
+      // "EOF"
+      i += 3;
+      if (i + 3 <= u8.length) {
+        const newSize = (u8[i] << 16) | (u8[i + 1] << 8) | u8[i + 2];
+        lines.push(`(Info) New file size (truncate): 0x${newSize.hex()}`);
+      }
+      break;
+    }
+
+    // Offset (3 bytes BE)
+    if (i + 5 > u8.length) throw new Error('Hỏng record (thiếu offset/size).');
+    const off = (u8[i] << 16) | (u8[i + 1] << 8) | u8[i + 2];
+    i += 3;
+
+    // Size (2 bytes BE)
+    const size = (u8[i] << 8) | u8[i + 1];
+    i += 2;
+
+    if (size === 0) {
+      // RLE: rleSize(2) + value(1)
+      if (i + 3 > u8.length) throw new Error('Hỏng RLE record.');
+      const rleSize = (u8[i] << 8) | u8[i + 1];
+      const value = u8[i + 2];
+      i += 3;
+      const block = new Uint8Array(rleSize);
+      block.fill(value);
+      lines.push(...printChunksToLines(off, block, wrap));
+    } else {
+      if (i + size > u8.length) throw new Error('Hỏng data record (tràn).');
+      const block = u8.slice(i, i + size);
+      i += size;
+      lines.push(...printChunksToLines(off, block, wrap));
+    }
+  }
+  $('#patch_code').val(lines.join('\n'));
 }

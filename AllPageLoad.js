@@ -38,9 +38,10 @@ function checknotmobile() {
 
 //libgme.js   //index.js  //cheats.js
 LoadCSSJSFile([
+  'dataother.js',
+  'datajson.js',
   'addon.js',
   'def.css',
-  'datajson.js',
   'bulidhtml.js',
   'rampluscheck.js',
   'function.js',

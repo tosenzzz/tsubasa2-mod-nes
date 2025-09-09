@@ -18,7 +18,7 @@
 <body>
 	<div id="main">
 		<div>
-			<p style="font-size: 1.1em" id="updated_at">by tosenzzz 2025-09-08 22:58:06</p>
+			<p style="font-size: 1.1em" id="updated_at">by tosenzzz 2025-09-09 12:57:10</p>
 			<a href="http://daymoe.com/rom/" target="_blank">RomMarket</a>&nbsp;
 			<a href="https://daymoe.com/rom/Hack%20CT2.html" target="_blank">Original</a>
 			<a href="https://www.marcrobledo.com/RomPatcher.js" target="_blank">Rom Patcher</a><br>
@@ -34,7 +34,7 @@
 			<div><span id="checknes">type:???</span>&nbsp;<span id="ramtype">Ram Plus Type:???</span></div>
 		</div>
 		<p id="result" style="width: 100%; word-break: break-all; word-wrap: break-word;"></p>
-		<div id="HackDiv" style="pointer-events: none;">
+		<div id="HackDiv" style="pointer-events: auto;">
 			<ul id="menu">
 				<li class="ctab">Teams</li>
 				<li class="ctab">Players</li>
@@ -139,9 +139,10 @@
 				</li>
 				<li class="ctab">
 					<br><span>Select OR Input patch code:</span>
-					<select id='patchList' onchange='PatchChanged();'></select><br>
-					<textarea id="patch_code" style="width: 100%; resize: none; height: 300px;"></textarea><br>
-					<button onclick="ApplyPatch()">Apply</button><br>
+					<select id='patchList' onchange='PatchChanged();'></select>
+					<input type="file" id="ipsFile" accept=".ips" /><br>
+					<textarea id="patch_code"></textarea><br>
+					<button onclick="ApplyPatch()">Apply Patch</button><br>
 				</li>
 				<li class="ctab">
 					<span>Search text: </span> <input type="text" style="width:120px;" id="searchTxt" value="">

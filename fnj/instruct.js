@@ -3,7 +3,7 @@ var InstructAddr = 0;
 var Instruct0440 = 0;
 var Instruct0443 = 0;
 function GetInstruct() {
-  CmdDataSel = $('#InstructList').get(0).selectedIndex;
+  CmdDataSel = $('#InstructList').val();
   InstructAddr = 0;
   if (CmdDataSel <= 54) {
     InstructAddr = AttackCmdAddr + CmdDataSel * 4;

@@ -611,6 +611,13 @@ function fillSelectlist_S(str, listdbs) {
   }
   return str;
 }
+function fillSelectlist_S3(str, listdbs) {
+  for (var i = 0; i < listdbs.length; i++) {
+    tmp = listdbs[i].split(' ', 1);
+    str += '<option value= "' + tmp[0].num() + '">' + listdbs[i] + '</option>';
+  }
+  return str;
+}
 function fillSelectlist_S2(str, listdbs) {
   var tmp = [];
   for (var i = 0; i < listdbs.length; i++) {

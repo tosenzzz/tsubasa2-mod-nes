@@ -217,6 +217,9 @@ table, td {
 #ShowEditValue {
     width: 100%;
 }
-#Edit16ViewTabs pre {
+/* #Edit16ViewTabs pre {
     min-width: 20px;
+} */
+#patch_code, #pwdTxt {
+    width: 100%; height: 300px;
 }
