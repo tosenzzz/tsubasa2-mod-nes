@@ -1,11 +1,3 @@
-var ll = console.log();
-Number.prototype.hex = function () {
-  return this.toString(16).toUpperCase();
-};
-String.prototype.num = function () {
-  return +('0x' + this);
-};
-
 // https://www.fontchanger.net
 var XX = [' ', 'tsu', 'ba', 'sa', 'le', 'nn', 'ar', 'li', 'ma', 'ri', 'ni']
   .concat(['ra', 'tt', 'il', 'mb', 'is', 'ta', 'ha', 'in', 'on', 'la', 'be'])
@@ -259,8 +251,11 @@ function PatchChanged() {
   $('#patch_code').val(CUS_PATCH[$('#patchList').val()][1]);
 }
 
-function ApplyPatch() {
-  var codes = $('#patch_code').val().replace(/;.*/g, '').trim().split('\n');
+function ApplyPatch(val) {
+  var codes = (val || $('#patch_code').val())
+    .replace(/;.*/g, '')
+    .trim()
+    .split('\n');
   codes.forEach((code) => {
     var arr = code.split('=');
     if (arr.length == 2) {

@@ -10,7 +10,7 @@ let copyTileData = null;
 let copyTileId = 0;
 
 document.onclick = function () {
-  document.getElementById('chrEditmeu').style.display = 'none';
+  $('#chrEditmeu').hide();
 };
 
 function IntoChrPage() {
@@ -98,7 +98,7 @@ function IntoChrPage() {
 
   selectedTileCanvas.addEventListener('contextmenu', (event) => {
     event.preventDefault();
-    document.getElementById('chrEditmeu').style.display = 'none';
+    $('#chrEditmeu').hide();
     currentPenColor = (currentPenColor + 1) % 4;
     var penSelectselectedIndex = penSelect.selectedIndex + 1;
     if (penSelectselectedIndex >= 4) {

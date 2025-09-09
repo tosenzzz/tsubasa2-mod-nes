@@ -134,38 +134,38 @@ var Ai_GK_3str = [
   '0A ',
 ];
 var Ai_Run = [
-  '00   NPC type',
-  '01   Amara',
-  '02   Nitta / Sano',
-  '03   Tsubasa / Misaki',
-  '04   Babinton',
-  '05   Taki',
-  '06   Jito & other forwards',
-  '07   Puraton',
-  '08   Urabe',
-  '09   Mamoru Soda / Matsuyama',
-  '0A   Schneider',
-  '0B   Jetorio',
-  '0C   Akita Tachibana Brothers',
-  '0D   ??',
-  '0E   NPC Hyuga',
-  '0F   Victorino',
-  '10   Japan NPC Defenders',
-  '11   NPC Tachibana Brothers',
-  '12   ??',
-  '13   Lee Yong-Woon',
-  '14   Makha',
-  '15   Islas',
-  '16   Avalanche Matsuyama',
-  '17   Berserk Diaz',
-  '18   Berserk Schneider',
-  '19   Netherlands NPC',
-  '1A   Karl-Heinz Kaltz (W.Ger.)',
-  '1B   Coimbra',
-  '1C   Santana (BRA)',
-  '1D   Misugi',
-  '1E   ??',
-  '1F   ??',
+  '00 NPC type',
+  '01 Amara',
+  '02 Nitta / Sano',
+  '03 Tsubasa / Misaki',
+  '04 Babinton',
+  '05 Taki',
+  '06 Jito & other forwards',
+  '07 Puraton',
+  '08 Urabe',
+  '09 Mamoru Soda / Matsuyama',
+  '0A Schneider',
+  '0B Jetorio',
+  '0C Akita Tachibana Brothers',
+  '0D ??',
+  '0E NPC Hyuga',
+  '0F Victorino',
+  '10 Japan NPC Defenders',
+  '11 NPC Tachibana Brothers',
+  '12 ??',
+  '13 Lee Yong-Woon',
+  '14 Makha',
+  '15 Islas',
+  '16 Avalanche Matsuyama',
+  '17 Berserk Diaz',
+  '18 Berserk Schneider',
+  '19 Netherlands NPC',
+  '1A Karl-Heinz Kaltz (W.Ger.)',
+  '1B Coimbra',
+  '1C Santana (BRA)',
+  '1D Misugi',
+  '1E ??',
+  '1F ??',
 ];
 var AI数据索引 = 0;
 var 我方球员数据 = false;
@@ -452,3 +452,136 @@ var Team_Formation_JP = 0x4a84; //日本阵型战术
 var Team_Sock_IMG =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHAAAABgCAMAAADy6AbiAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkRFMTA2MEE5RTI0RTExRURBNEMyQjIzRTNFRjU2MkFDIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkRFMTA2MEFBRTI0RTExRURBNEMyQjIzRTNFRjU2MkFDIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6REUxMDYwQTdFMjRFMTFFREE0QzJCMjNFM0VGNTYyQUMiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6REUxMDYwQThFMjRFMTFFREE0QzJCMjNFM0VGNTYyQUMiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4M9xqJAAAAElBMVEVmZmaZMwDMM2b///8AAAAzmQBf/pZaAAADA0lEQVR42tTZCW7EIAwFUBM+979ywxq2SQwYpKbVqNNW8/QJq0Nm8VJXdil1ff0/SYJqPwhUCdVWEFprNdaiK6DlDoKeOwcCaEC1EbQUHKrG+swk6MM5UY216ByI5OXDQu0DM+8B1b6EyLwjCXPvERWrz8yANiA6jcoKOAPqCHrxfh1o0amEadBnUbktOgGiBb15BtSZ7a5NIDpgUo+C+ivmOojWexNn7yHygbEfDNHSbFN7LyItDMNnekP5ThY0+dgrzfxXolNbm7BtVNHJuxOR3W2EwKajatn1EG+g/6vsit9E3A7ixZMHwzb4cToJIQ4WSLtgSe+82/uW5d0BvoivDbpyXOutEp/51g6kaJclfORbPXJDt3MO9hYVUC0aO4/c9a4DIKIzoCEbVJ8Eyd29k6DtOHQONOTv4EEwXqdAw/X+L2iY3jp4FeXEorTYPRTTYW8VtJWEIW8dHPTGQc0IqH57I6Bbzd13VN2njnkDYHG49lt5G1CNeXwQTfmg66kPjwtq9OoHtZi0l6IUF+wVLO7fqFGPCaKzwY71p0uNeDyw2Xzm772Yae9FPhoIWJ6Wnp1a1IJ3XcuT988iQiEy4jHBtyN9qNE+1yWwPIEvXiJP18CoWmhWPDaIekdfH0BdxkuqBN3rmW2JllXxHklYtGox7YQKgxEDTd1JqkpC+EEWRKcCjKqGsR3U9f0UA82PInfVg8xpkEUy18O8CtwBId2k5eD/CXJILkjotGBTgBZtUrSJ6sVKLuF9MNJo2rBdHsXGIeka7Dw7cP8hA5IFdbVkNIPf1m2FJm9bpLCNim6ZO1X1IDUO7R10IfOnP81TUrmE/vSuCaT7SzDSl0wvhfeCSL3hH0UjldBSmRjuW/oC3+ODlEQXMj5S1+m28voMGwyi6zz3+1waKJbyO00S7cv9Ezqm3BYjim4w2rtoPzy26KDHBGELouRfbMpn96jHOPbU5oZGLDPzP31htXiq2mOBZjfCHqIEz6PE4UI2AqZGwvDUxrpk7yH419dH/QkwAIMDuP6HlRzdAAAAAElFTkSuQmCC';
 var Team_Sock_Col_addr = 0x2ba97; //队伍袜子颜色
+
+var Team_Formation = 0x3bac2; //阵型战术
+var Formation_Str = [
+  '4:3:3 ',
+  '4:4:2',
+  '3:5:2',
+  'Brazilian Formation',
+  'Normal',
+  'Pressing',
+  'Counterattack',
+];
+var team_da = [
+  '00',
+  '01',
+  '02',
+  '03',
+  '10',
+  '11',
+  '12',
+  '13',
+  '20',
+  '21',
+  '22',
+  '23',
+];
+var teamlist = [
+  'SaoPaulo Team',
+  'Nankatsu Team',
+  'Japan Team',
+  'Stage 01 Fluminense',
+  'Stage 02 Corinthians',
+  'Stage 03 Grêmio',
+  'Stage 04 Palmeiras',
+  'Stage 05 Santos',
+  'Stage 06 Flamengo',
+  'Stage 07 Kunimi',
+  'Stage 08 Akita Commercial',
+  'Stage 09 Ritsuha', // 立波: kept phonetic
+  'Stage 10 Musashi',
+  'Stage 11 Furano',
+  'Stage 12 Toho',
+  'Stage 13 Roma',
+  'Stage 14 Uruguay',
+  'Stage 15 Hamburg',
+  'Stage 16 Japan',
+  'Stage 17 Syria',
+  'Stage 18 China',
+  'Stage 19 Iran',
+  'Stage 20 North Korea',
+  'Stage 21 Saudi Arabia',
+  'Stage 22 Korea',
+  'Stage 23 Vasco da Gama',
+  'Stage 24 Poland',
+  'Stage 25 England',
+  'Stage 26 Soviet',
+  'Stage 27 France',
+  'Stage 28 Mexico',
+  'Stage 29 Italy',
+  'Stage 30 Netherlands',
+  'Stage 31 Argentina',
+  'Stage 32 West Germany',
+  'Stage 33 Brazil',
+  'Stage 34 Brazil (Lower)',
+];
+function setteam_da_str() {
+  for (var i = 0; i < team_da.length; i++) {
+    team_da[i] =
+      team_da[i] +
+      ' ' +
+      Formation_Str[parseInt(team_da[i][0], 16) + 4] +
+      '_' +
+      Formation_Str[parseInt(team_da[i][1], 16)];
+  }
+}
+setteam_da_str();
+
+var abilitStr = [
+  'Shot:',
+  'Pass:',
+  'Dribble:',
+  'Block:',
+  'Tackle:',
+  'Intercept:',
+  'Low Shot:',
+  'Low Pass:',
+  'Low Trap:',
+  'Low Let-through:',
+  'Low Controlled Clear:',
+  'Low Uncontrolled Clear:',
+  'Low Ball Challenge:',
+  'Low Interception:',
+  'High Shot:',
+  'High Pass:',
+  'High Trap:',
+  'High Let-through:',
+  'High Controlled Clear:',
+  'High Uncontrolled Clear:',
+  'High Ball Challenge:',
+  'High Interception:',
+];
+var abilitGKStr = [
+  'Stamina:',
+  'Pass:',
+  'Catching:',
+  'Punching:',
+  'Vs Shots:',
+  'Vs Dribbles:',
+  'Low Rush:',
+  'High Claim:',
+];
+var player_data_ab =
+  '0=8,1=8,2=8,3=9,4=9,5=9,6=9,7=10,8=10,9=10,10=11,11=11,12=11,13=12,14=12,15=12,16=13,17=13,18=13,19=14,20=14,21=14,22=15,23=15,24=16,25=16,26=17,27=17,28=18,29=18,30=18,31=19,32=20,33=20,34=21,35=21,36=22,37=22,38=23,39=24,40=24,41=25,42=26,43=26,44=27,45=28,46=29,47=29,48=30,49=31,50=32,51=33,52=34,53=35,54=36,55=37,56=38,57=39,58=40,59=41,60=42,61=43,62=44,63=45,64=47,65=48,66=49,67=51,68=52,69=53,70=55,71=56,72=58,73=59,74=61,75=63,76=65,77=66,78=68,79=70,80=72,81=74,82=76,83=78,84=80,85=82,86=84,87=87,88=89,89=92,90=94,91=97,92=99,93=102,94=105,95=108,96=111,97=114,98=117,99=120,100=123,101=126,102=130,103=133,104=137,105=141,106=145,107=149,108=153,' +
+  '109=157,110=161,111=165,112=170,113=175,114=179,115=183,116=186,117=189,118=192,119=195,120=198,121=201,122=204,123=206,124=209,125=211,126=213,127=215,128=217,129=218,130=220,131=221,132=222,133=224,134=225,135=226,136=227,137=228,138=229,139=230,140=231,141=232,142=232,143=233,144=234,145=235,146=235,147=236,148=237,149=237,150=238,151=238,152=239,153=240,154=240,155=241,156=241,157=242,158=243,159=243,160=244,161=244,162=245,163=245,164=246,165=246,166=247,167=247,168=248,169=248,170=248,171=249,172=249,173=250,174=250,175=250,176=251,177=251,178=251,179=252,180=252,181=252,182=253,183=253,184=253,185=253,186=253,187=254,188=254,189=254,190=254,191=255,' +
+  '192=255,193=255,194=255,195=255,196=255,197=255,198=255,199=255,200=255,201=255,202=255,203=255,204=255,205=255,206=255,207=255,208=255,209=255,210=255,211=255,212=255,213=255,214=255,215=255,216=255,217=255,218=255,219=255,220=255,221=255,222=255,223=255,224=255,225=255,226=255,227=255,228=255,229=255,230=255,231=255,232=255,233=255,234=255,235=255,236=255,237=255,238=255,239=255,240=255,241=255,242=255,243=255,244=255,245=255,246=255,247=255,248=255,249=255,250=255,251=255,252=255,253=255,254=255,255=255';
+player_data_ab = player_data_ab.split(',');
+var player_data_hp =
+  '00=400,01=408,02=416,03=424,04=432,05=440,06=448,07=456,08=464,09=482,0A=490,0B=498,0C=506,0D=514,0E=522,0F=530,10=538,11=546,12=554,13=562,14=570,15=578,16=586,17=594,18=602,19=610,1A=618,1B=626,1C=634,1D=642,1E=650,1F=658,20=664,21=670,22=676,23=682,24=688,25=694,26=700,27=706,28=712,29=718,2A=724,2B=730,2C=736,2D=742,2E=748,2F=752,30=758,31=764,32=770,33=776,34=782,35=788,36=794,37=800,38=806,39=812,3A=818,3B=824,3C=830,3D=836,3E=842,3F=848,40=852,41=856,42=862,43=864,44=868,45=872,46=876,47=880,48=884,49=888,4A=892,4B=896,4C=900,4D=904,4E=908,4F=912,50=916,51=920,52=924,53=928,54=932,55=936,56=940,57=944,58=948,59=952,5A=956,5B=960,' +
+  '5C=964,5D=968,5E=972,5F=976,60=976,61=976,62=976,63=976,64=976,65=976,66=976,67=976,68=976,69=976,6A=976,6B=976,6C=976,6D=976,6E=976,6F=976,70=976,71=976,72=976,73=976,74=976,75=976,76=976,77=976,78=976,79=976,7A=976,7B=976,7C=976,7D=976,7E=976,7F=976,80=976,81=976,82=976,83=976,84=976,85=976,86=976,87=976,88=976,89=976,8A=976,8B=976,8C=976,8D=976,8E=976,8F=976,90=976,91=976,92=976,93=976,94=976,95=976,96=976,97=976,98=976,99=976,9A=976,9B=976,9C=976,9D=976,9E=976,9F=976,A0=976,A1=976,A2=976,A3=976,A4=976,A5=976,A6=976,A7=976,A8=976,A9=976,AA=976,AB=976,AC=976,AD=976,AE=976,AF=976,B0=976,B1=976,B2=976,B3=976,B4=976,B5=976,B6=976,B7=976,B8=976,' +
+  'B9=976,BA=976,BB=976,BC=976,BD=976,BE=976,BF=976,C0=976,C1=976,C2=976,C3=976,C4=976,C5=976,C6=976,C7=976,C8=976,C9=976,CA=976,CB=976,CC=976,CD=976,CE=976,CF=976,D0=976,D1=976,D2=976,D3=976,D4=976,D5=976,D6=976,D7=976,D8=976,D9=976,DA=976,DB=976,DC=976,DD=976,DE=976,DF=976,E0=976,E1=976,E2=976,E3=976,E4=976,E5=976,E6=976,E7=976,E8=976,E9=976,EA=976,EB=976,EC=976,ED=976,EE=976,EF=976,F0=976,F1=976,F2=976,F3=976,F4=976,F5=976,F6=976,F7=976,F8=976,F9=976,FA=976,FB=976,FC=976,FD=976,FE=976,FF=976';
+player_data_hp = player_data_hp.split(',');
+
+var gametime = [];
+for (
+  let i = new Date('2025-01-01 00:00:00').getTime();
+  i < new Date('2025-01-01 00:45:00').getTime();
+  i += 60 * 1000
+) {
+  gametime.push(
+    new Date(i).getMinutes() +
+      ':' +
+      ('0' + new Date(i).getSeconds()).substr(-2),
+  );
+}

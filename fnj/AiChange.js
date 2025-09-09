@@ -10,7 +10,7 @@ function AiPlayersChange() {
   var AiDataAddrIndex = aI_我方球员 + 0x22 * 4; //AI数据索引地址
   IsGK = false;
   我方球员数据 = false;
-  AI数据索引 = $('#AiPlayerSelect').get(0).selectedIndex;
+  AI数据索引 = +$('#AiPlayerSelect').val();
 
   if (AI数据索引 <= 33) {
     我方球员数据 = true;
@@ -24,7 +24,7 @@ function AiPlayersChange() {
     gkid < AiGKList.length;
     gkid++ //这里直接处理GK
   ) {
-    if (AiGKList[gkid] == $('#AiPlayerSelect').get(0).selectedIndex + 1) {
+    if (AiGKList[gkid] == +$('#AiPlayerSelect').val() + 1) {
       IsGK = true;
       break;
     }
@@ -105,7 +105,7 @@ var OutAI_Str = '';
 function outAiStr() {
   OutAI_Str = '';
   try {
-    var 能力 = $('#AiHPindex').get(0).selectedIndex;
+    var 能力 = +$('#AiHPindex').val();
     if (IsGK == true) {
       能力 = 能力 - 0x9d;
     }
@@ -115,7 +115,7 @@ function outAiStr() {
       '=' +
       toHex16(能力) +
       ' ' +
-      toHex16($('#AiRunType').get(0).selectedIndex) +
+      toHex16(+$('#AiRunType').val()) +
       ' ' +
       toHex16($('#AiXXAck').get(0).selectedIndex) +
       ' ' +
@@ -143,7 +143,7 @@ function outAiStr() {
         '=' +
         toHex16(能力) +
         ' ' +
-        toHex16($('#AiRunType').get(0).selectedIndex) +
+        toHex16(+$('#AiRunType').val()) +
         ' ' +
         toHex16($('#AiXXAck').get(0).selectedIndex) +
         ' ' +
@@ -183,7 +183,7 @@ function outAiStr() {
     }
     txt3 =
       'Step-length data code:' +
-      toHex16(步长类型 + $('#AiRunType').get(0).selectedIndex * 12, 5) +
+      toHex16(步长类型 + +$('#AiRunType').val() * 12, 5) +
       '=' +
       txt3;
     if (我方球员数据 == true) {
@@ -193,7 +193,7 @@ function outAiStr() {
         '=' +
         toHex16(能力) +
         ' ' +
-        toHex16($('#AiRunType').get(0).selectedIndex) +
+        toHex16(+$('#AiRunType').val()) +
         ' ' +
         toHex16($('#AiXXAck').get(0).selectedIndex) +
         ' ' +

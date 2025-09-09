@@ -99,13 +99,13 @@ function ChangeTeam() {
   if (isaddTeam == false) {
     $('#playerlistdiv select').each(function (index, element) {
       var h_index = $(this).attr('offindex');
-      NesHex[h_index] = $(this).get(0).selectedIndex;
+      NesHex[h_index] = +$(this).val();
     });
     //替补球员
     if ($('#replayerlistdiv').css('display') != 'none') {
       $('#replayerlistdiv select').each(function (index, element) {
         var h_index = $(this).attr('offindex');
-        NesHex[h_index] = $(this).get(0).selectedIndex;
+        NesHex[h_index] = +$(this).val();
       });
     }
     if (阵型addr != 0) {
@@ -348,27 +348,26 @@ function addteamclick() {
     .text()
     .substr(0, 2);
   addteam_temp2 += ' ' + toHex16($('#addplayeSB2').get(0).selectedIndex);
-  addteam_temp2 += ' ' + toHex16($('#addplayeSB3').get(0).selectedIndex);
-  addteam_temp2 += ' ' + toHex16($('#addplayeSB4').get(0).selectedIndex);
-  addteam_temp2 += ' ' + toHex16($('#addplayeSB5').get(0).selectedIndex);
-  addteam_temp2 += ' ' + toHex16($('#addplayeSB6').get(0).selectedIndex);
+  addteam_temp2 += ' ' + toHex16(+$('#addplayeSB3').val());
+  addteam_temp2 += ' ' + toHex16(+$('#addplayeSB4').val());
+  addteam_temp2 += ' ' + toHex16(+$('#addplayeSB5').val());
+  addteam_temp2 += ' ' + toHex16(+$('#addplayeSB6').val());
   addteam_temp2 += ' ' + toHex16($('#addplayeSB7').get(0).selectedIndex);
   addteam_temp2 += ' ' + toHex16($('#addplayeSB8').get(0).selectedIndex);
   addteam_temp2 += ' ' + toHex16($('#addplayeSB9').get(0).selectedIndex);
 
   for (var i = 1; i <= 11; i++) {
     if (i == 1) {
-      if ($('#addplayerGK').get(0).selectedIndex != 0) {
-        addteam_temp3 +=
-          ' 01 ' + toHex16($('#addplayerGK').get(0).selectedIndex);
+      if (+$('#addplayerGK').val() != 0) {
+        addteam_temp3 += ' 01 ' + toHex16(+$('#addplayerGK').val());
       }
     } else {
-      if ($('#addplayer' + addPreZero(i)).get(0).selectedIndex != 0) {
+      if (+$('#addplayer' + addPreZero(i)).val() != 0) {
         addteam_temp3 +=
           ' ' +
           addPreZero(toHex16(i)) +
           ' ' +
-          toHex16($('#addplayer' + addPreZero(i)).get(0).selectedIndex);
+          toHex16(+$('#addplayer' + addPreZero(i)).val());
       }
     }
   }
@@ -542,7 +541,7 @@ function TeamSelectChange() {
 }
 
 function GetPlayerByData(id, offset) {
-  $(id).get(0).selectedIndex = NesHex[offset];
+  $(id).val(NesHex[offset]);
   $(id).attr('offindex', offset);
   $(id).css('pointer-events', 'auto');
 }
@@ -613,8 +612,8 @@ function fillSelectlist_S(str, listdbs) {
 }
 function fillSelectlist_S3(str, listdbs) {
   for (var i = 0; i < listdbs.length; i++) {
-    tmp = listdbs[i].split(' ', 1);
-    str += '<option value= "' + tmp[0].num() + '">' + listdbs[i] + '</option>';
+    let idx = listdbs[i].split(' ', 1)[0];
+    str += '<option value= "' + idx.num() + '">' + listdbs[i] + '</option>';
   }
   return str;
 }
