@@ -60,14 +60,6 @@ function LoadHex16() {
         "' ><pre>" +
         bhex +
         '</pre></td>';
-      /*		if(w==0x0F)
-                    {
-                        budHexHtml+=bhex+"<br>";
-                    }
-                    else
-                    {
-                        budHexHtml+=bhex+" ";
-                    }*/
     }
     budHexHtml += '</tr>';
   }
@@ -86,10 +78,10 @@ function LoadHex16() {
   $('#HexPreView').css('font-size', defEditFontSize);
   $('#HexPreView').append(
     `<div id="pgchange">
-      <div onclick='NextHexData(-0x100)'>⬆</div>
+      <div onclick='NextHexData(-0x100)'>⏫</div>
       <div onclick='NextHexData(-0x10)'>▲</div>
       <div onclick='NextHexData(0x10)'>▼</div>
-      <div onclick='NextHexData(0x100)'>⬇</div></div>`,
+      <div onclick='NextHexData(0x100)'>⏬</div></div>`,
   );
 }
 
@@ -112,11 +104,11 @@ function HexFontSize(fonttype) {
   var unit = cssfontSize.replace('px', '');
   unit = parseInt(unit);
   if (unit <= 5 && fonttype == 1) {
-    alert('太小啦....');
+    alert('Too small....');
     return;
   }
   if (unit >= 28 && fonttype == 0) {
-    alert('太大啦....');
+    alert('Too large....');
     return;
   }
   if (fonttype == 0) {

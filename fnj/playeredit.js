@@ -250,6 +250,7 @@ function PlayerVSModAddChange(type) {
       $('#PlayerVSModADDList1').find('option:selected').text().substring(0, 2),
       16,
     );
+    if (Number.isNaN(id)) return;
     document.getElementById('Vsmodelist1')[
       NesHex[playerVSmodaddr + id]
     ].selected = true;
@@ -276,6 +277,7 @@ function ChangGVsPKpic() {
     $('#PlayerVSModADDList1').find('option:selected').text().substring(0, 2),
     16,
   );
+  if (Number.isNaN(id1)) return;
   NesHex[playerVSmodaddr + id1] = $('#Vsmodelist1').get(0).selectedIndex;
   var id2 = $('#PlayerVSModADDList2').get(0).selectedIndex;
   NesHex[playerVSmod_GK_addr + id2 * 2] = parseInt(

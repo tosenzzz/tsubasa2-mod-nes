@@ -198,7 +198,7 @@ function LoadSkills() {
     var idx1 = NesHex[bdz];
     var idx2 = NesHex[bdz + 1];
     lstSTYPE[0] +=
-      ': ' + `${bdz.hex()}, Index ${toHex16(idx1)} ${toHex16(idx2)}<br>`;
+      ` Pointer ${bdz.hex()}:` + `${toHex16(idx1)} ${toHex16(idx2)}<br>`;
     for (var i = 0; i < 0x100; i++) {
       let shotId = NesHex[shootaddr + i];
       if (shotId == 0xff) {
@@ -247,7 +247,7 @@ function BindSkillStr(lstSkills, lstTypes, ix, bd1, bd2, nm) {
       var txt = toHex16(ramcheck(bd1, NesHex), 5) + '=' + lstSkills[i];
       let id1 = toHex16(NesHex[bd1]);
       let id2 = toHex16(NesHex[bd2]);
-      lstTypes[ix] += `: ${bd1.hex()}, Index ` + `${id1} ${id2}, ` + txt;
+      lstTypes[ix] += ` Pointer ${bd1.hex()}:${id1} ${id2}, ` + txt;
       var sid = lstSkills[i].trim().split(' ')[0];
       skilllistother.push([txt, nm, sid]);
     }
@@ -280,7 +280,7 @@ function CheckTempaddr1(dz) {
 
 function CheckTempaddr2(dz) {
   // Option 1
-  for (var i = 0; i < 0x2f0; i += 0x20) {
+  for (var i = 0; i < 0x2f0; i += 0x10) {
     dz = 0x3bd10 + i;
     if (NesHex.slice(dz, dz + 0x20).every((v) => v == 0xff)) {
       return dz;
@@ -288,7 +288,7 @@ function CheckTempaddr2(dz) {
   }
 
   // Option 2
-  for (var i = 0; i < 0x2f0; i += 0x20) {
+  for (var i = 0; i < 0x2f0; i += 0x10) {
     dz = 0x3fd10 + i;
     if (NesHex.slice(dz, dz + 0x20).every((v) => v == 0xff)) {
       return dz;
@@ -349,19 +349,16 @@ function Save_Skills() {
     };
 
     // Check empty address
-    if (
-      NesHex[pSkAddr + 1] >= 0x50 &&
-      NesHex[pSkAddr + 1] <= 0x6f &&
-      !useNewAddr
-    ) {
-      dz = ramcheck(pSkAddr, NesHex);
-    } else {
+    var off2 = NesHex[pSkAddr + 1];
+    if (useNewAddr || off2 < 0x50 || off2 > 0x6f) {
       dz = CheckTempaddr1(dz);
       if (dz < 1) {
         alertMsg('#isfileload', 'red', 'No free space ...');
         return;
       }
       useNewAddr = true;
+    } else {
+      dz = ramcheck(pSkAddr, NesHex);
     }
   } else {
     if (Is1v32 == true) {
@@ -390,21 +387,15 @@ function Save_Skills() {
     // Check empty address
     var off1 = NesHex[pSkAddr];
     var off2 = NesHex[pSkAddr + 1];
-    var off21 = toHex16(off2).substr(0, 1);
-    if (
-      ([0xbd, 0xbe, 0xbf, 0xfd, 0xfe, 0xff].includes(off2) ||
-        (['6', '7'].includes(off21) && Is1v32 == true)) &&
-      !useNewAddr &&
-      !(off1 == 0x07 && off2 == 0x8f)
-    ) {
-      dz = ramcheck(pSkAddr, NesHex);
-    } else {
+    if (useNewAddr || (off1 == 0x07 && off2 == 0x8f)) {
       dz = CheckTempaddr2(dz);
       if (dz < 1) {
         alertMsg('#isfileload', 'red', 'No free space ...');
         return;
       }
       useNewAddr = true;
+    } else {
+      dz = ramcheck(pSkAddr, NesHex);
     }
   }
 
@@ -435,6 +426,9 @@ function Save_Skills() {
       NesHex[pSkAddr] = parseInt(toHex16(dz - 0x10, 4).substr(2, 2), 16);
       NesHex[pSkAddr + 1] = parseInt(toHex16(dz - 0x10, 4).substr(0, 2), 16);
       // Pointer to Shots skill
+      for (var i = 0; i < 0x20; i++) {
+        NesHex[dz + i] = 0;
+      }
       NesHex[dz] = parseInt(toHex16(dz - 2, 4).substr(2, 2), 16);
       NesHex[dz + 1] = parseInt(toHex16(dz - 2, 4).substr(0, 2), 16);
     }
@@ -456,7 +450,10 @@ function Save_Skills() {
 
   var isShotChanged =
     skilllistshoot.length != tmpShotList.length ||
-    !skilllistshoot.every((v) => tmpShotList.includes(v[1].num()));
+    skilllistshoot
+      .map((v) => v[1].num())
+      .sort()
+      .join(',') != tmpShotList.sort().join(',');
   if (isShotChanged) {
     if (SkillByte.length > shotBytes.length) {
       var addr = ramcheck(dz, NesHex);
@@ -468,8 +465,8 @@ function Save_Skills() {
           alertMsg('#isfileload', 'red', 'No free space ...');
           return;
         }
-        NesHex[dz] = parseInt(toHex16(ck - 2, 4).substr(2, 2), 16);
-        NesHex[dz + 1] = parseInt(toHex16(ck - 2, 4).substr(0, 2), 16);
+        NesHex[dz] = parseInt(toHex16(ck - 0x10, 4).substr(2, 2), 16);
+        NesHex[dz + 1] = parseInt(toHex16(ck - 0x10, 4).substr(0, 2), 16);
       }
     } else {
       for (let i = SkillByte.length; i < shotBytes.length; i++) {

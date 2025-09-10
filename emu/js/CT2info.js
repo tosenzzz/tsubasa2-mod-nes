@@ -1018,10 +1018,9 @@ document.addEventListener('DOMContentLoaded', function () {
       if (typeof db.nes.peak === 'function') {
         playerNum = db.nes.peak(addr);
       }
-      var playerName =
-        typeof playerstr !== 'undefined' && playerstr[playerNum]
-          ? playerstr[playerNum]
-          : 'Unknown(' + playerNum + ')';
+      playerNum = toHex16(playerNum);
+      let pler = playerstr.find((v) => v.startsWith(playerNum));
+      var playerName = pler || 'Unknown(' + playerNum + ')';
       // 计算位置编号
       const positionNum = i % 11;
       const positionText = positionMap[positionNum] || 'Unknown';

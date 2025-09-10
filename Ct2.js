@@ -67,7 +67,7 @@ function CheckNesHex() {
   AiPlayersChange(); //AI查看
   GetInstruct();
   showInstructbuttondiv(0); //指令
-  $('#PlayerEditNameList').val('0');
+  $('#PlayerEditNameList').val('1');
   PlayerEditSelectChange(); //造型
   $('#playerAbilitySe').val('0');
   GetPlayerData(0); //球员能力

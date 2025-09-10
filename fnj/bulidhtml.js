@@ -451,7 +451,8 @@ function LoadPlayerEditHtml() {
       i == 0x73
     ) {
     } else {
-      fillSelectlist_x($('#PlayerVSModADDList1'), i, PlayerName_Skill[i]);
+      let val = PlayerName_Skill[i].split(' ', 1)[0].num();
+      fillSelectlist_x($('#PlayerVSModADDList1'), val, PlayerName_Skill[i]);
     }
   }
   for (var i = 0; i < Portrait_List.length; i++) {
