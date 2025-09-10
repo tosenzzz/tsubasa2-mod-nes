@@ -1,3 +1,14 @@
+var ll = console.log();
+Number.prototype.hex = function () {
+  return this.toString(16).toUpperCase();
+};
+String.prototype.num = function () {
+  return +('0x' + this);
+};
+function isMobileDevice() {
+  return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+}
+
 //调色盘
 var nespal = [
   0x66, 0x66, 0x66, 0x00, 0x2a, 0x88, 0x14, 0x12, 0xa7, 0x3b, 0x00, 0xa4, 0x5c,

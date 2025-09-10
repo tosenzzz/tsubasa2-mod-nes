@@ -1,11 +1,3 @@
-var ll = console.log();
-Number.prototype.hex = function () {
-  return this.toString(16).toUpperCase();
-};
-String.prototype.num = function () {
-  return +('0x' + this);
-};
-
 //00
 var playerstrtemp0 = '00 NPC';
 //01-75
