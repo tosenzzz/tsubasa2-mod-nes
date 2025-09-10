@@ -268,29 +268,29 @@ function ChangeSkillView() {
   }
 }
 
-function CheckTempaddr1(dz) {
+function GetFreeAddr1(sz = 0x20) {
   for (var i = 0; i < 8064; i += 0x10) {
     let dz = 0x78020 + i;
-    if (NesHex.slice(dz, dz + 30).every((v) => v == 0x00)) {
+    if (NesHex.slice(dz, dz + sz).every((v) => v == 0x00 || v == 0xff)) {
       return dz;
     }
   }
   return 0;
 }
 
-function CheckTempaddr2(dz) {
+function GetFreeAddr2(sz = 0x20) {
   // Option 1
   for (var i = 0; i < 0x2f0; i += 0x10) {
-    dz = 0x3bd10 + i;
-    if (NesHex.slice(dz, dz + 0x20).every((v) => v == 0xff)) {
+    var dz = 0x3bd10 + i;
+    if (NesHex.slice(dz, dz + sz).every((v) => v == 0xff)) {
       return dz;
     }
   }
 
   // Option 2
   for (var i = 0; i < 0x2f0; i += 0x10) {
-    dz = 0x3fd10 + i;
-    if (NesHex.slice(dz, dz + 0x20).every((v) => v == 0xff)) {
+    var dz = 0x3fd10 + i;
+    if (NesHex.slice(dz, dz + sz).every((v) => v == 0xff)) {
       return dz;
     }
   }
@@ -321,7 +321,7 @@ function Save_Skills() {
     83: [0xed, 0xff, 0x0a],
     84: [0xee, 0xff, 0x20],
   };
-  var dz = 0; // General Index;// ramcheck(dz, NesHex);
+  var dz = 0; // General Skills Address
 
   if (IsCn) {
     var cncount = NesHex.indexOf(cn768);
@@ -351,7 +351,7 @@ function Save_Skills() {
     // Check empty address
     var off2 = NesHex[pSkAddr + 1];
     if (useNewAddr || off2 < 0x50 || off2 > 0x6f) {
-      dz = CheckTempaddr1(dz);
+      dz = GetFreeAddr1(0x20);
       if (dz < 1) {
         alertMsg('#isfileload', 'red', 'No free space ...');
         return;
@@ -388,7 +388,7 @@ function Save_Skills() {
     var off1 = NesHex[pSkAddr];
     var off2 = NesHex[pSkAddr + 1];
     if (useNewAddr || (off1 == 0x07 && off2 == 0x8f)) {
-      dz = CheckTempaddr2(dz);
+      dz = GetFreeAddr2(0x20);
       if (dz < 1) {
         alertMsg('#isfileload', 'red', 'No free space ...');
         return;
@@ -456,12 +456,13 @@ function Save_Skills() {
       .join(',') != tmpShotList.sort().join(',');
   if (isShotChanged) {
     if (SkillByte.length > shotBytes.length) {
+      // Get Shots address
       var addr = ramcheck(dz, NesHex);
       var ck = NesHex.slice(addr + shotBytes.length, addr + SkillByte.length);
       // Need to create new address
       if (!useNewAddr && !ck.every((v) => v == 0xff)) {
-        var ck = CheckTempaddr2(0);
-        if (dz < 1) {
+        var ck = GetFreeAddr2(SkillByte.length);
+        if (ck < 1) {
           alertMsg('#isfileload', 'red', 'No free space ...');
           return;
         }

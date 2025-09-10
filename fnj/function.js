@@ -140,14 +140,14 @@ function ChangeTeam() {
         if (NesHex[defaddr + 1] >= 0x50 && NesHex[defaddr + 1] <= 0x6f) {
           dz = ramcheck(defaddr, NesHex);
         } else {
-          dz = CheckTempaddr1(dz) - 0x10;
+          dz = GetFreeAddr1(datas.length);
           if (dz < 1) {
             alertMsg('#isfileload', 'red', 'No free space ...');
             return;
           }
         }
-        开关索引1 = parseInt(toHex16(dz - 0x73000, 4).substr(2, 2), 16);
-        开关索引2 = parseInt(toHex16(dz - 0x73000, 4).substr(0, 2), 16);
+        开关索引1 = parseInt(toHex16(dz - 0x73000 - 0x10, 4).substr(2, 2), 16);
+        开关索引2 = parseInt(toHex16(dz - 0x73000 - 0x10, 4).substr(0, 2), 16);
       } else {
         if (
           (NesHex[defaddr + 1] >= 0xbd && NesHex[defaddr + 1] <= 0xff) ||
@@ -157,20 +157,19 @@ function ChangeTeam() {
         ) {
           dz = ramcheck(defaddr, NesHex);
         } else {
-          dz = CheckTempaddr2(dz) - 0x10;
+          dz = GetFreeAddr2(datas.length);
           if (dz < 1) {
             alertMsg('#isfileload', 'red', 'No free space ...');
             return;
           }
         }
 
-        开关索引1 = parseInt(toHex16(dz, 4).substr(2, 2), 16);
-        开关索引2 = parseInt(toHex16(dz, 4).substr(0, 2), 16);
+        开关索引1 = parseInt(toHex16(dz - 0x10, 4).substr(2, 2), 16);
+        开关索引2 = parseInt(toHex16(dz - 0x10, 4).substr(0, 2), 16);
       }
 
       NesHex[defaddr] = 开关索引1;
       NesHex[defaddr + 1] = 开关索引2;
-      dz = dz + 0x10;
       addteam_def_add = dz;
       for (var i = 0; i < datas.length; i++) {
         NesHex[addteam_def_add + i] = parseInt(datas[i], 16);
