@@ -553,7 +553,7 @@ function Save_Skills() {
     if (old != cd.num()) {
       NesHex[dz + addrtemp] = xx[cd]?.[0] || 0;
       NesHex[dz + addrtemp + 1] = xx[cd]?.[1] || 0;
-      NesHex[DefEffectAddr + $('#PlayerList').val() - 1] = xx[cd]?.[2] || 0; //Defense effect code
+      NesHex[DefEffectAddr + +$('#PlayerList').val() - 1] = xx[cd]?.[2] || 0; //Defense effect code
     }
   }
   addrtemp += 2;
@@ -655,7 +655,7 @@ function Changeskilladdtype() {
 }
 
 function getskillimgcode() {
-  var addr = $('#skill__addr').val();
+  var addr = +$('#skill__addr').val();
   var codes = toHex16(NesHex[addr]);
   var x = 0;
   for (var i = 0; i < Skill_o_txt.length; i++) {
