@@ -149,8 +149,8 @@ function LoadSkills() {
   var bdz = ramcheck(xdz, NesHex);
   var str =
     'Skill entry: ' +
-    `${toHex16(xdz, 5)}=${toHex16(NesHex[xdz])} ${toHex16(NesHex[xdz + 1])}, `;
-  str += `Index address: ${toHex16(bdz, 5)}<br>`;
+    `${bLnk(xdz)}=${toHex16(NesHex[xdz])} ${toHex16(NesHex[xdz + 1])}, `;
+  str += `Index address: ${bLnk(bdz)}<br>`;
 
   // Check GK
   if (gkPlayer.includes(+$('#PlayerList').val())) {
@@ -198,7 +198,7 @@ function LoadSkills() {
     var idx1 = NesHex[bdz];
     var idx2 = NesHex[bdz + 1];
     lstSTYPE[0] +=
-      ` Pointer ${bdz.hex()}:` + `${toHex16(idx1)} ${toHex16(idx2)}<br>`;
+      ` Pointer ${bLnk(bdz)}:` + `${toHex16(idx1)} ${toHex16(idx2)}<br>`;
     for (var i = 0; i < 0x100; i++) {
       let shotId = NesHex[shootaddr + i];
       if (shotId == 0xff) {
@@ -210,7 +210,7 @@ function LoadSkills() {
       }
       for (var x = 0; x < lstSHOT.length; x++) {
         if (parseInt(lstSHOT[x].substr(0, 2), 16) == shotId) {
-          var txt = `${toHex16(shootaddr + i, 5)}=${lstSHOT[x]}`;
+          var txt = `${bLnk(shootaddr + i)}=${lstSHOT[x]}`;
           lstSTYPE[0] += 'Special Shot: ' + txt + '<br>';
           var sid = lstSHOT[x].trim().split(' ')[0];
           skilllistshoot.push([txt, sid]);
@@ -244,10 +244,10 @@ function BindSkillStrO(lstSkills, lstTypes, ix, bd1, bd2, nm) {
 function BindSkillStr(lstSkills, lstTypes, ix, bd1, bd2, nm) {
   for (var i = 0; i < lstSkills.length; i++) {
     if (lstSkills[i].substr(0, 2) == toHex16(NesHex[ramcheck(bd1, NesHex)])) {
-      var txt = toHex16(ramcheck(bd1, NesHex), 5) + '=' + lstSkills[i];
+      var txt = bLnk(ramcheck(bd1, NesHex)) + '=' + lstSkills[i];
       let id1 = toHex16(NesHex[bd1]);
       let id2 = toHex16(NesHex[bd2]);
-      lstTypes[ix] += ` Pointer ${bd1.hex()}:${id1} ${id2}, ` + txt;
+      lstTypes[ix] += ` Pointer ${bLnk(bd1)}:${id1} ${id2}, ` + txt;
       var sid = lstSkills[i].trim().split(' ')[0];
       skilllistother.push([txt, nm, sid]);
     }
@@ -266,6 +266,17 @@ function ChangeSkillView() {
     $('#SkillEdit').css('display', 'block');
     SkillViewTypeVar = 0;
   }
+}
+
+function bLnk(xdz) {
+  let addr = toHex16(xdz, 5);
+  return `<a href="#" onclick="gotoAddr('${addr}')">${addr}</a>`;
+}
+
+function gotoAddr(addr) {
+  $('.ctab')[5].click();
+  $('#offEditNo').val(addr);
+  LoadHex16();
 }
 
 function GetFreeAddr1(sz = 0x20) {

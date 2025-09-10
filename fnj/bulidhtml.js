@@ -857,11 +857,11 @@ function BulidInstructTabHtml() {
   htmlstr += '</select> <span id="InstructTempText"></span><br></div>';
 
   htmlstr +=
-    "<div><span>Aggressiveness (0~255):</span><input id='InstructB' onchange='CheckInstructB();' type='number' min=0 max=255>";
+    "<div><span>Aggressiveness (0~250):</span><input id='InstructB' onchange='CheckInstructB();' type='number' min=0 max=250>";
   htmlstr += '</input><br></div>';
 
   htmlstr +=
-    "<div><span>Power (0~255):</span><input id='InstructW' type='number' min=0 max=255>";
+    "<div><span>Power (0~250):</span><input id='InstructW' type='number' min=0 max=250>";
   htmlstr += '</input><br></div>';
 
   htmlstr +=
@@ -901,12 +901,12 @@ function GetSkill4EditMode() {
   var bdz = ramcheck(xdz, NesHex);
   var str =
     '<div><span>Skill entry: ' +
-    toHex16(xdz, 5) +
+    bLnk(xdz) +
     '=' +
     toHex16(NesHex[xdz]) +
     ' ' +
     toHex16(NesHex[xdz + 1]);
-  str += ', Index address: ' + toHex16(bdz, 5);
+  str += ', Index address: ' + bLnk(bdz);
   str += '</span></div>';
 
   // Check GK
