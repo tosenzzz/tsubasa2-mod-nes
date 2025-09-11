@@ -112,7 +112,7 @@ var defEditFontSize = isMobileDevice() ? '12px !important' : '16px !important';
 function BulidEdit16TabHtml() {
   $('#Edit16Tab ').empty();
   var edit16html = '';
-  edit16html += "<button onclick='LoadHex16()'>Load/Refresh</button> ";
+  edit16html += "<button onclick='LoadHex16()'>Refresh</button> ";
   edit16html +=
     "<button onclick='NextHexData(-0x100)'>↑(-0x100)</button> <button onclick='NextHexData(-0x10)'>↑(-0x10)</button>";
   edit16html +=
@@ -273,6 +273,7 @@ function WriteEdit16() {
     }
   }
   LoadHex16();
+  LoadSkills();
   alertMsg('#isfileload', 'green', 'Write successful!');
 }
 

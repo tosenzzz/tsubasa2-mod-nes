@@ -135,7 +135,7 @@ var player_data_GK_addr = 0x3ae96; //守门员能力值数据地址
 var AttackCmdAddr = 0x39484;
 var DefendCmdAddr = 0x3956e;
 var GKcmdAddr = 0x395c2;
-var DefEffectAddr = 0x2077b;
+var TackleAnimation = 0x2077b;
 var SkillAddr = 0x38e2d;
 var PortraitAddr = 0x22b63;
 

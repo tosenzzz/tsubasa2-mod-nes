@@ -144,16 +144,15 @@ function LoadSkills() {
   skilllistshoot = [];
   skilllistother = [];
   shotBytes = [];
-  var xdz = ($('#PlayerList').val() - 1) * 2 + SkillAddr;
+  var playerId = +$('#PlayerList').val();
+  var xdz = (playerId - 1) * 2 + SkillAddr;
   if (Number.isNaN(xdz)) return;
   var bdz = ramcheck(xdz, NesHex);
-  var str =
-    'Skill entry: ' +
-    `${bLnk(xdz)}=${toHex16(NesHex[xdz])} ${toHex16(NesHex[xdz + 1])}, `;
+  var str = 'Skill entry: ' + `${bLnk(xdz)}=${bCopy(xdz)}, `;
   str += `Index address: ${bLnk(bdz)}<br>`;
 
   // Check GK
-  if (gkPlayer.includes(+$('#PlayerList').val())) {
+  if (gkPlayer.includes(playerId)) {
     let val = NesHex[bdz];
     str += `Skill index: ${val} ` + (Skill_GK_[val] || `none`);
     $('#SkillStr').html(str);
@@ -268,6 +267,38 @@ function ChangeSkillView() {
   }
 }
 
+var skillCopied = [];
+function bCopy(xdz) {
+  let txt = `${toHex16(NesHex[xdz])} ${toHex16(NesHex[xdz + 1])}`;
+  return `<span class="skillMenu">
+  <a href="#" onclick="$('.skillCopyMenu').show()">${txt}</a><span class="skillCopyMenu">
+  <a href="#" onclick="copySkill(${xdz})">Copy</a><br>
+  <a href="#" onclick="pasteSkill(${xdz})">Paste</a><br>
+  <a href="#" onclick="$('.skillCopyMenu').hide()">Close</a>
+  </span></span>`;
+}
+
+function copySkill(xdz) {
+  skillCopied = [];
+  skillCopied.push(
+    xdz,
+    NesHex[xdz],
+    NesHex[xdz + 1],
+    +$('#PlayerList').val() - 1,
+  );
+  $('.skillCopyMenu').hide();
+}
+
+function pasteSkill(addr) {
+  NesHex[addr] = skillCopied[1];
+  NesHex[addr + 1] = skillCopied[2];
+  // Animation of Tackle
+  NesHex[TackleAnimation + +$('#PlayerList').val() - 1] =
+    NesHex[TackleAnimation + skillCopied[3]];
+  LoadSkills();
+  $('.skillCopyMenu').hide();
+}
+
 function bLnk(xdz) {
   let addr = toHex16(xdz, 5);
   return `<a href="#" onclick="gotoAddr('${addr}')">${addr}</a>`;
@@ -310,8 +341,9 @@ function GetFreeAddr2(sz = 0x20) {
 }
 
 function Save_Skills() {
+  var playerId = +$('#PlayerList').val();
   var useNewAddr = $('#useNewAddr').is(':checked');
-  var pSkAddr = ($('#PlayerList').val() - 1) * 2 + SkillAddr;
+  var pSkAddr = (playerId - 1) * 2 + SkillAddr;
   if (Number.isNaN(pSkAddr)) return;
   var skillothers = [
     0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x81, 0x82, 0x83, 0x84, 0x00,
@@ -411,7 +443,7 @@ function Save_Skills() {
   }
 
   // Check GK
-  if (gkPlayer.includes(+$('#PlayerList').val())) {
+  if (gkPlayer.includes(playerId)) {
     let val = $('#sgk').attr('val');
     NesHex[pSkAddr] = xx[toHex16(val)]?.[0] || 0;
     NesHex[pSkAddr + 1] = xx[toHex16(val)]?.[1] || 0;
@@ -553,7 +585,8 @@ function Save_Skills() {
     if (old != cd.num()) {
       NesHex[dz + addrtemp] = xx[cd]?.[0] || 0;
       NesHex[dz + addrtemp + 1] = xx[cd]?.[1] || 0;
-      NesHex[DefEffectAddr + +$('#PlayerList').val() - 1] = xx[cd]?.[2] || 0; //Defense effect code
+      // Animation of Tackle
+      NesHex[TackleAnimation + playerId - 1] = xx[cd]?.[2] || 0;
     }
   }
   addrtemp += 2;

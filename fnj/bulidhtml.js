@@ -899,15 +899,8 @@ function GetSkill4EditMode() {
   var xdz = ($('#PlayerList').val() - 1) * 2 + SkillAddr;
   if (Number.isNaN(xdz)) return;
   var bdz = ramcheck(xdz, NesHex);
-  var str =
-    '<div><span>Skill entry: ' +
-    bLnk(xdz) +
-    '=' +
-    toHex16(NesHex[xdz]) +
-    ' ' +
-    toHex16(NesHex[xdz + 1]);
-  str += ', Index address: ' + bLnk(bdz);
-  str += '</span></div>';
+  var str = '<div><span>Skill entry: ' + `${bLnk(xdz)}=${bCopy(xdz)}, `;
+  str += `Index address: ${bLnk(bdz)}</span></div>`;
 
   // Check GK
   if (gkPlayer.includes(+$('#PlayerList').val())) {
