@@ -243,10 +243,16 @@ function BindSkillStrO(lstSkills, lstTypes, ix, bd1, bd2, nm) {
 function BindSkillStr(lstSkills, lstTypes, ix, bd1, bd2, nm) {
   for (var i = 0; i < lstSkills.length; i++) {
     if (lstSkills[i].substr(0, 2) == toHex16(NesHex[ramcheck(bd1, NesHex)])) {
-      var txt = bLnk(ramcheck(bd1, NesHex)) + '=' + lstSkills[i];
-      let id1 = toHex16(NesHex[bd1]);
-      let id2 = toHex16(NesHex[bd2]);
-      lstTypes[ix] += ` Pointer ${bLnk(bd1)}:${id1} ${id2}, ` + txt;
+      var skill = lstSkills[i];
+      if (ix == 5) {
+        // Pointer to Tackle animation
+        skill = bLnk(
+          TackleAnimation + +$('#PlayerList').val() - 1,
+          lstSkills[i],
+        );
+      }
+      var txt = bLnk(ramcheck(bd1, NesHex)) + '=' + skill;
+      lstTypes[ix] += `: ` + txt;
       var sid = lstSkills[i].trim().split(' ')[0];
       skilllistother.push([txt, nm, sid]);
     }
@@ -272,9 +278,9 @@ function bCopy(xdz) {
   let txt = `${toHex16(NesHex[xdz])} ${toHex16(NesHex[xdz + 1])}`;
   return `<span class="skillMenu">
   <a href="#" onclick="$('.skillCopyMenu').show()">${txt}</a><span class="skillCopyMenu">
-  <a href="#" onclick="copySkill(${xdz})">Copy</a><br>
-  <a href="#" onclick="pasteSkill(${xdz})">Paste</a><br>
-  <a href="#" onclick="$('.skillCopyMenu').hide()">Close</a>
+  <div><a href="#" onclick="copySkill(${xdz})">Copy</a></div>
+  <div><a href="#" onclick="pasteSkill(${xdz})">Paste</a></div>
+  <div><a href="#" onclick="$('.skillCopyMenu').hide()">Close</a></div>
   </span></span>`;
 }
 
@@ -299,9 +305,9 @@ function pasteSkill(addr) {
   $('.skillCopyMenu').hide();
 }
 
-function bLnk(xdz) {
+function bLnk(xdz, txt) {
   let addr = toHex16(xdz, 5);
-  return `<a href="#" onclick="gotoAddr('${addr}')">${addr}</a>`;
+  return `<a href="#" onclick="gotoAddr('${addr}')">${txt || addr}</a>`;
 }
 
 function gotoAddr(addr) {
@@ -362,7 +368,7 @@ function Save_Skills() {
     81: [0xeb, 0xff, 0x01],
     82: [0xec, 0xff, 0x03],
     83: [0xed, 0xff, 0x0a],
-    84: [0xee, 0xff, 0x20],
+    84: [0xee, 0xff, 0x22],
   };
   var dz = 0; // General Skills Address
 
@@ -388,7 +394,7 @@ function Save_Skills() {
       81: [0x0b, 0x50, 0x01],
       82: [0x0c, 0x50, 0x03],
       83: [0x0d, 0x50, 0x0a],
-      84: [0x0e, 0x50, 0x20],
+      84: [0x0e, 0x50, 0x22],
     };
 
     // Check empty address
@@ -415,7 +421,7 @@ function Save_Skills() {
         81: [0xeb, 0x7f, 0x01],
         82: [0xec, 0x7f, 0x03],
         83: [0xed, 0x7f, 0x0a],
-        84: [0xee, 0x7f, 0x20],
+        84: [0xee, 0x7f, 0x22],
       };
       for (var i = 0; i < skillothers.length; i++) {
         NesHex[0x7ff5 + i] = skillothers[i];

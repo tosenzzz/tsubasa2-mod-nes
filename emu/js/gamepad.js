@@ -786,6 +786,7 @@ function renderTransparentOverlay(editMode = false) {
     };
     overlay.appendChild(saveBtn);
   }
+  if (window.SaveManagerUI) window.SaveManagerUI.show();
 
   let floatBarId = 'transpEditFloatBar';
   let oldBar = document.getElementById(floatBarId);
