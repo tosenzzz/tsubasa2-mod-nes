@@ -277,8 +277,8 @@ function WriteEdit16() {
   alertMsg('#isfileload', 'green', 'Write successful!');
 }
 
-function GetRditAddr(ojb) {
-  var offindex = $(ojb).attr('offset');
+function GetRditAddr(obj) {
+  var offindex = $(obj).attr('offset') || obj;
   offindex = parseInt(offindex);
   var topoffsssss = addPreZero2(offindex.toString(16), 6);
   $('#ShowEditIndex').attr('ShowEditIndex', offindex);

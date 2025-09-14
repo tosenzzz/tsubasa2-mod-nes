@@ -74,6 +74,19 @@ function CheckInstructB() {
   );
 }
 
+function ClearAllPortrait() {
+  let n = NO_PORTRAIT.split(' ');
+  Skill_o_str.forEach((v) => {
+    let t = v.split(',')[1];
+    if (t) {
+      NesHex[t.num() - 2] = n[0];
+      NesHex[t.num() - 1] = n[1];
+      NesHex[t.num() - 0] = n[2];
+    }
+  });
+  alertMsg('#isfileload', 'green', 'All Portrait cleared successfully!');
+}
+
 function ChangeInstruct() {
   //指令数据Addr
   var 暴力 = $('#InstructB').val();
@@ -112,10 +125,7 @@ function ChangeInstruct() {
     var sx = ss1 + ss2;
     NesHex[InstructAddr + 3] = parseInt(sx, 16);
   }
-  NesHex[PortraitAddr] = parseInt(
-    Skill_o_txt[$('#skill__code').get(0).selectedIndex].substr(0, 2),
-    16,
-  );
+  NesHex[PortraitAddr] = +$('#skill__code').val();
   alertMsg('#isfileload', 'green', 'Command data modified successfully!');
 }
 
@@ -313,6 +323,7 @@ function bLnk(xdz, txt) {
 function gotoAddr(addr) {
   $('.ctab')[5].click();
   $('#offEditNo').val(addr);
+  GetRditAddr(addr);
   LoadHex16();
 }
 
@@ -695,15 +706,8 @@ function Changeskilladdtype() {
 
 function getskillimgcode() {
   var addr = +$('#skill__addr').val();
-  var codes = toHex16(NesHex[addr]);
-  var x = 0;
-  for (var i = 0; i < Skill_o_txt.length; i++) {
-    if (codes == Skill_o_txt[i].substr(0, 2)) {
-      x = i;
-      break;
-    }
-  }
-  document.getElementById('skill__code')[x].selected = true;
+  var code = toHex16(NesHex[addr]);
+  $('#skill__code').val(code.num());
   $('#InstructTempText').html(
     'Instruction data address: ' + toHex16(InstructAddr, 5),
   );

@@ -76,7 +76,9 @@ var Skill_TACKLE_ =
 var Skill_ICEPT_ = '81 Skylab Intercept (S),01 Power Intercept (?)';
 var Skill_GK_ = { 1: 'Spin Save', 2: 'Illusion Save', 3: 'Dark Illusion Save' };
 var GK_Master_ = `3D2E5=20 F0 BB;
-37C00=BD 62 D3 48 8A 49 06 AA A9 85 85 37 A9 F2 85 36 20 79 CE AD 3E 04 F0 04 68 A9 00 48 68 60;`;
+37C00=BD 62 D3 48 8A 49 06 AA A9 85 85 37 A9 F2 85 36 20 79 CE AD 3E 04 F0 04 68 A9 00 48 68 60;
+3e97c=20 75 FD;
+3FD85=C0 2E D0 10 AC 3E 04 F0 0B 30 09 B9 8C FD 85 3C A9 FD 85 3D A0 00 18 60 90 9F AE AB 22 1A 00 00 00 00 00 00 53 75 70 65 72 21 AB 22 1A 00 00 00 00 00 00 53 75 70 65 72 21 AB 22 1A 00 00 00 00 00 00 53 75 70 65 72 21;`;
 
 // Edit skill for Player
 var PlayerName_Skill = playerstrtemp1.split(',');
@@ -138,6 +140,7 @@ var GKcmdAddr = 0x395c2;
 var TackleAnimation = 0x2077b;
 var SkillAddr = 0x38e2d;
 var PortraitAddr = 0x22b63;
+var NO_PORTRAIT = 'F2 AD B2';
 
 // Name, portrait, background, ball path
 var Skill_o_str = [
@@ -173,14 +176,14 @@ var Skill_o_str = [
   'Slider Cannon (Portrait 1),23156',
   'Slider Cannon (Portrait 2),2315D',
   'Drive Bicycle Kick,22FDD',
-  'Hyper Bicycle (Misugi, Musashi),230AA',
-  'Hyper Bicycle (Misugi, Japan),23090',
+  'Hyper Bicycle (Musashi Misugi),230AA',
+  'Hyper Bicycle (Japan Misugi),23090',
   // ============================================
   'Illusion Dribble (Brazil Santana),228A3',
   'Illusion Dribble (Flamengo),22899',
   'Drive Pass,2291C',
-  'Hedgehog Dribble (Kaltz, Germany),22F6C',
-  'Hedgehog Dribble (Kaltz, Hamburg),228F9',
+  'Hedgehog Dribble (Kaltz Germany),22F6C',
+  'Hedgehog Dribble (Kaltz Hamburg),228F9',
   'Razor Pass (Japan Soda),22F86',
   'Razor Pass (Roppongi Soda),22F9B',
   'Golden Combination (Portrait 1),23C0B',
@@ -197,8 +200,8 @@ var Skill_o_str = [
   'Tachibana Combination (Akita) (Portrait 2),23C56',
   'Eiffel Attack (Portrait 1),23C71',
   'Eiffel Attack (Portrait 2),23C78',
-  'Twin Shot (Tsubasa, Misaki) (Portrait 1),23215',
-  'Twin Shot (Tsubasa, Misaki) (Portrait 2),2321C',
+  'Twin Shot (Tsubasa Misaki) (Portrait 1),23215',
+  'Twin Shot (Tsubasa Misaki) (Portrait 2),2321C',
   'Twin Shot (Japan Tachibana) (Portrait 1),23235',
   'Twin Shot (Japan Tachibana) (Portrait 2),2323C',
   'Twin Shot (Akita Tachibana) (Portrait 1),23255',
@@ -258,8 +261,8 @@ var Skill_o_str = [
   'First Mach Shot (Morisaki),2365C',
   'First Mach Shot (Genzo),23663',
   'First Mach Shot (Ken),2366A',
-  'After Triangle Save (Ken, Toho),22352',
-  'After Triangle Save (Ken, Japan),22359',
+  'After Triangle Save (Toho Ken),22352',
+  'After Triangle Save (Japan Ken),22359',
   'After Jito Scores (Japan),222A6',
   'After Jito Scores (Kunimi),222B1',
   'Portrait after Diaz Rage dribbles past GK and scores,21C31',
@@ -538,7 +541,9 @@ var CUS_PATCH = [
 
 ; Show the name of special skill
 3e97c=20 75 FD;
-3fd85=C0 2E D0 10 AC 3E 04 F0 0B 30 09 B9 8C FD 85 3C A9 FD 85 3D A0 00 18 60 90 9F AE AB 22 1A 00 00 00 00 00 00 53 75 70 65 72 21 00 00 00 00 00 00 00 00 00 00 1C 2E 0C 2E 00 AB 22 1A 94 00 00 00 00 00 53 75 70 65 72 21;
+3fd85=C0 2E D0 10 AC 3E 04 F0 0B 30 09 B9 8C FD 85 3C A9 FD 85 3D A0 00 18 60 90 9F AE AB 22 1A 00 00 00 00 00 00 53 75 70 65 72 21 AB 22 1A 00 00 00 00 00 00 53 75 70 65 72 21 AB 22 1A 00 00 00 00 00 00 53 75 70 65 72 21;
+
+;3fd85=C0 2E D0 10 AC 3E 04 F0 0B 30 09 B9 8C FD 85 3C A9 FD 85 3D A0 00 18 60 90 9F AE AB 22 1A 00 00 00 00 00 94 53 75 70 65 72 21 AB 22 1A 00 00 00 00 00 00 53 75 70 65 72 21 AB 22 1A 94 00 00 00 00 00 53 75 70 65 72 21;
 `,
   ],
   [
@@ -673,5 +678,12 @@ var CUS_PATCH = [
 3FEC0=D7 60 C9 02 F0 1C C9 04 F0 18 C9 0E F0 14 C9 0F
 3FED0=F0 10 C9 1C F0 0C C9 1D F0 08 C9 1E F0 04 C9 1F
 3FEE0=D0 05 A9 02 8D 4E 04 68 20 17 D7 60`,
+  ],
+  [
+    'Infinity HP',
+    `03E34F 91 => B1
+03E353 91 => B1
+035057 91 => B1
+03505B 91 => B1`,
   ],
 ];

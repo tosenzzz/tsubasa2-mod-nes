@@ -115,9 +115,7 @@ function SearchInRom() {
     cnt.css('color', 'red');
     return;
   }
-  cnt.text(
-    `Found ${SRR.rs.length} result: ${SRR.rs.map((v) => v.toString(16))}`,
-  );
+  cnt.html(`Found ${SRR.rs.length} result: ${SRR.rs.map((v) => bLnk(v))}`);
   cnt.css('color', 'green');
 }
 
@@ -235,6 +233,36 @@ function copyDivContent() {
       console.error('Lỗi khi copy: ', err);
       alert('Không thể copy.');
     });
+}
+
+function convertRetro() {
+  let txt = $('#pwdTxt').val().trim().split('\n');
+  txt = txt.map((v) => v.trim()).filter((v) => !!v);
+  let out = [];
+  txt.forEach((v, i) => {
+    let t = v.split(';').map((v) => v.trim());
+    if (t[1]) out.push(`cheat${i}_desc = "${t[1]}"`);
+    out.push(`cheat${i}_enable = "true"`);
+    out.push(`cheat${i}_handler = "1"`);
+    out.push(`cheat${i}_memory_search_size = "4"`);
+
+    t = t[0].split('=').map((v) => v.trim());
+    if (/\(.*\)/.test(t[0])) {
+      // 303(11*12) => ['303(11*12)', '303', '11', '12']
+      let m = t[0].match(/(\w+)\((\d+)\*(\d+)\)/);
+      out.push(`cheat1_address = "0x${m[1]}"`);
+      out.push(`cheat1_value = "${t[1]}"`);
+      out.push(`cheat1_repeat_count = "${m[2]}"`);
+      out.push(`cheat1_repeat_add_to_address = "${m[3] / 2}"`);
+      out.push(`cheat1_repeat_add_to_value = "0"`);
+    } else {
+      out.push(`cheat${i}_address = "0x${t[0]}"`);
+      out.push(`cheat${i}_value = "${t[1]}"`);
+    }
+    out.push('');
+  });
+  out.push(`cheats = "${txt.length}"`);
+  $('#pwdTxt').val(out.join('\n'));
 }
 
 function LoadAllPatch() {

@@ -877,11 +877,12 @@ function BulidInstructTabHtml() {
     "<div><span>Skill Image ↓</span><br><select id='skill__addr' onchange='getskillimgcode();'>";
   htmlstr = fillSelectlist_S2(htmlstr, Skill_o_str);
   htmlstr += "</select><select id='skill__code'>";
-  htmlstr = fillSelectlist_S(htmlstr, Skill_o_txt);
+  htmlstr = fillSelectlist_S3(htmlstr, Skill_o_txt);
   htmlstr += '</select></div>';
   htmlstr += "<span id='PortraitTempText'></span>";
   htmlstr +=
-    "<div><button onclick='ChangeInstruct();'>Apply Command Changes ↑</button></div></div>";
+    "<div><button onclick='ChangeInstruct();'>Apply Command Changes ↑</button> " +
+    "<button onclick='ClearAllPortrait();'>Clear all Portrait</button></div></div>";
   htmlstr +=
     "<div id='Instructedit_a_1'><div><span>Specials view/edit supports original & some hacks.</span></div><div><span>Player:</span>" +
     "<select id='PlayerList' onchange='LoadSkills();'>";
