@@ -491,10 +491,10 @@ function loadHPandOther() {
 function checkrunai() {
   for (var i = 0; i < 12; i++) {
     var xxxx = '#AiRunType_' + (i + 1);
-    $(xxxx).val(NesHex[步长类型 + +$('#AiRunType').val() * 12 + i]);
+    $(xxxx).val(NesHex[StepType_ + +$('#AiRunType').val() * 12 + i]);
   }
   $('#AiRunType_Addr').html(
-    ' 0x' + toHex16(步长类型 + +$('#AiRunType').val() * 12, 5),
+    ' 0x' + toHex16(StepType_ + +$('#AiRunType').val() * 12, 5),
   );
   outAiStr();
 }
@@ -514,21 +514,16 @@ function loadAiRun() {
     'Defense Support',
   ];
   for (var i = 0; i < tempstr.length; i++) {
+    let id1 = `AiRunType_${i * 2 + 1}`;
+    let id2 = `AiRunType_${i * 2 + 2}`;
     str += '<div><span>' + tempstr[i] + '<span>';
-    str += "<select id='AiRunType_" + (i * 2 + 1) + "' onchange='outAiStr();'>";
-    str += '</select> ';
-    str += "<select id='AiRunType_" + (i * 2 + 2) + "' onchange='outAiStr();'>";
-    str += '</select></div>';
+    str += `<input type="number" id="${id1}" min="0" max="255" onchange='outAiStr()'>`;
+    str += `<input type="number" id="${id2}" min="0" max="255" onchange='outAiStr()'>`;
+    str += '</div>';
   }
+  str += `<button onclick="ChangeAiRunType()">Apply Changes</button>`;
 
   $('#aitab1').append(str);
-  for (var i = 0; i < 0x100; i++) {
-    for (var x = 0; x < 12; x++) {
-      $('#AiRunType_' + (x + 1)).append(
-        $('<option/>').text(toHex16(i)).attr('value', i),
-      );
-    }
-  }
 }
 
 // AI top bar & passing intent

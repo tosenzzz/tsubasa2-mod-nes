@@ -178,15 +178,15 @@ var Ai_Run = [
   '1E ??',
   '1F ??',
 ];
-var AI数据索引 = 0;
-var 我方球员数据 = false;
+var AiData_ = 0;
+var PlayerData_ = false;
 var IsGK = false;
-var aI_我方球员 = 0x395ea;
-var aI_传球意向 = 0x3b73e;
-var 步长类型 = 0x3afbe;
-var 进攻AI地址 = 0x3b13e;
-var 防守AI地址 = 0x3b8be;
-var GKAI地址 = 0x3ba3e;
+var AiPlayer_ = 0x395ea;
+var AiPass_ = 0x3b73e;
+var StepType_ = 0x3afbe;
+var AiAttack_ = 0x3b13e;
+var AiDefend_ = 0x3b8be;
+var AiGK_ = 0x3ba3e;
 var Ai_data_1_2 = ['0', '1', '2', '3', '4', '5', '6', '7', '8'];
 var Ai_data_2_2 = ['0', '1', '2', '3'];
 var Ai_data_3_2 = ['0', '1', '2', '3'];

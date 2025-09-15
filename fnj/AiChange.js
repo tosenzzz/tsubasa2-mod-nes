@@ -7,16 +7,16 @@ function AiPlayersChange() {
     0xc5,
   ];
 
-  var AiDataAddrIndex = aI_我方球员 + 0x22 * 4; //AI数据索引地址
+  var AiDataAddrIndex = AiPlayer_ + 0x22 * 4; //AI数据索引地址
   IsGK = false;
-  我方球员数据 = false;
-  AI数据索引 = +$('#AiPlayerSelect').val();
+  PlayerData_ = false;
+  AiData_ = +$('#AiPlayerSelect').val() - 1;
 
-  if (AI数据索引 <= 33) {
-    我方球员数据 = true;
-    AiDataAddrIndex = aI_我方球员;
+  if (AiData_ <= 33) {
+    PlayerData_ = true;
+    AiDataAddrIndex = AiPlayer_;
   } else {
-    AI数据索引 = AI数据索引 - 34;
+    AiData_ = AiData_ - 34;
   }
 
   for (
@@ -24,7 +24,7 @@ function AiPlayersChange() {
     gkid < AiGKList.length;
     gkid++ //这里直接处理GK
   ) {
-    if (AiGKList[gkid] == +$('#AiPlayerSelect').val() + 1) {
+    if (AiGKList[gkid] == AiData_ + 1) {
       IsGK = true;
       break;
     }
@@ -32,14 +32,14 @@ function AiPlayersChange() {
   var hptemp = 0;
   if (IsGK == true) {
     hptemp = 0x9d;
-    if (我方球员数据 == true) {
-      var 数据地址 = AiDataAddrIndex + AI数据索引 * 4;
+    if (PlayerData_ == true) {
+      var 数据地址 = AiDataAddrIndex + AiData_ * 4;
       $('#aitab_4').css('display', 'none');
       $('#aitab_5').css('display', 'none');
       $('#aitab_6').css('display', 'none');
       $('#aitab_7').css('display', 'none');
     } else {
-      var 数据地址 = AiDataAddrIndex + AI数据索引 * 12;
+      var 数据地址 = AiDataAddrIndex + AiData_ * 12;
       $('#aitab_4').css('display', 'none');
       $('#aitab_5').css('display', 'none');
       $('#aitab_6').css('display', 'inline-block');
@@ -51,14 +51,14 @@ function AiPlayersChange() {
       AiPasslistChange();
     }
   } else {
-    if (我方球员数据 == true) {
-      var 数据地址 = AiDataAddrIndex + AI数据索引 * 4;
+    if (PlayerData_ == true) {
+      var 数据地址 = AiDataAddrIndex + AiData_ * 4;
       $('#aitab_4').css('display', 'none');
       $('#aitab_5').css('display', 'none');
       $('#aitab_6').css('display', 'none');
       $('#aitab_7').css('display', 'none');
     } else {
-      var 数据地址 = AiDataAddrIndex + AI数据索引 * 12;
+      var 数据地址 = AiDataAddrIndex + AiData_ * 12;
       $('#aitab_4').css('display', 'inline-block');
       $('#aitab_5').css('display', 'inline-block');
       $('#aitab_6').css('display', 'none');
@@ -79,7 +79,7 @@ function AiPlayersChange() {
   $('#AiXXAck').val(NesHex[数据地址 + 2]);
   $('#AiXXDef').val(NesHex[数据地址 + 3]);
 
-  if (IsGK == true && 我方球员数据 == false) {
+  if (IsGK == true && PlayerData_ == false) {
     ldAIData3(0);
     ldAIData3(1);
     ldAIData3(2);
@@ -88,7 +88,7 @@ function AiPlayersChange() {
     GetAIData3(2);
   }
 
-  if (IsGK == false && 我方球员数据 == false) {
+  if (IsGK == false && PlayerData_ == false) {
     ldAIData1(0);
     ldAIData1(1);
     ldAIData1(2);
@@ -111,7 +111,7 @@ function outAiStr() {
     }
     var txt1 =
       'Full code data:' +
-      (aI_我方球员 + 0x22 * 4 + AI数据索引 * 12).toString(16).toUpperCase() +
+      (AiPlayer_ + 0x22 * 4 + AiData_ * 12).toString(16).toUpperCase() +
       '=' +
       toHex16(能力) +
       ' ' +
@@ -139,7 +139,7 @@ function outAiStr() {
     if (IsGK == true) {
       txt1 =
         'Full code data:' +
-        (aI_我方球员 + 0x22 * 4 + AI数据索引 * 12).toString(16).toUpperCase() +
+        (AiPlayer_ + 0x22 * 4 + AiData_ * 12).toString(16).toUpperCase() +
         '=' +
         toHex16(能力) +
         ' ' +
@@ -172,24 +172,21 @@ function outAiStr() {
     }
     txt2 =
       'Passing intent code:' +
-      toHex16(
-        aI_传球意向 + $('#AiPasslistSelect').get(0).selectedIndex * 8,
-        5,
-      ) +
+      toHex16(AiPass_ + $('#AiPasslistSelect').get(0).selectedIndex * 8, 5) +
       '=' +
       txt2;
     for (var i = 0; i < 12; i++) {
-      txt3 += toHex16($('#AiRunType_' + (i + 1)).get(0).selectedIndex) + ' ';
+      txt3 += toHex16(+$('#AiRunType_' + (i + 1)).val()) + ' ';
     }
     txt3 =
       'Step-length data code:' +
-      toHex16(步长类型 + +$('#AiRunType').val() * 12, 5) +
+      toHex16(StepType_ + +$('#AiRunType').val() * 12, 5) +
       '=' +
       txt3;
-    if (我方球员数据 == true) {
+    if (PlayerData_ == true) {
       txt1 =
         'Full code data:' +
-        (aI_我方球员 + AI数据索引 * 4).toString(16).toUpperCase() +
+        (AiPlayer_ + AiData_ * 4).toString(16).toUpperCase() +
         '=' +
         toHex16(能力) +
         ' ' +
@@ -225,7 +222,7 @@ function outAiStr() {
 }
 
 function AiPasslistChange() {
-  var strcode = aI_传球意向;
+  var strcode = AiPass_;
   for (var ist = 0; ist < 48; ist++) {
     if ($('#AiPasslistSelect').get(0).selectedIndex != ist) {
       continue;
@@ -395,7 +392,7 @@ function GetAIData3(type) {
 }
 
 function ldAIData1(type) {
-  var 地址 = 进攻AI地址 + $('#AiAck1').get(0).selectedIndex * 48;
+  var 地址 = AiAttack_ + $('#AiAck1').get(0).selectedIndex * 48;
   var st = 0;
   var ed = 5;
   if (type == 0) {
@@ -404,12 +401,12 @@ function ldAIData1(type) {
   if (type == 1) {
     st = 6;
     ed = 8;
-    地址 = 进攻AI地址 + $('#AiAck2').get(0).selectedIndex * 48;
+    地址 = AiAttack_ + $('#AiAck2').get(0).selectedIndex * 48;
   }
   if (type == 2) {
     st = 9;
     ed = 11;
-    地址 = 进攻AI地址 + $('#AiAck3').get(0).selectedIndex * 48;
+    地址 = AiAttack_ + $('#AiAck3').get(0).selectedIndex * 48;
   }
   for (var i = st; i <= ed; i++) {
     for (var x = 0; x < 4; x++) {
@@ -426,7 +423,7 @@ function ldAIData1(type) {
 }
 
 function ldAIData2(type) {
-  var 地址 = 防守AI地址 + $('#AiDef1').get(0).selectedIndex * 48;
+  var 地址 = AiDefend_ + $('#AiDef1').get(0).selectedIndex * 48;
   var st = 0;
   var ed = 5;
   if (type == 0) {
@@ -435,12 +432,12 @@ function ldAIData2(type) {
   if (type == 1) {
     st = 6;
     ed = 8;
-    地址 = 防守AI地址 + $('#AiDef2').get(0).selectedIndex * 48;
+    地址 = AiDefend_ + $('#AiDef2').get(0).selectedIndex * 48;
   }
   if (type == 2) {
     st = 9;
     ed = 11;
-    地址 = 防守AI地址 + $('#AiDef3').get(0).selectedIndex * 48;
+    地址 = AiDefend_ + $('#AiDef3').get(0).selectedIndex * 48;
   }
   for (var i = st; i <= ed; i++) {
     for (var x = 0; x < 4; x++) {
@@ -457,16 +454,16 @@ function ldAIData2(type) {
 }
 
 function ldAIData3(type) {
-  var 地址 = GKAI地址 + $('#AiGK1').get(0).selectedIndex * 12;
+  var 地址 = AiGK_ + $('#AiGK1').get(0).selectedIndex * 12;
 
   if (type == 0) {
   }
 
   if (type == 1) {
-    地址 = GKAI地址 + $('#AiGK2').get(0).selectedIndex * 12;
+    地址 = AiGK_ + $('#AiGK2').get(0).selectedIndex * 12;
   }
   if (type == 2) {
-    地址 = GKAI地址 + $('#AiGK3').get(0).selectedIndex * 12;
+    地址 = AiGK_ + $('#AiGK3').get(0).selectedIndex * 12;
   }
 
   for (var x = 0; x < 4; x++) {
@@ -514,3 +511,11 @@ $(document).ready(function () {
   loadHPandOther(); //能力 进攻防守跑动
   loadAiRun();
 });
+
+function ChangeAiRunType() {
+  for (var i = 0; i < 12; i++) {
+    var xxxx = '#AiRunType_' + (i + 1);
+    NesHex[StepType_ + +$('#AiRunType').val() * 12 + i] = $(xxxx).val();
+  }
+  alertMsg('#isfileload', 'green', 'AiRun updated successfully!');
+}
