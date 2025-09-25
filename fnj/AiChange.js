@@ -317,16 +317,16 @@ function GetAIData1(type) {
     }
 
     if (type == 0) {
-      var 几率 = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-      str = GetAiTyoeStr(Hex1, '', Ai_data_1_3, Ai_data_1_2, 几率);
+      var probability = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+      str = GetAiTyoeStr(Hex1, '', Ai_data_1_3, Ai_data_1_2, probability);
     }
     if (type == 1) {
-      var 几率 = [0, 0, 0, 0];
-      str = GetAiTyoeStr(Hex1, '', Ai_data_2_3, Ai_data_2_2, 几率);
+      var probability = [0, 0, 0, 0];
+      str = GetAiTyoeStr(Hex1, '', Ai_data_2_3, Ai_data_2_2, probability);
     }
     if (type == 2) {
-      var 几率 = [0, 0, 0, 0];
-      str = GetAiTyoeStr(Hex1, '', Ai_data_3_3, Ai_data_3_2, 几率);
+      var probability = [0, 0, 0, 0];
+      str = GetAiTyoeStr(Hex1, '', Ai_data_3_3, Ai_data_3_2, probability);
     }
     $('#AiEx_Txt_' + i).html(str);
   }
@@ -354,16 +354,16 @@ function GetAIData2(type) {
     }
 
     if (type == 0) {
-      var 几率 = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-      str = GetAiTyoeStr(Hex1, '', Ai_data_4_3, Ai_data_4_2, 几率);
+      var probability = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+      str = GetAiTyoeStr(Hex1, '', Ai_data_4_3, Ai_data_4_2, probability);
     }
     if (type == 1) {
-      var 几率 = [0, 0, 0, 0];
-      str = GetAiTyoeStr(Hex1, '', Ai_data_5_3, Ai_data_5_2, 几率);
+      var probability = [0, 0, 0, 0];
+      str = GetAiTyoeStr(Hex1, '', Ai_data_5_3, Ai_data_5_2, probability);
     }
     if (type == 2) {
-      var 几率 = [0, 0, 0, 0];
-      str = GetAiTyoeStr(Hex1, '', Ai_data_6_3, Ai_data_6_2, 几率);
+      var probability = [0, 0, 0, 0];
+      str = GetAiTyoeStr(Hex1, '', Ai_data_6_3, Ai_data_6_2, probability);
     }
     $('#AiEx1_Txt_' + i).html(str);
   }
@@ -377,16 +377,16 @@ function GetAIData3(type) {
   }
 
   if (type == 0) {
-    var 几率 = [0, 0, 0];
-    str = GetAiTyoeStr(Hex1, '', Ai_data_7_3, Ai_data_7_2, 几率);
+    var probability = [0, 0, 0];
+    str = GetAiTyoeStr(Hex1, '', Ai_data_7_3, Ai_data_7_2, probability);
   }
   if (type == 1) {
-    var 几率 = [0, 0];
-    str = GetAiTyoeStr(Hex1, '', Ai_data_8_3, Ai_data_8_2, 几率);
+    var probability = [0, 0];
+    str = GetAiTyoeStr(Hex1, '', Ai_data_8_3, Ai_data_8_2, probability);
   }
   if (type == 2) {
-    var 几率 = [0, 0];
-    str = GetAiTyoeStr(Hex1, '', Ai_data_9_3, Ai_data_9_2, 几率);
+    var probability = [0, 0];
+    str = GetAiTyoeStr(Hex1, '', Ai_data_9_3, Ai_data_9_2, probability);
   }
   $('#AiEx2_Txt_' + (type + 1)).html(str);
 }

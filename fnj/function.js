@@ -640,7 +640,7 @@ function fillSelectlist_S_10(str, len) {
   return str;
 }
 
-function 添加几率文本(动作, select) {
+function 添加probability文本(动作, select) {
   var temp = [];
   for (var i = 0; i < 动作.length; i++) {
     for (var j = 0; j < 动作.length; j++) {
@@ -657,29 +657,30 @@ function 添加几率文本(动作, select) {
   }
 }
 
-function GetAiTyoeStr(HexData, str, 文本, 动作, 几率) {
-  GetAiTypeSum(动作, 几率, HexData);
-  for (var types = 0; types < 文本.length; types++) {
-    str += '<div>' + 文本[types] + '=' + 几率[types] * 100 + '%<br></div>';
+function GetAiTyoeStr(HexData, str, Text, Act, probability) {
+  GetAiTypeSum(Act, probability, HexData);
+  for (var types = 0; types < Text.length; types++) {
+    str +=
+      '<div>' + Text[types] + '=' + probability[types] * 100 + '%<br></div>';
   }
   return str;
 }
 
-function GetAiTypeSum(动作, 几率, HexData) {
+function GetAiTypeSum(Act, probability, HexData) {
   for (var j = 0; j < HexData.length; j++) {
     for (
       var i = 0;
-      i < 动作.length;
+      i < Act.length;
       i++ //遍历所有动作类型
     ) {
       var a = toHex16(HexData[j]);
-      if (a.substr(0, 1) == 动作[i]) {
+      if (a.substr(0, 1) == Act[i]) {
         //验证取得的字节是否出现动作...
-        几率[i] = 几率[i] + 0.125; //累加到几率数组中....
+        probability[i] = probability[i] + 0.125; //累加到probability数组中....
       }
-      if (a.substr(1, 1) == 动作[i]) {
+      if (a.substr(1, 1) == Act[i]) {
         //验证取得的字节是否出现动作...
-        几率[i] = 几率[i] + 0.125; //累加到几率数组中....
+        probability[i] = probability[i] + 0.125; //累加到probability数组中....
       }
     }
   }

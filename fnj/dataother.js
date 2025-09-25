@@ -197,16 +197,17 @@ var Ai_data_7_2 = ['0', '1', '2'];
 var Ai_data_8_2 = ['3', '4'];
 var Ai_data_9_2 = ['5', '6'];
 var Ai_data_1_3 = [
-  ' 0 = 未知',
-  ' 1 = 射门',
-  ' 2 = 传球',
-  ' 3 = 过人',
-  ' 4 = 2过1',
-  ' 5 = 虎射',
-  ' 6 = 新虎',
-  ' 7 = 雪崩',
-  ' 8 = 暴怒',
+  ' 0 = Unknown',
+  ' 1 = Shot',
+  ' 2 = Pass',
+  ' 3 = Dribble',
+  ' 4 = 2-1',
+  ' 5 = TigerShot,',
+  ' 6 = NeoTiger',
+  ' 7 = Avalanche',
+  ' 8 = Berserk',
 ];
+
 var Ai_data_2_3 = [
   ' 0 = Shoot',
   ' 1 = Dummy (let ball through)',
@@ -499,8 +500,8 @@ var teamlist = [
   'Stage 05 Santos',
   'Stage 06 Flamengo',
   'Stage 07 Kunimi',
-  'Stage 08 Akita Commercial',
-  'Stage 09 Ritsuha', // 立波: kept phonetic
+  'Stage 08 Akita',
+  'Stage 09 Tatsunami',
   'Stage 10 Musashi',
   'Stage 11 Furano',
   'Stage 12 Toho',

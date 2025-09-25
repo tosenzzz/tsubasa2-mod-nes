@@ -453,7 +453,7 @@ Stage 11: ふらの (Furano)
 Stage 12: とうほう (Tōhō)
 07 0gYNR 1shlI A26pm qEy
 
-======== Japan
+======== Japan Cup
 Stage 13: ローマ (Roma)
 07 7dVKO xpeiF 0y3dd +XE
 
@@ -466,6 +466,7 @@ Stage 15: ハンブルガーSV (Hamburger SV)
 Stage 16: ぜんにほん (Japan)
 09 d3tBx KBVFe VpZpv KQK
 
+======== Asian Cup
 Stage 17: シリア (Siria)
 09 Lkbvf 5vDzM DXHQX VLA
 
@@ -484,6 +485,7 @@ Stage 21: サウジアラビア (Saudi Arabia)
 Stage 22: かんこく (South Korea)
 12 XnkIr 85c,P MwTgY qTk
 
+======== World Cup
 Stage 23: バスコダガマ (Vasco da Gama)
 12 jaJ84 udPLC xjfua ftb
 

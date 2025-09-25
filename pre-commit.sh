@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
+# vi .git/hooks/pre-commit
+# chmod +x .git/hooks/pre-commit
 set -euo pipefail
 
 FILE="index.html"
 
 # YYYY-MM-DD-HH (năm-tháng-ngày-giờ hiện tại)
 TS="$(date +'%Y-%m-%d %H:%M:%S')"
-MSG="by tosenzzz ${TS}"
 
 if [[ -f "$FILE" ]]; then
   # Chèn/ghi đè nội dung giữa <... id="updated_at" ...>...</...>
-  perl -0777 -i -pe "s{(<[^>]*\\bid=[\"\\x27]updated_at[\"\\x27][^>]*>).*?(</[^>]*>)}{\$1by tosenzzz ${TS}\$2}gms" "$FILE"
+  perl -0777 -i -pe "s{(<[^>]*\\bid=[\"\\x27]updated_at[\"\\x27][^>]*>).*?(</[^>]*>)}{\$tsz ${TS}\$2}gms" "$FILE"
 
   # Đưa file đã sửa vào commit
   git add "$FILE"
