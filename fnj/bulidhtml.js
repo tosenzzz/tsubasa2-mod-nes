@@ -877,6 +877,8 @@ function BulidInstructTabHtml() {
   htmlstr += "<span id='PortraitTempText'></span>";
   htmlstr +=
     "<div><button onclick='ChangeInstruct();'>Apply Command Changes ↑</button> " +
+    "<button onclick='setShotFace();'>Set Face (keep cutscene)</button> " +
+    "<button onclick='removeShotFace();'>Remove Face (keep cutscene)</button> " +
     "<button onclick='ClearAllPortrait();'>Clear all Portrait</button></div></div>";
   htmlstr +=
     "<div id='Instructedit_a_1'><div><span>Specials view/edit supports original & some hacks.</span></div><div><span>Player:</span>" +

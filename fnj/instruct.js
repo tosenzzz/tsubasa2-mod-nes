@@ -74,17 +74,55 @@ function CheckInstructB() {
   );
 }
 
+// The portrait flash is a 4-byte VM command `3C 30 <face> <param>` at
+// addr-2..addr+1, followed immediately by the kick/ball animation. Overwriting
+// all 4 bytes with two no-op waits (F7 01 F7 01) removes the face but keeps the
+// script in-sync, so the shot cutscene (kick + ball) still plays. Verified in
+// game on Cannon Shot. (A few background tiles may show slight palette smear
+// during the kick, since the portrait command also loaded a palette.)
+function setNoPortrait(addr) {
+  NesHex[addr - 2] = 0xf7;
+  NesHex[addr - 1] = 0x01;
+  NesHex[addr - 0] = 0xf7;
+  NesHex[addr + 1] = 0x01;
+}
+
 function ClearAllPortrait() {
-  let n = NO_PORTRAIT.split(' ');
   Skill_o_str.forEach((v) => {
     let t = v.split(',')[1];
-    if (t) {
-      NesHex[t.num() - 2] = n[0];
-      NesHex[t.num() - 1] = n[1];
-      NesHex[t.num() - 0] = n[2];
-    }
+    if (t) setNoPortrait(t.num());
   });
   alertMsg('#isfileload', 'green', 'All Portrait cleared successfully!');
+}
+
+// Assign the face picked in the Skill Image list to just this shot, touching
+// only the face byte. The animation params (addr-2, addr-1) stay intact, so the
+// shooting cutscene is preserved — unlike NO_PORTRAIT, which drops it.
+function setShotFace() {
+  let addr = +$('#skill__addr').val();
+  if (Number.isNaN(addr)) return;
+  // If the face was removed (Remove Face writes F7 01 F7 01), the 4-byte
+  // portrait command `3C 30 <face> <param>` is gone. Restore the opcode + a
+  // default param. When the command is still intact, keep its original param.
+  if (NesHex[addr - 2] !== 0x3c || NesHex[addr - 1] !== 0x30) {
+    NesHex[addr - 2] = 0x3c;
+    NesHex[addr - 1] = 0x30;
+    NesHex[addr + 1] = 0xa3; // default portrait param (original lost once removed)
+  }
+  NesHex[addr] = +$('#skill__code').val();
+  getskillimgcode();
+  alertMsg('#isfileload', 'green', 'Shot face updated (cutscene kept)!');
+}
+
+// Remove the face flash for the selected shot while keeping the shooting
+// cutscene (see setNoPortrait). Useful when a shot is shared by players who
+// have no matching portrait.
+function removeShotFace() {
+  let addr = +$('#skill__addr').val();
+  if (Number.isNaN(addr)) return;
+  setNoPortrait(addr);
+  getskillimgcode();
+  alertMsg('#isfileload', 'green', 'Shot face removed (cutscene kept)!');
 }
 
 function ChangeInstruct() {
@@ -125,7 +163,7 @@ function ChangeInstruct() {
     var sx = ss1 + ss2;
     NesHex[InstructAddr + 3] = parseInt(sx, 16);
   }
-  NesHex[PortraitAddr] = +$('#skill__code').val();
+  NesHex[+$('#skill__addr').val()] = +$('#skill__code').val();
   alertMsg('#isfileload', 'green', 'Command data modified successfully!');
 }
 
