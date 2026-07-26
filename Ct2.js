@@ -63,11 +63,11 @@ function CheckNesHex() {
   LoadHex16(); //16进制编辑器
   AiButtonClick('#aitab_0');
   showPlayerEditbuttondiv(0); //能力值
-  document.getElementById('AiPlayerSelect')[0x22].selected = true;
+  $('#AiPlayerSelect').val(1);
   AiPlayersChange(); //AI查看
   GetInstruct();
   showInstructbuttondiv(0); //指令
-  $('#PlayerEditNameList').val('0');
+  $('#PlayerEditNameList').val('1');
   PlayerEditSelectChange(); //造型
   $('#playerAbilitySe').val('0');
   GetPlayerData(0); //球员能力

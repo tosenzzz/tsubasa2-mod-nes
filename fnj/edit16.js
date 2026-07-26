@@ -60,37 +60,24 @@ function LoadHex16() {
         "' ><pre>" +
         bhex +
         '</pre></td>';
-      /*		if(w==0x0F)
-                    {
-                        budHexHtml+=bhex+"<br>";
-                    }
-                    else
-                    {
-                        budHexHtml+=bhex+" ";
-                    }*/
     }
     budHexHtml += '</tr>';
   }
 
   budHexHtml += '</table>';
-  $('#HexPreView ').html(budHexHtml);
-  $('#HexPreView td').css({
-    'font-size': defEditFontSize,
-  });
-  $('#HexPreView table').css({
-    'font-size': defEditFontSize,
-  });
-  $('#HexPreView tr').css({
-    'font-size': defEditFontSize,
-  });
-  $('#HexPreView').css('font-size', defEditFontSize);
+  $('#HexPreView').html(budHexHtml);
+  // $('#HexPreView pre').css('font-size', defEditFontSize);
+  // $('#HexPreView table').css('font-size', defEditFontSize);
+  // $('#HexPreView tr').css('font-size', defEditFontSize);
+  // $('#HexPreView').css('font-size', defEditFontSize);
   $('#HexPreView').append(
     `<div id="pgchange">
-      <div onclick='NextHexData(-0x100)'>⬆</div>
+      <div onclick='NextHexData(-0x100)'>⏫</div>
       <div onclick='NextHexData(-0x10)'>▲</div>
       <div onclick='NextHexData(0x10)'>▼</div>
-      <div onclick='NextHexData(0x100)'>⬇</div></div>`,
+      <div onclick='NextHexData(0x100)'>⏬</div></div>`,
   );
+  $('#HexPreView pre').attr('style', `font-size: ${defEditFontSize}`);
 }
 
 function NextHexData(val) {
@@ -106,55 +93,34 @@ function NextHexData(val) {
 }
 
 function HexFontSize(fonttype) {
-  //$("#HexPreView")
-  var cssfontSize = $('#HexPreView').css('font-size'); //
-  //alert(cssfontSize);
-  var unit = cssfontSize.replace('px', '');
-  unit = parseInt(unit);
-  if (unit <= 5 && fonttype == 1) {
-    alert('太小啦....');
+  var cssfontSize = $('#HexPreView pre').css('font-size');
+  var unit = +cssfontSize.replace('px', '') + fonttype;
+  if (unit <= 5) {
+    alert('Too small....');
     return;
   }
-  if (unit >= 28 && fonttype == 0) {
-    alert('太大啦....');
+  if (unit >= 28) {
+    alert('Too large....');
     return;
   }
-  if (fonttype == 0) {
-    unit = unit + 1;
-  } else {
-    unit = unit - 1;
-  }
-  defEditFontSize = unit + 'px';
-  $('#HexPreView td').css({
-    'font-size': unit + 'px',
-  });
-  $('#HexPreView table').css({
-    'font-size': unit + 'px',
-  });
-  $('#HexPreView tr').css({
-    'font-size': unit + 'px',
-  });
-  $('#HexPreView div').css({
-    'font-size': unit + 'px',
-  });
-  $('#HexPreView pre').css({
-    'font-size': unit + 'px',
-  });
-  $('#HexPreView').css('font-size', unit + 'px');
+  defEditFontSize = `${unit}px !important`;
+  $('#HexPreView pre').attr('style', `font-size: ${defEditFontSize}`);
 }
 
-var defEditFontSize = '12px';
+var defEditFontSize = isMobileDevice() ? '12px !important' : '16px !important';
 
 function BulidEdit16TabHtml() {
   $('#Edit16Tab ').empty();
   var edit16html = '';
-  edit16html += "<button onclick='LoadHex16()'>Load/Refresh</button> ";
+  edit16html += "<button onclick='LoadHex16()'>Refresh</button> ";
   edit16html +=
-    "<button onclick='NextHexData(-0x100)'>↑(-0x100)</button> <button onclick='NextHexData(0x100)'>↓(+0x100)</button><br>";
+    "<button onclick='NextHexData(-0x100)'>↑(-0x100)</button> <button onclick='NextHexData(-0x10)'>↑(-0x10)</button>";
+  edit16html +=
+    "<button onclick='NextHexData(0x10)'>↓(+0x10)</button> <button onclick='NextHexData(0x100)'>↓(+0x100)</button><br>";
   edit16html +=
     "<span style='color:red;'>Data Address:</span><input type='text' style='width:60px;' id='offEditNo' value='0'>";
   edit16html +=
-    " <button onclick='HexFontSize(0)'>Enlarge Text</button> <button onclick='HexFontSize(1)'>Shrink Text</button>(may not work)";
+    " <button onclick='HexFontSize(1)'>Font+</button> <button onclick='HexFontSize(-1)'>Font-</button>";
   edit16html += '<div>';
   edit16html += "<div id='HexPreView' style='font-size:12px;'></div>";
   edit16html +=
@@ -278,7 +244,11 @@ function JumpEdit() {
 }
 
 function FormatData16() {
-  var val = $('#ShowEditValue').val().trim().replace(/\n/g, ' ');
+  var val = $('#ShowEditValue')
+    .val()
+    .split(/[,\s\n]/)
+    .filter((v) => !!v)
+    .join(' ');
   $('#ShowEditValue').val(val);
 }
 
@@ -303,11 +273,12 @@ function WriteEdit16() {
     }
   }
   LoadHex16();
+  LoadSkills();
   alertMsg('#isfileload', 'green', 'Write successful!');
 }
 
-function GetRditAddr(ojb) {
-  var offindex = $(ojb).attr('offset');
+function GetRditAddr(obj) {
+  var offindex = $(obj).attr('offset') || obj;
   offindex = parseInt(offindex);
   var topoffsssss = addPreZero2(offindex.toString(16), 6);
   $('#ShowEditIndex').attr('ShowEditIndex', offindex);

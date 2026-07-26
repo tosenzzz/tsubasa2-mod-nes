@@ -18,7 +18,7 @@
 <body>
 	<div id="main">
 		<div>
-			<p style="font-size: 1.1em" id="updated_at">by tosenzzz 2025-09-07 22:53:24</p>
+			<p style="font-size: 1.1em" id="updated_at">by tosenzzz 2026-07-26 23:06:34</p>
 			<a href="http://daymoe.com/rom/" target="_blank">RomMarket</a>&nbsp;
 			<a href="https://daymoe.com/rom/Hack%20CT2.html" target="_blank">Original</a>
 			<a href="https://www.marcrobledo.com/RomPatcher.js" target="_blank">Rom Patcher</a><br>
@@ -34,7 +34,7 @@
 			<div><span id="checknes">type:???</span>&nbsp;<span id="ramtype">Ram Plus Type:???</span></div>
 		</div>
 		<p id="result" style="width: 100%; word-break: break-all; word-wrap: break-word;"></p>
-		<div id="HackDiv" style="pointer-events: none;">
+		<div id="HackDiv" style="pointer-events: auto;">
 			<ul id="menu">
 				<li class="ctab">Teams</li>
 				<li class="ctab">Players</li>
@@ -44,8 +44,8 @@
 				<li class="ctab">HEX</li>
 				<li class="ctab">CHR</li>
 				<li class="ctab">Patch</li>
-				<li class="ctab">Replace Text</li>
-				<li class="ctab">Password</li>
+				<li class="ctab">TextRep</li>
+				<li class="ctab">TextUlt</li>
 				<li class="tabFocus ctab">About</li>
 			</ul>
 			<ul id="content">
@@ -138,25 +138,11 @@
 					</div>
 				</li>
 				<li class="ctab">
-					<span>Input patch code:</span><br>
-					<textarea id="patch_code" style="width: 100%; resize: none; height: 300px;">
-; +0x1e0b3 for new block
-21C6D=10 fd
-; code for Illusion Save: ramcheck('21C6D'.num(), NesHex).hex()
-3FD20=F7 30 F9 02 17 96 6A 3A 20 F9 02 1F F7 1D 80 47 F0 21 FB
-; Text of button down: Supper!
-3EB30=8f 75 70 65 72 21 20 20
-; Assign special catch for Lennart
-3D2F8=02
-; Animation of Lennart when catching
-221DA=F7 02 09 0E 2C 1C FB F7 02 F9 21 2A 05 0E 17 1C FC 00 FB F7 02 10 0E 24 1E FB
-; Disable Wakashimazu has this special
-3977D=03 03
-39861=03 03
-; Image of Lennart when catching
-237B2=33 93
-					</textarea><br>
-					<button onclick="ApplyPatch()">Apply</button><br>
+					<br><span>Select OR Input patch code:</span>
+					<select id='patchList' onchange='PatchChanged();'></select>
+					<input type="file" id="ipsFile" accept=".ips" /><br>
+					<textarea id="patch_code"></textarea><br>
+					<button onclick="ApplyPatch()">Apply Patch</button><br>
 				</li>
 				<li class="ctab">
 					<span>Search text: </span> <input type="text" style="width:120px;" id="searchTxt" value="">
@@ -174,10 +160,11 @@
 					<button onclick="ReplaceText()">Replace Text </button>
 				</li>
 				<li class="ctab">
-					<input type="file" id="pwdFile" accept=".txt" /><br>
+					<br><input type="file" id="pwdFile" accept=".txt" /><br>
 					<textarea id="pwdTxt" rows="10" cols="50" placeholder="Nhập nội dung tại đây..."></textarea><br>
 					<button onclick="convertHira()">Convert あ=>A1=>A</button>
 					<button onclick="copyDivContent()" id="copy">Copy</button><br>
+					<button onclick="convertRetro()" id="copy">Retroarch</button><br>
 				</li>
 				<li class="c ctab" style="pointer-events: auto;">
 					<span>On mobile, it’s recommended to use Chrome or Microsoft Edge.<br>Switching your phone to landscape

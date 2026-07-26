@@ -3,7 +3,7 @@ var InstructAddr = 0;
 var Instruct0440 = 0;
 var Instruct0443 = 0;
 function GetInstruct() {
-  CmdDataSel = $('#InstructList').get(0).selectedIndex;
+  CmdDataSel = $('#InstructList').val();
   InstructAddr = 0;
   if (CmdDataSel <= 54) {
     InstructAddr = AttackCmdAddr + CmdDataSel * 4;
@@ -74,6 +74,85 @@ function CheckInstructB() {
   );
 }
 
+// The portrait flash is a 4-byte VM command `3C 30 <face> <param>` at
+// addr-2..addr+1, followed immediately by the kick/ball animation. Overwriting
+// all 4 bytes with two no-op waits (F7 01 F7 01) removes the face but keeps the
+// script in-sync, so the shot cutscene (kick + ball) still plays. Verified in
+// game on Cannon Shot. (A few background tiles may show slight palette smear
+// during the kick, since the portrait command also loaded a palette.)
+function setNoPortrait(addr) {
+  NesHex[addr - 2] = 0xf7;
+  NesHex[addr - 1] = 0x01;
+  NesHex[addr - 0] = 0xf7;
+  NesHex[addr + 1] = 0x01;
+}
+
+function ClearAllPortrait() {
+  Skill_o_str.forEach((v) => {
+    let t = v.split(',')[1];
+    if (t) setNoPortrait(t.num());
+  });
+  alertMsg('#isfileload', 'green', 'All Portrait cleared successfully!');
+}
+
+// Assign the face picked in the Skill Image list to just this shot, touching
+// only the face byte. The animation params (addr-2, addr-1) stay intact, so the
+// shooting cutscene is preserved — unlike NO_PORTRAIT, which drops it.
+function setShotFace() {
+  let addr = +$('#skill__addr').val();
+  if (Number.isNaN(addr)) return;
+  // If the face was removed (Remove Face writes F7 01 F7 01), the 4-byte
+  // portrait command `3C 30 <face> <param>` is gone. Restore the opcode + a
+  // default param. When the command is still intact, keep its original param.
+  if (NesHex[addr - 2] !== 0x3c || NesHex[addr - 1] !== 0x30) {
+    NesHex[addr - 2] = 0x3c;
+    NesHex[addr - 1] = 0x30;
+    NesHex[addr + 1] = 0xa3; // default portrait param (original lost once removed)
+  }
+  NesHex[addr] = +$('#skill__code').val();
+  getskillimgcode();
+  alertMsg('#isfileload', 'green', 'Shot face updated (cutscene kept)!');
+}
+
+// Remove the face flash for the selected shot while keeping the shooting
+// cutscene (see setNoPortrait). Useful when a shot is shared by players who
+// have no matching portrait.
+function removeShotFace() {
+  let addr = +$('#skill__addr').val();
+  if (Number.isNaN(addr)) return;
+  setNoPortrait(addr);
+  getskillimgcode();
+  alertMsg('#isfileload', 'green', 'Shot face removed (cutscene kept)!');
+}
+
+// Given a skillsub label (e.g. "02 Razor Pass (S)"), strip its id and (S)/(?)
+// suffix to get the base name, then remove the face on every Skill_o_str
+// portrait whose name matches (e.g. "Razor Pass (Japan Soda)" + "(Roppongi
+// Soda)"). Lets "add skill" also clear that skill's mismatched face(s).
+// Returns how many portraits were cleared.
+function removeFaceForSkill(skillText) {
+  let base = skillText
+    .replace(/^[0-9A-Fa-f]{2}\s+/, '')
+    .replace(/\s*\((?:S|\?)\)\s*$/, '')
+    .trim()
+    .toLowerCase();
+  if (!base) return 0;
+  let count = 0;
+  Skill_o_str.forEach((v) => {
+    let parts = v.split(',');
+    if (parts.length < 2) return; // group header (no address)
+    let nameBase = parts[0]
+      .replace(/\s*\(.*$/, '')
+      .trim()
+      .toLowerCase();
+    if (nameBase === base) {
+      setNoPortrait(parts[1].num());
+      count++;
+    }
+  });
+  return count;
+}
+
 function ChangeInstruct() {
   //指令数据Addr
   var 暴力 = $('#InstructB').val();
@@ -112,10 +191,7 @@ function ChangeInstruct() {
     var sx = ss1 + ss2;
     NesHex[InstructAddr + 3] = parseInt(sx, 16);
   }
-  NesHex[PortraitAddr] = parseInt(
-    Skill_o_txt[$('#skill__code').get(0).selectedIndex].substr(0, 2),
-    16,
-  );
+  NesHex[+$('#skill__addr').val()] = +$('#skill__code').val();
   alertMsg('#isfileload', 'green', 'Command data modified successfully!');
 }
 
@@ -144,12 +220,21 @@ function LoadSkills() {
   skilllistshoot = [];
   skilllistother = [];
   shotBytes = [];
-  var xdz = $('#PlayerList').get(0).selectedIndex * 2 + SkillAddr;
+  var playerId = +$('#PlayerList').val();
+  var xdz = (playerId - 1) * 2 + SkillAddr;
+  if (Number.isNaN(xdz)) return;
   var bdz = ramcheck(xdz, NesHex);
-  var str =
-    'Skill entry: ' +
-    `${toHex16(xdz, 5)}=${toHex16(NesHex[xdz])} ${toHex16(NesHex[xdz + 1])}, `;
-  str += `Index address: ${toHex16(bdz, 5)}<br>`;
+  var str = 'Skill entry: ' + `${bLnk(xdz)}=${bCopy(xdz)}, `;
+  str += `Index address: ${bLnk(bdz)}<br>`;
+
+  // Check GK
+  if (gkPlayer.includes(playerId)) {
+    let val = NesHex[bdz];
+    str += `Skill index: ${val} ` + (Skill_GK_[val] || `none`);
+    $('#SkillStr').html(str);
+    GetSkill4EditMode();
+    return;
+  }
 
   //+ toHex16(NesHex[bdz]);
   str += 'Skill index: ';
@@ -169,7 +254,6 @@ function LoadSkills() {
   var lstBLOCK = Skill_BLOCK_.split(',');
   var lstTACKLE = Skill_TACKLE_.split(',');
   var lstICEPT = Skill_ICEPT_.split(',');
-  // var lstGK = Skill_GK_.split(',');
 
   BindSkillStrO(lstPASS, lstSTYPE, 1, bdz + 2, bdz + 3, 'Passing'); //传/过人/二过一等
   BindSkillStrO(lstDRIBB, lstSTYPE, 2, bdz + 4, bdz + 5, 'Dribble');
@@ -177,7 +261,6 @@ function LoadSkills() {
   BindSkillStrO(lstBLOCK, lstSTYPE, 4, bdz + 8, bdz + 9, 'Block');
   BindSkillStrO(lstTACKLE, lstSTYPE, 5, bdz + 10, bdz + 11, 'Tackle');
   BindSkillStrO(lstICEPT, lstSTYPE, 6, bdz + 12, bdz + 13, 'Intercept');
-  // BindSkillStrO(lstGK, lstSTYPE, 7, bdz + 14, bdz + 15, 'GK');
 
   var shotWithF = [
     0x20, 0x21, 0x22, 0x24, 0x25, 0x26, 0x28, 0x29, 0x2a, 0x44, 0x4c, 0x4d,
@@ -185,13 +268,12 @@ function LoadSkills() {
   ];
   // Bind SHOT skills list: lstSHOT
   if (NesHex[bdz] == 0x00 && NesHex[bdz + 1] == 0x00) {
-    lstSTYPE[0] += 'Special Shot: none<br>';
+    lstSTYPE[0] += ': none<br>';
   } else {
     var idx1 = NesHex[bdz];
     var idx2 = NesHex[bdz + 1];
     lstSTYPE[0] +=
-      'Special Shot: Address ' +
-      `${bdz.hex()}, Index ${toHex16(idx1)} ${toHex16(idx2)}<br>`;
+      ` Pointer ${bLnk(bdz)}:` + `${toHex16(idx1)} ${toHex16(idx2)}<br>`;
     for (var i = 0; i < 0x100; i++) {
       let shotId = NesHex[shootaddr + i];
       if (shotId == 0xff) {
@@ -203,7 +285,7 @@ function LoadSkills() {
       }
       for (var x = 0; x < lstSHOT.length; x++) {
         if (parseInt(lstSHOT[x].substr(0, 2), 16) == shotId) {
-          var txt = `Address ${toHex16(shootaddr + i, 5)}=${lstSHOT[x]}`;
+          var txt = `${bLnk(shootaddr + i)}=${lstSHOT[x]}`;
           lstSTYPE[0] += 'Special Shot: ' + txt + '<br>';
           var sid = lstSHOT[x].trim().split(' ')[0];
           skilllistshoot.push([txt, sid]);
@@ -237,15 +319,16 @@ function BindSkillStrO(lstSkills, lstTypes, ix, bd1, bd2, nm) {
 function BindSkillStr(lstSkills, lstTypes, ix, bd1, bd2, nm) {
   for (var i = 0; i < lstSkills.length; i++) {
     if (lstSkills[i].substr(0, 2) == toHex16(NesHex[ramcheck(bd1, NesHex)])) {
-      var txt =
-        'Address ' + toHex16(ramcheck(bd1, NesHex), 5) + '=' + lstSkills[i];
-      lstTypes[ix] +=
-        `: Address ${bd1.hex()}, Index ` +
-        toHex16(NesHex[bd1]) +
-        ' ' +
-        toHex16(NesHex[bd2]) +
-        ', ' +
-        txt;
+      var skill = lstSkills[i];
+      if (ix == 5) {
+        // Pointer to Tackle animation
+        skill = bLnk(
+          TackleAnimation + +$('#PlayerList').val() - 1,
+          lstSkills[i],
+        );
+      }
+      var txt = bLnk(ramcheck(bd1, NesHex)) + '=' + skill;
+      lstTypes[ix] += `: ` + txt;
       var sid = lstSkills[i].trim().split(' ')[0];
       skilllistother.push([txt, nm, sid]);
     }
@@ -266,36 +349,85 @@ function ChangeSkillView() {
   }
 }
 
-function CheckTempaddr1(dz) {
+var skillCopied = [];
+function bCopy(xdz) {
+  let txt = `${toHex16(NesHex[xdz])} ${toHex16(NesHex[xdz + 1])}`;
+  return `<span class="skillMenu">
+  <a href="#" onclick="$('.skillCopyMenu').show()">${txt}</a><span class="skillCopyMenu">
+  <div><a href="#" onclick="copySkill(${xdz})">Copy</a></div>
+  <div><a href="#" onclick="pasteSkill(${xdz})">Paste</a></div>
+  <div><a href="#" onclick="$('.skillCopyMenu').hide()">Close</a></div>
+  </span></span>`;
+}
+
+function copySkill(xdz) {
+  skillCopied = [];
+  skillCopied.push(
+    xdz,
+    NesHex[xdz],
+    NesHex[xdz + 1],
+    +$('#PlayerList').val() - 1,
+  );
+  $('.skillCopyMenu').hide();
+}
+
+function pasteSkill(addr) {
+  NesHex[addr] = skillCopied[1];
+  NesHex[addr + 1] = skillCopied[2];
+  // Animation of Tackle
+  NesHex[TackleAnimation + +$('#PlayerList').val() - 1] =
+    NesHex[TackleAnimation + skillCopied[3]];
+  LoadSkills();
+  $('.skillCopyMenu').hide();
+}
+
+function bLnk(xdz, txt) {
+  let addr = toHex16(xdz, 5);
+  return `<a href="#" onclick="gotoAddr('${addr}')">${txt || addr}</a>`;
+}
+
+function gotoAddr(addr) {
+  $('.ctab')[5].click();
+  $('#offEditNo').val(addr);
+  GetRditAddr(addr);
+  LoadHex16();
+}
+
+function GetFreeAddr1(sz = 0x20) {
   for (var i = 0; i < 8064; i += 0x10) {
     let dz = 0x78020 + i;
-    if (NesHex.slice(dz, dz + 30).every((v) => v == 0x00)) {
+    if (NesHex.slice(dz, dz + sz).every((v) => v == 0x00 || v == 0xff)) {
       return dz;
     }
   }
+  return 0;
 }
 
-function CheckTempaddr2(dz) {
+function GetFreeAddr2(sz = 0x20) {
   // Option 1
-  for (var i = 0; i < 700; i += 0x20) {
-    dz = 0x3bd10 + i;
-    if (NesHex.slice(dz, dz + 3).every((v) => v == 0xff)) {
+  for (var i = 0; i < 0x2f0; i += 0x10) {
+    var dz = 0x3bd10 + i;
+    if (NesHex.slice(dz, dz + sz).every((v) => v == 0xff)) {
       return dz;
     }
   }
 
   // Option 2
-  for (var i = 0; i < 700; i + 0x20) {
-    dz = 0x3fd10 + i;
-    if (NesHex.slice(dz, dz + 3).every((v) => v == 0xff)) {
+  for (var i = 0; i < 0x2f0; i += 0x10) {
+    var dz = 0x3fd10 + i;
+    if (NesHex.slice(dz, dz + sz).every((v) => v == 0xff)) {
       return dz;
     }
   }
+
+  return 0;
 }
 
 function Save_Skills() {
+  var playerId = +$('#PlayerList').val();
   var useNewAddr = $('#useNewAddr').is(':checked');
-  var pSkAddr = $('#PlayerList').get(0).selectedIndex * 2 + SkillAddr;
+  var pSkAddr = (playerId - 1) * 2 + SkillAddr;
+  if (Number.isNaN(pSkAddr)) return;
   var skillothers = [
     0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x81, 0x82, 0x83, 0x84, 0x00,
   ];
@@ -313,9 +445,9 @@ function Save_Skills() {
     81: [0xeb, 0xff, 0x01],
     82: [0xec, 0xff, 0x03],
     83: [0xed, 0xff, 0x0a],
-    84: [0xee, 0xff, 0x20],
+    84: [0xee, 0xff, 0x22],
   };
-  var dz = 0; // General Index;// ramcheck(dz, NesHex);
+  var dz = 0; // General Skills Address
 
   if (IsCn) {
     var cncount = NesHex.indexOf(cn768);
@@ -326,7 +458,6 @@ function Save_Skills() {
       NesHex[0x8000c] = 0x60;
       NesHex[0x8000d] = 0xfa;
     }
-
     for (var i = 0; i < skillothers.length; i++) {
       NesHex[0x78015 + i] = skillothers[i];
     }
@@ -340,68 +471,71 @@ function Save_Skills() {
       81: [0x0b, 0x50, 0x01],
       82: [0x0c, 0x50, 0x03],
       83: [0x0d, 0x50, 0x0a],
-      84: [0x0e, 0x50, 0x20],
+      84: [0x0e, 0x50, 0x22],
     };
 
     // Check empty address
-    if (
-      NesHex[pSkAddr + 1] >= 0x50 &&
-      NesHex[pSkAddr + 1] <= 0x6f &&
-      !useNewAddr
-    ) {
-      dz = ramcheck(pSkAddr, NesHex);
-    } else {
-      dz = CheckTempaddr1(dz);
+    var off2 = NesHex[pSkAddr + 1];
+    if (useNewAddr || off2 < 0x50 || off2 > 0x6f) {
+      dz = GetFreeAddr1(0x20);
+      if (dz < 1) {
+        alertMsg('#isfileload', 'red', 'No free space ...');
+        return;
+      }
       useNewAddr = true;
+    } else {
+      dz = ramcheck(pSkAddr, NesHex);
     }
-  }
-  //else if (Is1v32) {}
-  else {
-    // Define Others SKILL to using later
-    for (var i = 0; i < skillothers.length; i++) {
-      NesHex[0x3fff5 + i] = skillothers[i];
+  } else {
+    if (Is1v32 == true) {
+      xx = {
+        '01': [0xe5, 0x7f, 0x01],
+        '02': [0xe6, 0x7f],
+        '03': [0xe7, 0x7f],
+        '04': [0xe8, 0x7f],
+        '05': [0xe9, 0x7f],
+        '06': [0xea, 0x7f],
+        81: [0xeb, 0x7f, 0x01],
+        82: [0xec, 0x7f, 0x03],
+        83: [0xed, 0x7f, 0x0a],
+        84: [0xee, 0x7f, 0x22],
+      };
+      for (var i = 0; i < skillothers.length; i++) {
+        NesHex[0x7ff5 + i] = skillothers[i];
+      }
+    } else {
+      // Define Others SKILL to using later
+      for (var i = 0; i < skillothers.length; i++) {
+        NesHex[0x3fff5 + i] = skillothers[i];
+      }
     }
 
     // Check empty address
     var off1 = NesHex[pSkAddr];
     var off2 = NesHex[pSkAddr + 1];
-    var off21 = toHex16(off2).substr(0, 1);
-    if (
-      (!(off1 == 0x07 && off2 == 0x8f) ||
-        [0xbd, 0xbe, 0xbf, 0xfd, 0xfe, 0xff].includes(off2) ||
-        (['6', '7'].includes(off21) && Is1v32 == true)) &&
-      !useNewAddr
-    ) {
-      dz = ramcheck(pSkAddr, NesHex);
-    } else {
-      dz = CheckTempaddr2(dz);
+    if (useNewAddr || (off1 == 0x07 && off2 == 0x8f)) {
+      dz = GetFreeAddr2(0x20);
+      if (dz < 1) {
+        alertMsg('#isfileload', 'red', 'No free space ...');
+        return;
+      }
       useNewAddr = true;
+    } else {
+      dz = ramcheck(pSkAddr, NesHex);
     }
   }
 
-  if (Is1v32 == true) {
-    xx = {
-      '01': [0xe5, 0x7f, 0x01],
-      '02': [0xe6, 0x7f],
-      '03': [0xe7, 0x7f],
-      '04': [0xe8, 0x7f],
-      '05': [0xe9, 0x7f],
-      '06': [0xea, 0x7f],
-      81: [0xeb, 0x7f, 0x01],
-      82: [0xec, 0x7f, 0x03],
-      83: [0xed, 0x7f, 0x0a],
-      84: [0xee, 0x7f, 0x20],
-    };
-    for (var i = 0; i < skillothers.length; i++) {
-      NesHex[0x7ff5 + i] = skillothers[i];
-    }
+  // Check GK
+  if (gkPlayer.includes(playerId)) {
+    let val = $('#sgk').attr('val');
+    NesHex[pSkAddr] = xx[toHex16(val)]?.[0] || 0;
+    NesHex[pSkAddr + 1] = xx[toHex16(val)]?.[1] || 0;
+    ApplyPatch(GK_Master_);
+    LoadSkills();
+    alertMsg('#isfileload', 'green', 'Special skills updated successfully!');
+    return;
   }
 
-  // if (dz >= 0x10000 && Is1v32 == true) {
-  //   dz = parseInt(toHex16(ramcheck(总索引, NesHex), 5).substr(1, 4), 16);
-  // }
-
-  // Special shot need to write to a new empty address
   if (IsCn) {
     let cn = dz - 0x73000;
     NesHex[dz] = parseInt(toHex16(cn - 2, 4).substr(2, 2), 16);
@@ -418,6 +552,9 @@ function Save_Skills() {
       NesHex[pSkAddr] = parseInt(toHex16(dz - 0x10, 4).substr(2, 2), 16);
       NesHex[pSkAddr + 1] = parseInt(toHex16(dz - 0x10, 4).substr(0, 2), 16);
       // Pointer to Shots skill
+      for (var i = 0; i < 0x20; i++) {
+        NesHex[dz + i] = 0;
+      }
       NesHex[dz] = parseInt(toHex16(dz - 2, 4).substr(2, 2), 16);
       NesHex[dz + 1] = parseInt(toHex16(dz - 2, 4).substr(0, 2), 16);
     }
@@ -439,14 +576,24 @@ function Save_Skills() {
 
   var isShotChanged =
     skilllistshoot.length != tmpShotList.length ||
-    !skilllistshoot.every((v) => tmpShotList.includes(v[1].num()));
+    skilllistshoot
+      .map((v) => v[1].num())
+      .sort()
+      .join(',') != tmpShotList.sort().join(',');
   if (isShotChanged) {
     if (SkillByte.length > shotBytes.length) {
+      // Get Shots address
+      var addr = ramcheck(dz, NesHex);
+      var ck = NesHex.slice(addr + shotBytes.length, addr + SkillByte.length);
       // Need to create new address
-      if (!useNewAddr) {
-        var ck = CheckTempaddr2(0);
-        NesHex[dz] = parseInt(toHex16(ck - 2, 4).substr(2, 2), 16);
-        NesHex[dz + 1] = parseInt(toHex16(ck - 2, 4).substr(0, 2), 16);
+      if (!useNewAddr && !ck.every((v) => v == 0xff)) {
+        var ck = GetFreeAddr2(SkillByte.length);
+        if (ck < 1) {
+          alertMsg('#isfileload', 'red', 'No free space ...');
+          return;
+        }
+        NesHex[dz] = parseInt(toHex16(ck - 0x10, 4).substr(2, 2), 16);
+        NesHex[dz + 1] = parseInt(toHex16(ck - 0x10, 4).substr(0, 2), 16);
       }
     } else {
       for (let i = SkillByte.length; i < shotBytes.length; i++) {
@@ -521,8 +668,8 @@ function Save_Skills() {
     if (old != cd.num()) {
       NesHex[dz + addrtemp] = xx[cd]?.[0] || 0;
       NesHex[dz + addrtemp + 1] = xx[cd]?.[1] || 0;
-      NesHex[DefEffectAddr + $('#PlayerList').get(0).selectedIndex] =
-        xx[cd]?.[2] || 0; //Defense effect code
+      // Animation of Tackle
+      NesHex[TackleAnimation + playerId - 1] = xx[cd]?.[2] || 0;
     }
   }
   addrtemp += 2;
@@ -560,20 +707,26 @@ function DelSkillsub(id) {
   }
 }
 
+function addSkillGk() {
+  let val = $('#skillGk').val();
+  $('#sgk').attr('val', val).html(Skill_GK_[val]);
+}
+
 function addSkillsub() {
-  var sType = $('#skilladdtype').get(0).selectedIndex;
-  var text = $('#skillsub option:selected').text();
+  var sel = $('#skillsub option:selected');
+  var sType = +sel.val(); // type index (0-6) stored on the option
+  var text = sel.text();
   var sid = text.trim().split(' ')[0];
   if (sType == 0) {
     // SHOT
     if ($('#ulshoot').children().length == 9) {
       alertMsg('#isfileload', 'red', 'The number of special shots must <= 9');
-    } else {
-      var selectstr =
-        "<li style='display:block;'><button af='ulshoot' onclick='DelSkillsub(this);'>Del (Shot)</button>" +
-        `<span val="${sid}">${text}</span></li>`;
-      $(selectstr).appendTo($('#ulshoot'));
+      return;
     }
+    var selectstr =
+      "<li style='display:block;'><button af='ulshoot' onclick='DelSkillsub(this);'>Del (Shot)</button>" +
+      `<span val="${sid}">${text}</span></li>`;
+    $(selectstr).appendTo($('#ulshoot'));
   } else {
     // OTHERS
     $('#ulother')
@@ -583,55 +736,55 @@ function addSkillsub() {
       .attr('val', sid)
       .html(text);
   }
+  // Also strip this skill's mismatched face(s) so the added player doesn't
+  // inherit another player's portrait.
+  var n = removeFaceForSkill(text);
+  alertMsg(
+    '#isfileload',
+    'green',
+    n > 0 ? `Added "${text}" & removed ${n} face(s)` : `Added "${text}"`,
+  );
 }
 
+// Fill #skillsub with ALL skills, grouped by the 7 skilladdtype categories
+// (Skill_TYPE_). Each option's value = its type index (0-6) so addSkillsub knows
+// where to place it. Separators (====) are skipped.
 function Changeskilladdtype() {
-  var 类型 = $('#skilladdtype').get(0).selectedIndex;
-  $('#skillsub').html('');
-  var Skillitem = [];
-  switch (类型) {
-    case 0:
-      Skillitem = Skill_SHOT_.split(',');
-      break;
-    case 1:
-      Skillitem = Skill_PASS_.split(',');
-      break;
-    case 2:
-      Skillitem = Skill_DRIBBLE_.split(',');
-      break;
-    case 3:
-      Skillitem = Skill_COMBO_.split(',');
-      break;
-    case 4:
-      Skillitem = Skill_BLOCK_.split(',');
-      break;
-    case 5:
-      Skillitem = Skill_TACKLE_.split(',');
-      break;
-    case 6:
-      Skillitem = Skill_ICEPT_.split(',');
-      break;
-    case 7:
-      Skillitem = Skill_GK_.split(',');
-      break;
+  var lists = [
+    Skill_SHOT_,
+    Skill_PASS_,
+    Skill_DRIBBLE_,
+    Skill_TACKLE_,
+    Skill_COMBO_,
+    Skill_BLOCK_,
+    Skill_ICEPT_,
+  ];
+  var types = Skill_TYPE_.split(',');
+  var html = '';
+  for (var t = 0; t < lists.length; t++) {
+    html +=
+      '<optgroup style="font-weight:bold;font-size:16px;color:#12489e;background:#eaf1fb;" label="── ' +
+      types[t].toUpperCase() +
+      ' ──">';
+    var items = lists[t].split(',');
+    for (var i = 0; i < items.length; i++) {
+      if (/^=+$/.test(items[i].trim())) continue; // bỏ vạch ngăn
+      html +=
+        '<option style="font-size:14px;color:#111;font-weight:normal;" value="' +
+        t +
+        '">' +
+        items[i] +
+        '</option>';
+    }
+    html += '</optgroup>';
   }
-  var obj = document.getElementById('skillsub');
-  for (var i = 0; i < Skillitem.length; i++) {
-    obj.options.add(new Option(Skillitem[i], i));
-  }
+  $('#skillsub').html(html);
 }
 
 function getskillimgcode() {
-  var addr = $('#skill__addr').val();
-  var codes = toHex16(NesHex[addr]);
-  var x = 0;
-  for (var i = 0; i < Skill_o_txt.length; i++) {
-    if (codes == Skill_o_txt[i].substr(0, 2)) {
-      x = i;
-      break;
-    }
-  }
-  document.getElementById('skill__code')[x].selected = true;
+  var addr = +$('#skill__addr').val();
+  var code = toHex16(NesHex[addr]);
+  $('#skill__code').val(code.num());
   $('#InstructTempText').html(
     'Instruction data address: ' + toHex16(InstructAddr, 5),
   );

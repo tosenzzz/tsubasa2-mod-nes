@@ -1,0 +1,17 @@
+#!/bin/sh
+# Only run the deploy build when pushing the `main` branch.
+# Git passes each ref being pushed on stdin as:
+#   <local_ref> <local_sha> <remote_ref> <remote_sha>
+# We trigger `yarn dep` if any of those rows targets refs/heads/main.
+
+push_main=0
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [ "$remote_ref" = "refs/heads/main" ] && push_main=1
+done
+
+if [ "$push_main" = "1" ]; then
+  yarn deploy
+fi
+
+#cp ./pre-push .git/hooks/pre-push
+#chmod +x .git/hooks/pre-push

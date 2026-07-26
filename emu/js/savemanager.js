@@ -259,6 +259,26 @@
 
 // 此模块负责存档列表的显示与交互
 (function () {
+  // 无截图时显示的占位样式
+  const PREVIEW_BOX_STYLE =
+    'width:60px;height:45px;display:flex;align-items:center;justify-content:center;' +
+    'background:#e0e0e0;color:#888;font-size:0.7em;line-height:1.1;text-align:center;' +
+    'border-radius:3px;flex:0 0 auto;margin:0;';
+
+  // 空槽位占位（保持行对齐，但不显示任何文字）
+  const PREVIEW_EMPTY_STYLE = 'width:60px;height:45px;flex:0 0 auto;margin:0;';
+
+  // 根据截图返回缩略图 HTML
+  // hasSave=false（空槽位）→ 透明占位，不显示 "No preview"
+  // 有存档但缺截图/加载失败 → 显示 "No preview"
+  function previewHtml(screenshot, hasSave) {
+    if (!hasSave) return `<div style="${PREVIEW_EMPTY_STYLE}"></div>`;
+    let placeholder = `<div style="${PREVIEW_BOX_STYLE}">No preview</div>`;
+    if (!screenshot) return placeholder;
+    let onerr = placeholder.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    return `<img src="${screenshot}" style="width:60px;height:45px;object-fit:cover;margin:0;border-radius:3px;" onerror="this.outerHTML='${onerr}';">`;
+  }
+
   function showGameManager() {
     SaveManager.getAllSaveSlots(function (err, list) {
       if (err) return alert('获取存档失败');
@@ -429,7 +449,7 @@
                     <div style="display:flex;align-items:center;justify-content:space-between;">
                         <div style="display:flex;align-items:center;gap:0.5rem;">
                             <strong>Auto</strong>
-                            <img src="${autoScreenshot}" style="width:60px;height:45px;object-fit:cover;margin:0;" onerror="this.style.display='none';">
+                            ${previewHtml(autoScreenshot, !!(autoSave && autoSave.romName === loadedName))}
                             <span style="flex:1;font-size:0.9em;">${autoTimestamp}</span>
                         </div>
                         <div>
@@ -449,7 +469,7 @@
                     <div data-slot="${i}" style="padding:0.5rem;border-bottom:1px solid #ccc;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
                         <div style="display:flex;align-items:center;gap:0.5rem;">
                             <strong style="width:2rem;">${i}</strong>
-                            <img src="${screenshot}" style="width:60px;height:45px;object-fit:cover;margin:0;" onerror="this.style.display='none';">
+                            ${previewHtml(screenshot, !!slotSave)}
                             <span style="flex:1;font-size:0.9em;">${timestamp}</span>
                         </div>
                         <div style="display:flex;gap:0.2rem;">

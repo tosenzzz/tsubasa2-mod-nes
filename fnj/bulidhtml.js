@@ -8,7 +8,7 @@ function LoadTxtData() {
       sel = document.getElementById('selectplayer' + addPreZero(i));
     }
     var str = '';
-    str = fillSelectlist_S(str, playerstr);
+    str = fillSelectlist_S3(str, playerstr);
     sel.innerHTML = str;
   }
 
@@ -23,7 +23,7 @@ function LoadTxtData() {
       resel = document.getElementById('selectplayert' + addPreZero(i));
     }
     var restr = '';
-    restr = fillSelectlist_S(restr, playerstr);
+    restr = fillSelectlist_S3(restr, playerstr);
     resel.innerHTML = restr;
   }
 }
@@ -35,6 +35,7 @@ function LoadHtmlInner() {
   BulidHTML_ChrHTML();
   BulidInstructTabHtml();
   BulidHTML_BG_View_Html(); // Build CHR extended HTML
+  LoadAllPatch();
 }
 
 // CHR quick editor
@@ -270,12 +271,12 @@ function BulidHTML_Team_Player() {
       sel = document.getElementById('addplayer' + addPreZero(i));
     }
     var str = '';
-    str = fillSelectlist_S(str, playerstr);
+    str = fillSelectlist_S3(str, playerstr);
     sel.innerHTML = str;
   }
 
   var strTEMP = '';
-  strTEMP = fillSelectlist_S(strTEMP, playerstr);
+  strTEMP = fillSelectlist_S3(strTEMP, playerstr);
   document.getElementById('addplayeSB3').innerHTML =
     document.getElementById('addplayeSB4').innerHTML =
     document.getElementById('addplayeSB5').innerHTML =
@@ -349,7 +350,8 @@ function LoadPlayerEditHtml() {
   $('#playeredit_a_0').html(htmlstr);
   $('#PlayerEditNameList').empty();
   for (var i = 0; i < PlayerColorList.length; i++) {
-    fillSelectlist_x($('#PlayerEditNameList'), i, PlayerColorList[i]);
+    let val = PlayerColorList[i].split(' ', 1)[0].num();
+    fillSelectlist_x($('#PlayerEditNameList'), val, PlayerColorList[i]);
   }
   InputPlayerColorData('#PlayerSkincolourSe');
   InputPlayerColorData('#PlayerHaircolorSe');
@@ -449,7 +451,8 @@ function LoadPlayerEditHtml() {
       i == 0x73
     ) {
     } else {
-      fillSelectlist_x($('#PlayerVSModADDList1'), i, PlayerName_Skill[i]);
+      let val = PlayerName_Skill[i].split(' ', 1)[0].num();
+      fillSelectlist_x($('#PlayerVSModADDList1'), val, PlayerName_Skill[i]);
     }
   }
   for (var i = 0; i < Portrait_List.length; i++) {
@@ -469,7 +472,7 @@ function LoadPlayerEditHtml() {
 // AI ability index & run
 function loadHPandOther() {
   var str = "<select id='AiHPindex' onchange='outAiStr();'>";
-  str = fillSelectlist_S(str, Ai_HP_Index);
+  str = fillSelectlist_S3(str, Ai_HP_Index);
   str += '</select>';
   $('#aitab0').append(str);
 
@@ -488,12 +491,10 @@ function loadHPandOther() {
 function checkrunai() {
   for (var i = 0; i < 12; i++) {
     var xxxx = '#AiRunType_' + (i + 1);
-    $(xxxx).val(
-      NesHex[步长类型 + $('#AiRunType').get(0).selectedIndex * 12 + i],
-    );
+    $(xxxx).val(NesHex[StepType_ + +$('#AiRunType').val() * 12 + i]);
   }
   $('#AiRunType_Addr').html(
-    ' 0x' + toHex16(步长类型 + $('#AiRunType').get(0).selectedIndex * 12, 5),
+    ' 0x' + toHex16(StepType_ + +$('#AiRunType').val() * 12, 5),
   );
   outAiStr();
 }
@@ -501,7 +502,7 @@ function checkrunai() {
 // Build run-step HTML
 function loadAiRun() {
   var str = "<select id='AiRunType' onchange='checkrunai();'>";
-  str = fillSelectlist_S(str, Ai_Run);
+  str = fillSelectlist_S3(str, Ai_Run);
   str += "</select><span id='AiRunType_Addr'></span>";
 
   var tempstr = [
@@ -513,21 +514,16 @@ function loadAiRun() {
     'Defense Support',
   ];
   for (var i = 0; i < tempstr.length; i++) {
+    let id1 = `AiRunType_${i * 2 + 1}`;
+    let id2 = `AiRunType_${i * 2 + 2}`;
     str += '<div><span>' + tempstr[i] + '<span>';
-    str += "<select id='AiRunType_" + (i * 2 + 1) + "' onchange='outAiStr();'>";
-    str += '</select> ';
-    str += "<select id='AiRunType_" + (i * 2 + 2) + "' onchange='outAiStr();'>";
-    str += '</select></div>';
+    str += `<input type="number" id="${id1}" min="0" max="255" onchange='outAiStr()'>`;
+    str += `<input type="number" id="${id2}" min="0" max="255" onchange='outAiStr()'>`;
+    str += '</div>';
   }
+  str += `<button onclick="ChangeAiRunType()">Apply Changes</button>`;
 
   $('#aitab1').append(str);
-  for (var i = 0; i < 0x100; i++) {
-    for (var x = 0; x < 12; x++) {
-      $('#AiRunType_' + (x + 1)).append(
-        $('<option/>').text(toHex16(i)).attr('value', i),
-      );
-    }
-  }
 }
 
 // AI top bar & passing intent
@@ -535,7 +531,7 @@ function loadPassAi1() {
   var AI_player_list = '<div>Players:';
   AI_player_list +=
     " <select id='AiPlayerSelect' offindex=0 onchange='AiPlayersChange();'>";
-  AI_player_list = fillSelectlist_S(AI_player_list, Aiplayerstr);
+  AI_player_list = fillSelectlist_S3(AI_player_list, Aiplayerstr);
   AI_player_list += "</select><div id='AIOutStr'></div></div>";
   $('#AI_Players_Name').html(AI_player_list);
 
@@ -852,15 +848,15 @@ function BulidInstructTabHtml() {
     "<div id='Instructedit_a_0'><div><span>Note: Aggressiveness/Power should not exceed 0xFC.<br>Stamina/One-two distance can be edited. Web version doesn’t show linked 0440/0443 data.<br>Command editing supports only original-address data.</span></div>";
   htmlstr +=
     "<div><span>Command Set:</span><select id='InstructList' onchange='GetInstruct();'>";
-  htmlstr = fillSelectlist_S(htmlstr, AllSkills);
+  htmlstr = fillSelectlist_S3(htmlstr, AllSkills.split(','));
   htmlstr += '</select> <span id="InstructTempText"></span><br></div>';
 
   htmlstr +=
-    "<div><span>Aggressiveness (0~255):</span><input id='InstructB' onchange='CheckInstructB();' type='number' min=0 max=255>";
+    "<div><span>Aggressiveness (0~250):</span><input id='InstructB' onchange='CheckInstructB();' type='number' min=0 max=250>";
   htmlstr += '</input><br></div>';
 
   htmlstr +=
-    "<div><span>Power (0~255):</span><input id='InstructW' type='number' min=0 max=255>";
+    "<div><span>Power (0~250):</span><input id='InstructW' type='number' min=0 max=250>";
   htmlstr += '</input><br></div>';
 
   htmlstr +=
@@ -876,14 +872,18 @@ function BulidInstructTabHtml() {
     "<div><span>Skill Image ↓</span><br><select id='skill__addr' onchange='getskillimgcode();'>";
   htmlstr = fillSelectlist_S2(htmlstr, Skill_o_str);
   htmlstr += "</select><select id='skill__code'>";
-  htmlstr = fillSelectlist_S(htmlstr, Skill_o_txt);
+  htmlstr = fillSelectlist_S3(htmlstr, Skill_o_txt);
   htmlstr += '</select></div>';
   htmlstr += "<span id='PortraitTempText'></span>";
   htmlstr +=
-    "<div><button onclick='ChangeInstruct();'>Apply Command Changes ↑</button></div></div>";
+    "<div><button onclick='ChangeInstruct();'>Apply Command Changes ↑</button> " +
+    "<button onclick='setShotFace();'>Set Face (keep cutscene)</button> " +
+    "<button onclick='removeShotFace();'>Remove Face (keep cutscene)</button> " +
+    "<button onclick='ClearAllPortrait();'>Clear all Portrait</button></div></div>";
   htmlstr +=
-    "<div id='Instructedit_a_1'><div><span>Specials view/edit supports original & some hacks.</span></div><div><span>Player:</span><select id='PlayerList' onchange='LoadSkills();'>";
-  htmlstr = fillSelectlist_S(htmlstr, PlayerName_Skill);
+    "<div id='Instructedit_a_1'><div><span>Specials view/edit supports original & some hacks.</span></div><div><span>Player:</span>" +
+    "<select id='PlayerList' onchange='LoadSkills();'>";
+  htmlstr = fillSelectlist_S3(htmlstr, PlayerName_Skill);
   htmlstr +=
     "</select><button id='SkillViewType' onclick='ChangeSkillView();'>Toggle Mode</button></div><span id='SkillStr'></span>";
   htmlstr += "<div id='SkillEdit' style='display:none;'></div>";
@@ -894,54 +894,57 @@ function BulidInstructTabHtml() {
 var SkillViewTypeVar = 1; // mode flag
 
 function GetSkill4EditMode() {
-  var xdz = $('#PlayerList').get(0).selectedIndex * 2 + SkillAddr;
+  var xdz = ($('#PlayerList').val() - 1) * 2 + SkillAddr;
+  if (Number.isNaN(xdz)) return;
   var bdz = ramcheck(xdz, NesHex);
-  var str =
-    '<div><span>Skill entry: ' +
-    toHex16(xdz, 5) +
-    '=' +
-    toHex16(NesHex[xdz]) +
-    ' ' +
-    toHex16(NesHex[xdz + 1]);
-  str += ', Index address: ' + toHex16(bdz, 5);
-  str += '</span></div><div><span>Skill index: ';
-  for (var i = 0; i <= 6; i++) {
-    str +=
-      toHex16(NesHex[bdz + i * 2 + 0]) +
-      ' ' +
-      toHex16(NesHex[bdz + i * 2 + 1]) +
-      ' ';
-  }
-  str += '</span></div>';
-  var shootaddr = ramcheck(bdz, NesHex);
+  var str = '<div><span>Skill entry: ' + `${bLnk(xdz)}=${bCopy(xdz)}, `;
+  str += `Index address: ${bLnk(bdz)}</span></div>`;
 
-  var Skilltype = Skill_TYPE_.split(',');
-  Skilltype[0] = 'Special Shot';
-  var selectstr =
-    "<div><span>Special type:</span><select id='skilladdtype' onchange='Changeskilladdtype();'>";
-  selectstr = fillSelectlist_S(selectstr, Skilltype);
-  selectstr += '</select>';
-  selectstr += "<select id='skillsub'>";
-  selectstr +=
-    "</select><button onclick='addSkillsub();'>Add Skill</button></div>";
-
-  selectstr += "<ul id='ulshoot'>";
-  for (var i = 0; i < skilllistshoot.length; i++) {
-    let sub = '#ulshoot' + i;
+  // Check GK
+  if (gkPlayer.includes(+$('#PlayerList').val())) {
+    let val = NesHex[bdz];
+    str += `Skill index: ${val} ` + (Skill_GK_[val] || `none`);
+    var selectstr = "<div><span>Special skill:</span><select id='skillGk'>";
+    Object.keys(Skill_GK_).forEach((k) => {
+      selectstr += `<option value="${k}">${Skill_GK_[k]}</option>`;
+    });
+    selectstr += `</select><button onclick='addSkillGk();'>Add Skill</button></div>`;
     selectstr +=
-      "<li style='display:block;'><button af='ulshoot' onclick='DelSkillsub(this);'>Del (Shot)</button>" +
-      `<span val="${skilllistshoot[i][1]}">${skilllistshoot[i][0]}</span></li>`;
-  }
-  selectstr += '</ul>';
+      `<button onclick='$(this).next().attr("val", 0).text("none");'>Del (GK)</button>` +
+      `<span id='sgk' val="${val}">${Skill_GK_[val] || `none`}</span><br>`;
+  } else {
+    str += '<div><span>Skill index: ';
+    for (var i = 0; i <= 6; i++) {
+      str +=
+        toHex16(NesHex[bdz + i * 2 + 0]) +
+        ' ' +
+        toHex16(NesHex[bdz + i * 2 + 1]) +
+        ' ';
+    }
+    str += '</span></div>';
 
-  selectstr += "<ul id='ulother'>";
-  for (var i = 0; i < skilllistother.length; i++) {
-    let sub = '#ulother' + i;
+    var selectstr =
+      "<div><span>Special skill:</span><select id='skillsub'>";
     selectstr +=
-      `<li style='display:block;'><button af='ulother' onclick='DelSkillsub(this);'>Del (${skilllistother[i][1]})</button>` +
-      `<span val="${skilllistother[i][2]}">${skilllistother[i][0]}</span></li>`;
+      "</select><button onclick='addSkillsub();'>Add Skill</button></div>";
+
+    selectstr += "<ul id='ulshoot'>";
+    for (var i = 0; i < skilllistshoot.length; i++) {
+      selectstr +=
+        "<li style='display:block;'><button af='ulshoot' onclick='DelSkillsub(this);'>Del (Shot)</button>" +
+        `<span val="${skilllistshoot[i][1]}">${skilllistshoot[i][0]}</span></li>`;
+    }
+    selectstr += '</ul>';
+
+    selectstr += "<ul id='ulother'>";
+    for (var i = 0; i < skilllistother.length; i++) {
+      selectstr +=
+        `<li style='display:block;'><button af='ulother' onclick='DelSkillsub(this);'>Del (${skilllistother[i][1]})</button>` +
+        `<span val="${skilllistother[i][2]}">${skilllistother[i][0]}</span></li>`;
+    }
+    selectstr += '</ul>';
   }
-  selectstr += '</ul>';
+
   selectstr +=
     "<button onclick='Save_Skills();'>Apply Special Changes</button><span> Force new free space → <input id='useNewAddr' type='checkbox'> (avoid unless needed)</span><br>";
   selectstr +=

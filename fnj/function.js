@@ -99,13 +99,13 @@ function ChangeTeam() {
   if (isaddTeam == false) {
     $('#playerlistdiv select').each(function (index, element) {
       var h_index = $(this).attr('offindex');
-      NesHex[h_index] = $(this).get(0).selectedIndex;
+      NesHex[h_index] = +$(this).val();
     });
     //替补球员
     if ($('#replayerlistdiv').css('display') != 'none') {
       $('#replayerlistdiv select').each(function (index, element) {
         var h_index = $(this).attr('offindex');
-        NesHex[h_index] = $(this).get(0).selectedIndex;
+        NesHex[h_index] = +$(this).val();
       });
     }
     if (阵型addr != 0) {
@@ -137,70 +137,39 @@ function ChangeTeam() {
           NesHex[0x8000d] = 0xfa;
         }
         //空地址
-        if (
-          NesHex[defaddr + 1] == 0x50 ||
-          NesHex[defaddr + 1] == 0x51 ||
-          NesHex[defaddr + 1] == 0x52 ||
-          NesHex[defaddr + 1] == 0x53 ||
-          NesHex[defaddr + 1] == 0x54 ||
-          NesHex[defaddr + 1] == 0x55 ||
-          NesHex[defaddr + 1] == 0x56 ||
-          NesHex[defaddr + 1] == 0x57 ||
-          NesHex[defaddr + 1] == 0x58 ||
-          NesHex[defaddr + 1] == 0x59 ||
-          NesHex[defaddr + 1] == 0x5a ||
-          NesHex[defaddr + 1] == 0x5b ||
-          NesHex[defaddr + 1] == 0x5c ||
-          NesHex[defaddr + 1] == 0x5d ||
-          NesHex[defaddr + 1] == 0x5e ||
-          NesHex[defaddr + 1] == 0x5f ||
-          NesHex[defaddr + 1] == 0x60 ||
-          NesHex[defaddr + 1] == 0x61 ||
-          NesHex[defaddr + 1] == 0x62 ||
-          NesHex[defaddr + 1] == 0x63 ||
-          NesHex[defaddr + 1] == 0x64 ||
-          NesHex[defaddr + 1] == 0x65 ||
-          NesHex[defaddr + 1] == 0x66 ||
-          NesHex[defaddr + 1] == 0x67 ||
-          NesHex[defaddr + 1] == 0x68 ||
-          NesHex[defaddr + 1] == 0x69 ||
-          NesHex[defaddr + 1] == 0x6a ||
-          NesHex[defaddr + 1] == 0x6b ||
-          NesHex[defaddr + 1] == 0x6c ||
-          NesHex[defaddr + 1] == 0x6d ||
-          NesHex[defaddr + 1] == 0x6e ||
-          NesHex[defaddr + 1] == 0x6f
-        ) {
+        if (NesHex[defaddr + 1] >= 0x50 && NesHex[defaddr + 1] <= 0x6f) {
           dz = ramcheck(defaddr, NesHex);
         } else {
-          dz = CheckTempaddr1(dz) - 0x10;
+          dz = GetFreeAddr1(datas.length);
+          if (dz < 1) {
+            alertMsg('#isfileload', 'red', 'No free space ...');
+            return;
+          }
         }
-        开关索引1 = parseInt(toHex16(dz - 0x73000, 4).substr(2, 2), 16);
-        开关索引2 = parseInt(toHex16(dz - 0x73000, 4).substr(0, 2), 16);
+        开关索引1 = parseInt(toHex16(dz - 0x73000 - 0x10, 4).substr(2, 2), 16);
+        开关索引2 = parseInt(toHex16(dz - 0x73000 - 0x10, 4).substr(0, 2), 16);
       } else {
         if (
-          NesHex[defaddr + 1] == 0xbd ||
-          NesHex[defaddr + 1] == 0xbe ||
-          NesHex[defaddr + 1] == 0xbf ||
-          NesHex[defaddr + 1] == 0xfd ||
-          NesHex[defaddr + 1] == 0xfe ||
-          NesHex[defaddr + 1] == 0xff ||
+          (NesHex[defaddr + 1] >= 0xbd && NesHex[defaddr + 1] <= 0xff) ||
           (toHex16(NesHex[defaddr + 1]).substr(0, 1) == '6' &&
             Is1v32 == true) ||
           (toHex16(NesHex[defaddr + 1]).substr(0, 1) == '7' && Is1v32 == true)
         ) {
           dz = ramcheck(defaddr, NesHex);
         } else {
-          dz = CheckTempaddr2(dz) - 0x10;
+          dz = GetFreeAddr2(datas.length);
+          if (dz < 1) {
+            alertMsg('#isfileload', 'red', 'No free space ...');
+            return;
+          }
         }
 
-        开关索引1 = parseInt(toHex16(dz, 4).substr(2, 2), 16);
-        开关索引2 = parseInt(toHex16(dz, 4).substr(0, 2), 16);
+        开关索引1 = parseInt(toHex16(dz - 0x10, 4).substr(2, 2), 16);
+        开关索引2 = parseInt(toHex16(dz - 0x10, 4).substr(0, 2), 16);
       }
 
       NesHex[defaddr] = 开关索引1;
       NesHex[defaddr + 1] = 开关索引2;
-      dz = dz + 0x10;
       addteam_def_add = dz;
       for (var i = 0; i < datas.length; i++) {
         NesHex[addteam_def_add + i] = parseInt(datas[i], 16);
@@ -378,27 +347,26 @@ function addteamclick() {
     .text()
     .substr(0, 2);
   addteam_temp2 += ' ' + toHex16($('#addplayeSB2').get(0).selectedIndex);
-  addteam_temp2 += ' ' + toHex16($('#addplayeSB3').get(0).selectedIndex);
-  addteam_temp2 += ' ' + toHex16($('#addplayeSB4').get(0).selectedIndex);
-  addteam_temp2 += ' ' + toHex16($('#addplayeSB5').get(0).selectedIndex);
-  addteam_temp2 += ' ' + toHex16($('#addplayeSB6').get(0).selectedIndex);
+  addteam_temp2 += ' ' + toHex16(+$('#addplayeSB3').val());
+  addteam_temp2 += ' ' + toHex16(+$('#addplayeSB4').val());
+  addteam_temp2 += ' ' + toHex16(+$('#addplayeSB5').val());
+  addteam_temp2 += ' ' + toHex16(+$('#addplayeSB6').val());
   addteam_temp2 += ' ' + toHex16($('#addplayeSB7').get(0).selectedIndex);
   addteam_temp2 += ' ' + toHex16($('#addplayeSB8').get(0).selectedIndex);
   addteam_temp2 += ' ' + toHex16($('#addplayeSB9').get(0).selectedIndex);
 
   for (var i = 1; i <= 11; i++) {
     if (i == 1) {
-      if ($('#addplayerGK').get(0).selectedIndex != 0) {
-        addteam_temp3 +=
-          ' 01 ' + toHex16($('#addplayerGK').get(0).selectedIndex);
+      if (+$('#addplayerGK').val() != 0) {
+        addteam_temp3 += ' 01 ' + toHex16(+$('#addplayerGK').val());
       }
     } else {
-      if ($('#addplayer' + addPreZero(i)).get(0).selectedIndex != 0) {
+      if (+$('#addplayer' + addPreZero(i)).val() != 0) {
         addteam_temp3 +=
           ' ' +
           addPreZero(toHex16(i)) +
           ' ' +
-          toHex16($('#addplayer' + addPreZero(i)).get(0).selectedIndex);
+          toHex16(+$('#addplayer' + addPreZero(i)).val());
       }
     }
   }
@@ -572,7 +540,7 @@ function TeamSelectChange() {
 }
 
 function GetPlayerByData(id, offset) {
-  $(id).get(0).selectedIndex = NesHex[offset];
+  $(id).val(NesHex[offset]);
   $(id).attr('offindex', offset);
   $(id).css('pointer-events', 'auto');
 }
@@ -641,12 +609,36 @@ function fillSelectlist_S(str, listdbs) {
   }
   return str;
 }
+function fillSelectlist_S3(str, listdbs) {
+  for (var i = 0; i < listdbs.length; i++) {
+    let idx = listdbs[i].split(' ', 1)[0];
+    str += '<option value= "' + idx.num() + '">' + listdbs[i] + '</option>';
+  }
+  return str;
+}
 function fillSelectlist_S2(str, listdbs) {
   var tmp = [];
+  var openGroup = false;
   for (var i = 0; i < listdbs.length; i++) {
     tmp = listdbs[i].split(',');
-    str += '<option value= "' + tmp[1].num() + '">' + tmp[0] + '</option>';
+    // Entry without an address (no comma) = group header -> <optgroup>
+    if (tmp.length < 2) {
+      if (openGroup) str += '</optgroup>';
+      str +=
+        '<optgroup style="font-weight:bold;font-size:16px;color:#12489e;background:#eaf1fb;" label="── ' +
+        tmp[0].toUpperCase() +
+        ' ──">';
+      openGroup = true;
+      continue;
+    }
+    str +=
+      '<option style="font-size:14px;color:#111;font-weight:normal;" value= "' +
+      tmp[1].num() +
+      '">' +
+      tmp[0] +
+      '</option>';
   }
+  if (openGroup) str += '</optgroup>';
   return str;
 }
 //拼接option字符串 指定长度按16进制字符串
@@ -665,7 +657,7 @@ function fillSelectlist_S_10(str, len) {
   return str;
 }
 
-function 添加几率文本(动作, select) {
+function 添加probability文本(动作, select) {
   var temp = [];
   for (var i = 0; i < 动作.length; i++) {
     for (var j = 0; j < 动作.length; j++) {
@@ -682,29 +674,30 @@ function 添加几率文本(动作, select) {
   }
 }
 
-function GetAiTyoeStr(HexData, str, 文本, 动作, 几率) {
-  GetAiTypeSum(动作, 几率, HexData);
-  for (var types = 0; types < 文本.length; types++) {
-    str += '<div>' + 文本[types] + '=' + 几率[types] * 100 + '%<br></div>';
+function GetAiTyoeStr(HexData, str, Text, Act, probability) {
+  GetAiTypeSum(Act, probability, HexData);
+  for (var types = 0; types < Text.length; types++) {
+    str +=
+      '<div>' + Text[types] + '=' + probability[types] * 100 + '%<br></div>';
   }
   return str;
 }
 
-function GetAiTypeSum(动作, 几率, HexData) {
+function GetAiTypeSum(Act, probability, HexData) {
   for (var j = 0; j < HexData.length; j++) {
     for (
       var i = 0;
-      i < 动作.length;
+      i < Act.length;
       i++ //遍历所有动作类型
     ) {
       var a = toHex16(HexData[j]);
-      if (a.substr(0, 1) == 动作[i]) {
+      if (a.substr(0, 1) == Act[i]) {
         //验证取得的字节是否出现动作...
-        几率[i] = 几率[i] + 0.125; //累加到几率数组中....
+        probability[i] = probability[i] + 0.125; //累加到probability数组中....
       }
-      if (a.substr(1, 1) == 动作[i]) {
+      if (a.substr(1, 1) == Act[i]) {
         //验证取得的字节是否出现动作...
-        几率[i] = 几率[i] + 0.125; //累加到几率数组中....
+        probability[i] = probability[i] + 0.125; //累加到probability数组中....
       }
     }
   }

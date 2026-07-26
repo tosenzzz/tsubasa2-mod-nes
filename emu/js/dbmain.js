@@ -488,22 +488,22 @@ function loadRom(romOrArr, name) {
     let ctx = document.getElementById('chapage').getContext('2d');
     drawChrPage(db.nes, ctx, 0);
     document.title = loadedName;
-    if (window.SaveManager && SaveManager.checkAutoSave) {
-      setPausedState(true);
-      SaveManager.checkAutoSave(function (err, record) {
-        if (!err && record && record.romName === name && record.saveState) {
-          SaveManager.showAutoSavePrompt(record, function () {
-            setPausedState(false);
-            startAutoSave();
-          });
-        } else {
-          setPausedState(false);
-          startAutoSave();
-        }
-      });
-    } else {
-      startAutoSave();
-    }
+    // if (window.SaveManager && SaveManager.checkAutoSave) {
+    //   setPausedState(true);
+    //   SaveManager.checkAutoSave(function (err, record) {
+    //     if (!err && record && record.romName === name && record.saveState) {
+    //       SaveManager.showAutoSavePrompt(record, function () {
+    //         setPausedState(false);
+    //         startAutoSave();
+    //       });
+    //     } else {
+    //       setPausedState(false);
+    //       startAutoSave();
+    //     }
+    //   });
+    // } else {
+    //   startAutoSave();
+    // }
   });
 }
 
