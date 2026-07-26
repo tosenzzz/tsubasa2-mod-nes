@@ -57,8 +57,12 @@ var AllSkills =
   '3B Tackle,3C Skylab Tackle,3D Razor Tackle,3E Power Tackle,3F Tiger Tackle,40 Tackle (Violent),==========,' +
   '41 Intercept,42 Skylab Intercept (S),==========,43 Enemy Clear,44 Enemy Clear (Violent),45 Duel,46 Duel (Violent),==========,' +
   '47 GK Catch,4B GK Punch,48 Spin Save,49 Illusion Save,4A Dark Illusion Save,4C Triangle Save,==========,4D GK Rush,4E GK vs Dribble,4F GK vs Shot';
+// Order is FIXED to the ROM skill-block layout (Shot0 Pass1 Dribble2 Combo3
+// Block4 Tackle5 Intercept6) — LoadSkills indexes it by that layout. To change
+// the DISPLAY order of the Skill Add dropdown, reorder `groups` in
+// Changeskilladdtype instead (the value there stays the fixed ROM index).
 var Skill_TYPE_ =
-  'Special Shot,Special Passing,Special Dribble,Special Tackle,Special 1-2,Special Block,Special Intercept';
+  'Special Shot,Special Passing,Special Dribble,Special 1-2,Special Block,Special Tackle,Special Intercept';
 var Skill_SHOT_ =
   '0C Drive Shot,50 Banana Shot,54 Buster Shot,14 Falcon Shot (S),1C Razor Shot (S),2C Eagle Shot (S),30 Tiger Shot (S),34 Neo Tiger Shot (S),44 Drive Tiger Shot (S),' +
   '48 Cyclone Shot (S),4C Sano Shot (S),58 Mirage Shot (S),5C Mach Shot (S),60 Sidewind Shot,64 Slider Shot (S),68 Cannon Shot (S),6C Fire Shot (S),88 DblEagle Shot,============,' +

@@ -746,32 +746,34 @@ function addSkillsub() {
   );
 }
 
-// Fill #skillsub with ALL skills, grouped by the 7 skilladdtype categories
-// (Skill_TYPE_). Each option's value = its type index (0-6) so addSkillsub knows
-// where to place it. Separators (====) are skipped.
+// Fill #skillsub with ALL skills, grouped by category. Each entry is
+// [displayLabel, skillList, romTypeIndex]. romTypeIndex is FIXED to the ROM
+// skill-block layout (Shot0 Pass1 Dribble2 Combo3 Block4 Tackle5 Intercept6) and
+// becomes the option's value so addSkillsub/Save_Skills place it in the right
+// slot. The array ORDER is display-only — rearrange it freely to reorder the
+// dropdown (e.g. Tackle right after Dribble) without breaking saves.
 function Changeskilladdtype() {
-  var lists = [
-    Skill_SHOT_,
-    Skill_PASS_,
-    Skill_DRIBBLE_,
-    Skill_TACKLE_,
-    Skill_COMBO_,
-    Skill_BLOCK_,
-    Skill_ICEPT_,
+  var groups = [
+    ['Special Shot', Skill_SHOT_, 0],
+    ['Special Passing', Skill_PASS_, 1],
+    ['Special Dribble', Skill_DRIBBLE_, 2],
+    ['Special Tackle', Skill_TACKLE_, 5],
+    ['Special 1-2', Skill_COMBO_, 3],
+    ['Special Block', Skill_BLOCK_, 4],
+    ['Special Intercept', Skill_ICEPT_, 6],
   ];
-  var types = Skill_TYPE_.split(',');
   var html = '';
-  for (var t = 0; t < lists.length; t++) {
+  for (var g = 0; g < groups.length; g++) {
     html +=
       '<optgroup style="font-weight:bold;font-size:16px;color:#12489e;background:#eaf1fb;" label="── ' +
-      types[t].toUpperCase() +
+      groups[g][0].toUpperCase() +
       ' ──">';
-    var items = lists[t].split(',');
+    var items = groups[g][1].split(',');
     for (var i = 0; i < items.length; i++) {
       if (/^=+$/.test(items[i].trim())) continue; // bỏ vạch ngăn
       html +=
         '<option style="font-size:14px;color:#111;font-weight:normal;" value="' +
-        t +
+        groups[g][2] +
         '">' +
         items[i] +
         '</option>';
