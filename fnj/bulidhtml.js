@@ -923,12 +923,8 @@ function GetSkill4EditMode() {
     }
     str += '</span></div>';
 
-    var Skilltype = Skill_TYPE_.split(',');
     var selectstr =
-      "<div><span>Special type:</span><select id='skilladdtype' onchange='Changeskilladdtype();'>";
-    selectstr = fillSelectlist_S(selectstr, Skilltype);
-    selectstr += '</select>';
-    selectstr += "<select id='skillsub'>";
+      "<div><span>Special skill:</span><select id='skillsub'>";
     selectstr +=
       "</select><button onclick='addSkillsub();'>Add Skill</button></div>";
 

@@ -618,10 +618,27 @@ function fillSelectlist_S3(str, listdbs) {
 }
 function fillSelectlist_S2(str, listdbs) {
   var tmp = [];
+  var openGroup = false;
   for (var i = 0; i < listdbs.length; i++) {
     tmp = listdbs[i].split(',');
-    str += '<option value= "' + tmp[1].num() + '">' + tmp[0] + '</option>';
+    // Entry without an address (no comma) = group header -> <optgroup>
+    if (tmp.length < 2) {
+      if (openGroup) str += '</optgroup>';
+      str +=
+        '<optgroup style="font-weight:bold;font-size:16px;color:#12489e;background:#eaf1fb;" label="── ' +
+        tmp[0].toUpperCase() +
+        ' ──">';
+      openGroup = true;
+      continue;
+    }
+    str +=
+      '<option style="font-size:14px;color:#111;font-weight:normal;" value= "' +
+      tmp[1].num() +
+      '">' +
+      tmp[0] +
+      '</option>';
   }
+  if (openGroup) str += '</optgroup>';
   return str;
 }
 //拼接option字符串 指定长度按16进制字符串

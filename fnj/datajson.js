@@ -52,13 +52,13 @@ var AllSkills =
   '==========,' +
   '23 Pass,24 Drive Pass (S),25 Razor Pass (S),26 T-Spin Pass,==========,' +
   '27 Dribble,28 H. Lift Dribble (S),29 Force Dribble,2A Fake Dribble,2B Speed Dribble,2C Fast Dribble,2D Super Dribble (S),==========,' +
-  '2E One-Two,2F Golden Combo,30 Toho Combo,31 Twin Combo,32 Eiffel Attack,==========,33 Trap,34 Let-through,35 Our Clear,36 Our Clear (Violent),==========,' +
+  '2E One-Two,2F Golden Combo,30 Toho Combo,31 Twin Combo,32 Eiffel Combo,==========,33 Trap,34 Let-through,35 Our Clear,36 Our Clear (Violent),==========,' +
   '37 Block,38 Face Block,39 Skylab Block,3A Power Block,==========,' +
   '3B Tackle,3C Skylab Tackle,3D Razor Tackle,3E Power Tackle,3F Tiger Tackle,40 Tackle (Violent),==========,' +
   '41 Intercept,42 Skylab Intercept (S),==========,43 Enemy Clear,44 Enemy Clear (Violent),45 Duel,46 Duel (Violent),==========,' +
   '47 GK Catch,4B GK Punch,48 Spin Save,49 Illusion Save,4A Dark Illusion Save,4C Triangle Save,==========,4D GK Rush,4E GK vs Dribble,4F GK vs Shot';
 var Skill_TYPE_ =
-  'Special Shot,Special Passing,Special Dribble,Special 1-2,Special Block,Special Tackle,Special Intercept';
+  'Special Shot,Special Passing,Special Dribble,Special Tackle,Special 1-2,Special Block,Special Intercept';
 var Skill_SHOT_ =
   '0C Drive Shot,50 Banana Shot,54 Buster Shot,14 Falcon Shot (S),1C Razor Shot (S),2C Eagle Shot (S),30 Tiger Shot (S),34 Neo Tiger Shot (S),44 Drive Tiger Shot (S),' +
   '48 Cyclone Shot (S),4C Sano Shot (S),58 Mirage Shot (S),5C Mach Shot (S),60 Sidewind Shot,64 Slider Shot (S),68 Cannon Shot (S),6C Fire Shot (S),88 DblEagle Shot,============,' +
@@ -146,6 +146,7 @@ var NO_PORTRAIT = 'F2 AD B2';
 var Skill_o_str = [
   // Nitta's Falcon Shot: Background: 21D10  - Ball's Path: 21F12
   // Zagalo's Double Eel Shot: Background: 21D4A - Ball's Path:21F4C
+  'Shots',
   'Drive Shot (Tsubasa),22B63,21D0C,21F0E', // (ramcheck2(0x21D0C, NesHex)+7).hex()
   'Drive Shot (Diaz),22B84',
   'Eagle Shot,22BFB,21D1C,21F1E',
@@ -161,60 +162,63 @@ var Skill_o_str = [
   'Drive Tiger Shot (Hyuga) (Portrait 2),22CD5',
   'Cyclone Shot (Portrait 1),23DD5',
   'Cyclone Shot (Portrait 2),230C9',
-  'Sano Combination Shot (Kunimi Jito),22D57',
-  'Sano Combination Shot (Japan Jito),22D33',
+  'Sano Shot (Kunimi Jito),22D57',
+  'Sano Shot (Japan Jito),22D33',
   'Mirage Shot (Brazil Santana),22DB6,21D32,21F34',
   'Mirage Shot (Flamengo),22D97',
   'Mach Shot,22DBD,21D34,21F36',
   'Slider Shot,22DEE',
   'Cannon Shot,22E0B',
   'Fire Shot,22E21,21D3C,21F3E',
+  // ============================================
+  'Volleys & Bicycle',
   'Falcon Volley,231D5',
-  'Misaki Jump Volley,232CD',
-  'BackheelShot Volley (Portrait 1),23281',
-  'BackheelShot Volley (Portrait 2),232A6',
+  'Jumping Volley (Misaki),232CD',
+  'BackShot Volley (Portrait 1),23281',
+  'BackShot Volley (Portrait 2),232A6',
   'Slider Cannon (Portrait 1),23156',
   'Slider Cannon (Portrait 2),2315D',
-  'Drive Bicycle Kick,22FDD',
+  'Drive Bicycle,22FDD',
   'Hyper Bicycle (Musashi Misugi),230AA',
   'Hyper Bicycle (Japan Misugi),23090',
   // ============================================
-  'Illusion Dribble (Brazil Santana),228A3',
-  'Illusion Dribble (Flamengo),22899',
-  'Drive Pass,2291C',
-  'Hedgehog Dribble (Kaltz Germany),22F6C',
-  'Hedgehog Dribble (Kaltz Hamburg),228F9',
-  'Razor Pass (Japan Soda),22F86',
-  'Razor Pass (Roppongi Soda),22F9B',
-  'Golden Combination (Portrait 1),23C0B',
-  'Golden Combination (Portrait 2),23C12',
-  'Golden Combination (Argentina) (Portrait 1),23C67',
-  'Golden Combination (Argentina) (Portrait 2),23C60',
-  'Toho Combination (Japan) (Portrait 1),23C1C',
-  'Toho Combination (Japan) (Portrait 2),23C23',
-  'Toho Combination (Toho) (Portrait 1),23C2D',
-  'Toho Combination (Toho) (Portrait 2),23C34',
-  'Tachibana Combination (Japan) (Portrait 1),23C3E',
-  'Tachibana Combination (Japan) (Portrait 2),23C45',
-  'Tachibana Combination (Akita) (Portrait 1),23C4F',
-  'Tachibana Combination (Akita) (Portrait 2),23C56',
-  'Eiffel Attack (Portrait 1),23C71',
-  'Eiffel Attack (Portrait 2),23C78',
+  'Twin Shots',
   'Twin Shot (Tsubasa Misaki) (Portrait 1),23215',
   'Twin Shot (Tsubasa Misaki) (Portrait 2),2321C',
   'Twin Shot (Japan Tachibana) (Portrait 1),23235',
   'Twin Shot (Japan Tachibana) (Portrait 2),2323C',
   'Twin Shot (Akita Tachibana) (Portrait 1),23255',
   'Twin Shot (Akita Tachibana) (Portrait 2),2325C',
-  'Aerial Hurricane (Japan Tachibana) (Portrait 1),22E7E',
-  'Aerial Hurricane (Japan Tachibana) (Portrait 2),22E85',
-  'Aerial Hurricane (Akita Tachibana) (Portrait 1),22EB9',
-  'Aerial Hurricane (Akita Tachibana) (Portrait 2),22EC0',
-  'Twin Hurricane (Japan Tachibana) (Portrait 1),22EE9',
-  'Twin Hurricane (Japan Jito) (Portrait 2),22EF0',
-  'Twin Hurricane (Japan Tachibana) (Portrait 3),22F21',
-  'Twin Hurricane (Japan Tachibana) (Portrait 4),22F28',
-  'Twin Hurricane (Japan Jito) (Portrait 5),22F2D',
+  // ============================================
+  'Skylab Hurricane',
+  'Skylab 2x Head/Volley (Japan Tachibana) (Portrait 1),22E7E',
+  'Skylab 2x Head/Volley (Japan Tachibana) (Portrait 2),22E85',
+  'Skylab 2x Head/Volley (Akita Tachibana) (Portrait 1),22EB9',
+  'Skylab 2x Head/Volley (Akita Tachibana) (Portrait 2),22EC0',
+  'Skylab 3x Volley (Japan Tachibana) (Portrait 1),22EE9',
+  'Skylab 3x Volley (Japan Jito) (Portrait 2),22EF0',
+  'Skylab 3x Volley (Japan Tachibana) (Portrait 3),22F21',
+  'Skylab 3x Volley (Japan Tachibana) (Portrait 4),22F28',
+  'Skylab 3x Volley (Japan Jito) (Portrait 5),22F2D',
+  // ============================================
+  'Passes',
+  'Drive Pass (Tsubasa),2291C',
+  'Razor Pass (Japan Soda),22F86',
+  'Razor Pass (Roppongi Soda),22F9B',
+  // ============================================
+  'Tackles',
+  'Tiger Tackle (Japan Hyuga),2242C',
+  'Tiger Tackle (Toho Hyuga),22443',
+  'Power Tackle (Japan Jito),22404',
+  'Power Tackle (Kunimi Jito),22420',
+  'Razor Tackle (Japan Soda),2246B',
+  'Razor Tackle (Roppongi Soda),22462',
+  // ============================================
+  'Dribbles',
+  'Speed Dribble (Brazil Santana),228A3',
+  'Speed Dribble (Flamengo),22899',
+  'Super Dribble (Kaltz Germany),22F6C',
+  'Super Dribble (Kaltz Hamburg),228F9',
   'Japan Hyuga Forced Dribble I,2283C',
   'Japan Hyuga Forced Dribble II,22A89',
   'Japan Hyuga Forced Dribble III,233CB',
@@ -230,16 +234,30 @@ var Skill_o_str = [
   'France Napoleon Forced Dribble I,22860',
   'France Napoleon Forced Dribble II,22AC2',
   'France Napoleon Forced Dribble III,233F4',
-  'Tiger Tackle (Japan Hyuga),2242C',
-  'Tiger Tackle (Toho Hyuga),22443',
-  'Power Tackle (Japan Jito),22404',
-  'Power Tackle (Kunimi Jito),22420',
-  'Razor Tackle (Japan Soda),2246B',
-  'Razor Tackle (Roppongi Soda),22462',
+  // ============================================
+  'Combinations',
+  'Golden Combo (Portrait 1),23C0B',
+  'Golden Combo (Portrait 2),23C12',
+  'Golden Combo (Argentina) (Portrait 1),23C67',
+  'Golden Combo (Argentina) (Portrait 2),23C60',
+  'Toho Combo (Japan) (Portrait 1),23C1C',
+  'Toho Combo (Japan) (Portrait 2),23C23',
+  'Toho Combo (Toho) (Portrait 1),23C2D',
+  'Toho Combo (Toho) (Portrait 2),23C34',
+  'Twin Combo (Japan) (Portrait 1),23C3E',
+  'Twin Combo (Japan) (Portrait 2),23C45',
+  'Twin Combo (Akita) (Portrait 1),23C4F',
+  'Twin Combo (Akita) (Portrait 2),23C56',
+  'Eiffel Combo (Portrait 1),23C71',
+  'Eiffel Combo (Portrait 2),23C78',
+  // ============================================
+  'Intercepts',
   'Tackle/Block/Intercept (Japan Tachibana) (Portrait 1),2272F',
   'Tackle/Block/Intercept (Japan Tachibana) (Portrait 2),2273F',
   'Tackle/Block/Intercept (Akita Tachibana) (Portrait 1),2276B',
   'Tackle/Block/Intercept (Akita Tachibana) (Portrait 2),2277B',
+  // ============================================
+  'Blocks',
   'Face Block,227BF',
   'Face Block,227D9',
   'Face Block,233AC',
@@ -248,6 +266,8 @@ var Skill_o_str = [
   'Power Block (Kunimi Jito),227B0',
   'Power Block (Japan Jito),23386',
   'Power Block (Kunimi Jito),233A3',
+  // ============================================
+  'Rage & Cutscenes',
   'Tsubasa Rage,23A16',
   'Schneider Rage,22295',
   'Diaz Rage,2382D',

@@ -125,6 +125,34 @@ function removeShotFace() {
   alertMsg('#isfileload', 'green', 'Shot face removed (cutscene kept)!');
 }
 
+// Given a skillsub label (e.g. "02 Razor Pass (S)"), strip its id and (S)/(?)
+// suffix to get the base name, then remove the face on every Skill_o_str
+// portrait whose name matches (e.g. "Razor Pass (Japan Soda)" + "(Roppongi
+// Soda)"). Lets "add skill" also clear that skill's mismatched face(s).
+// Returns how many portraits were cleared.
+function removeFaceForSkill(skillText) {
+  let base = skillText
+    .replace(/^[0-9A-Fa-f]{2}\s+/, '')
+    .replace(/\s*\((?:S|\?)\)\s*$/, '')
+    .trim()
+    .toLowerCase();
+  if (!base) return 0;
+  let count = 0;
+  Skill_o_str.forEach((v) => {
+    let parts = v.split(',');
+    if (parts.length < 2) return; // group header (no address)
+    let nameBase = parts[0]
+      .replace(/\s*\(.*$/, '')
+      .trim()
+      .toLowerCase();
+    if (nameBase === base) {
+      setNoPortrait(parts[1].num());
+      count++;
+    }
+  });
+  return count;
+}
+
 function ChangeInstruct() {
   //指令数据Addr
   var 暴力 = $('#InstructB').val();
@@ -685,19 +713,20 @@ function addSkillGk() {
 }
 
 function addSkillsub() {
-  var sType = $('#skilladdtype').get(0).selectedIndex;
-  var text = $('#skillsub option:selected').text();
+  var sel = $('#skillsub option:selected');
+  var sType = +sel.val(); // type index (0-6) stored on the option
+  var text = sel.text();
   var sid = text.trim().split(' ')[0];
   if (sType == 0) {
     // SHOT
     if ($('#ulshoot').children().length == 9) {
       alertMsg('#isfileload', 'red', 'The number of special shots must <= 9');
-    } else {
-      var selectstr =
-        "<li style='display:block;'><button af='ulshoot' onclick='DelSkillsub(this);'>Del (Shot)</button>" +
-        `<span val="${sid}">${text}</span></li>`;
-      $(selectstr).appendTo($('#ulshoot'));
+      return;
     }
+    var selectstr =
+      "<li style='display:block;'><button af='ulshoot' onclick='DelSkillsub(this);'>Del (Shot)</button>" +
+      `<span val="${sid}">${text}</span></li>`;
+    $(selectstr).appendTo($('#ulshoot'));
   } else {
     // OTHERS
     $('#ulother')
@@ -707,39 +736,49 @@ function addSkillsub() {
       .attr('val', sid)
       .html(text);
   }
+  // Also strip this skill's mismatched face(s) so the added player doesn't
+  // inherit another player's portrait.
+  var n = removeFaceForSkill(text);
+  alertMsg(
+    '#isfileload',
+    'green',
+    n > 0 ? `Added "${text}" & removed ${n} face(s)` : `Added "${text}"`,
+  );
 }
 
+// Fill #skillsub with ALL skills, grouped by the 7 skilladdtype categories
+// (Skill_TYPE_). Each option's value = its type index (0-6) so addSkillsub knows
+// where to place it. Separators (====) are skipped.
 function Changeskilladdtype() {
-  var idx = $('#skilladdtype').get(0)?.selectedIndex;
-  $('#skillsub').html('');
-  var Skillitem = [];
-  switch (idx) {
-    case 0:
-      Skillitem = Skill_SHOT_.split(',');
-      break;
-    case 1:
-      Skillitem = Skill_PASS_.split(',');
-      break;
-    case 2:
-      Skillitem = Skill_DRIBBLE_.split(',');
-      break;
-    case 3:
-      Skillitem = Skill_COMBO_.split(',');
-      break;
-    case 4:
-      Skillitem = Skill_BLOCK_.split(',');
-      break;
-    case 5:
-      Skillitem = Skill_TACKLE_.split(',');
-      break;
-    case 6:
-      Skillitem = Skill_ICEPT_.split(',');
-      break;
+  var lists = [
+    Skill_SHOT_,
+    Skill_PASS_,
+    Skill_DRIBBLE_,
+    Skill_TACKLE_,
+    Skill_COMBO_,
+    Skill_BLOCK_,
+    Skill_ICEPT_,
+  ];
+  var types = Skill_TYPE_.split(',');
+  var html = '';
+  for (var t = 0; t < lists.length; t++) {
+    html +=
+      '<optgroup style="font-weight:bold;font-size:16px;color:#12489e;background:#eaf1fb;" label="── ' +
+      types[t].toUpperCase() +
+      ' ──">';
+    var items = lists[t].split(',');
+    for (var i = 0; i < items.length; i++) {
+      if (/^=+$/.test(items[i].trim())) continue; // bỏ vạch ngăn
+      html +=
+        '<option style="font-size:14px;color:#111;font-weight:normal;" value="' +
+        t +
+        '">' +
+        items[i] +
+        '</option>';
+    }
+    html += '</optgroup>';
   }
-  var obj = document.getElementById('skillsub');
-  for (var i = 0; i < Skillitem.length; i++) {
-    obj.options.add(new Option(Skillitem[i], i));
-  }
+  $('#skillsub').html(html);
 }
 
 function getskillimgcode() {
