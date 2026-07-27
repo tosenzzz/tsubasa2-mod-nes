@@ -375,7 +375,7 @@ function LoadPlayerEditHtml() {
   htmlstr +=
     "<td><span>Dark skin</span><br><select id='vscol_2' onchange='PlayerVSModColorChange2();'></select></td>";
   htmlstr +=
-    "<td><span id='vscc_1'>GK Collar</span><br><select id='vscol_3' onchange='PlayerVSModColorChange2();'></select></td>";
+    "<tr><td><span id='vscc_1'>GK Collar</span><br><select id='vscol_3' onchange='PlayerVSModColorChange2();'></select></td>";
   htmlstr +=
     "<td><span id='vscc_2'>GK Jersey</span><br><select id='vscol_4' onchange='PlayerVSModColorChange2();'></select></td>";
   htmlstr +=
@@ -881,10 +881,14 @@ function BulidInstructTabHtml() {
     "<button onclick='removeShotFace();'>Remove Face (keep cutscene)</button> " +
     "<button onclick='ClearAllPortrait();'>Clear all Portrait</button></div></div>";
   htmlstr +=
-    "<div id='Instructedit_a_1'><div><span>Specials view/edit supports original & some hacks.</span></div><div><span>Player:</span>" +
+    "<div id='Instructedit_a_1'><div><span>Specials view/edit supports original & some hacks.</span></div><div class='flex'><span>Player:</span>" +
     "<select id='PlayerList' onchange='LoadSkills();'>";
   htmlstr = fillSelectlist_S3(htmlstr, PlayerName_Skill);
-  htmlstr += "</select></div><span id='SkillStr' style='display:none;'></span>";
+  htmlstr +=
+    '</select>' +
+    "<button id='copyPlayerSkillsBtn' title='Copy all skills of this player' onclick='copyPlayerSkills();'>Copy</button>" +
+    "<button id='pastePlayerSkillsBtn' title='Add copied skills into this player without overwriting existing ones' onclick='pastePlayerSkills();'>Paste</button>" +
+    "</div><span id='SkillStr' style='display:none;'></span>";
   htmlstr += "<div id='SkillEdit'></div>";
   htmlstr += '</div>';
   $('#InstructTab').html(htmlstr);

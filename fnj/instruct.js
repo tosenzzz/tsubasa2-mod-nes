@@ -257,7 +257,7 @@ function LoadSkills() {
 
   BindSkillStrO(lstPASS, lstSTYPE, 1, bdz + 2, bdz + 3, 'Passing'); //传/过人/二过一等
   BindSkillStrO(lstDRIBB, lstSTYPE, 2, bdz + 4, bdz + 5, 'Dribble');
-  BindSkillStrO(lstCOMBO, lstSTYPE, 3, bdz + 6, bdz + 7, 'Combo 1-2');
+  BindSkillStrO(lstCOMBO, lstSTYPE, 3, bdz + 6, bdz + 7, '1-2');
   BindSkillStrO(lstBLOCK, lstSTYPE, 4, bdz + 8, bdz + 9, 'Block');
   BindSkillStrO(lstTACKLE, lstSTYPE, 5, bdz + 10, bdz + 11, 'Tackle');
   BindSkillStrO(lstICEPT, lstSTYPE, 6, bdz + 12, bdz + 13, 'Intercept');
@@ -698,6 +698,116 @@ function DelSkillsub(id) {
 function addSkillGk() {
   let val = $('#skillGk').val();
   $('#sgk').attr('val', val).html(Skill_GK_[val]);
+}
+
+// Clipboard for whole-player skill copy/paste. Captured from the currently
+// loaded player's edit UI (#SkillEdit), applied onto another player.
+var copiedPlayerSkills = null;
+
+// Copy every skill of the currently selected player: the special-shot list,
+// the 6 field-skill slots (Passing/Dribble/Combo/Block/Tackle/Intercept, in
+// #ulother order), and the GK slot if this is a keeper.
+function copyPlayerSkills() {
+  var data = { shots: [], fields: [], gk: null };
+  $('#ulshoot')
+    .children()
+    .each(function () {
+      var sp = $(this).find('span[val]');
+      data.shots.push({ val: sp.attr('val'), text: sp.text() });
+    });
+  $('#ulother')
+    .children()
+    .each(function () {
+      var sp = $(this).find('span[val]');
+      data.fields.push({ val: sp.attr('val'), text: sp.text() });
+    });
+  if ($('#sgk').length) {
+    data.gk = { val: $('#sgk').attr('val'), text: $('#sgk').text() };
+  }
+  copiedPlayerSkills = data;
+
+  var n =
+    data.shots.length +
+    data.fields.filter((f) => f.text !== 'none').length +
+    (data.gk && data.gk.text !== 'none' ? 1 : 0);
+  alertMsg(
+    '#isfileload',
+    'green',
+    n > 0
+      ? `Copied ${n} skill(s). Switch player, then click "Paste".`
+      : 'This player has no skills to copy.',
+  );
+}
+
+// Add the copied skills into the currently loaded player WITHOUT overwriting
+// skills it already has. Only fills empty slots / appends new shots. The user
+// must then click "Apply Special Changes" to write to ROM.
+function pastePlayerSkills() {
+  if (!copiedPlayerSkills) {
+    alertMsg('#isfileload', 'red', 'Copy a player first.');
+    return;
+  }
+  var src = copiedPlayerSkills;
+  var added = 0;
+  var kept = 0;
+
+  if ($('#sgk').length) {
+    // Target is a goalkeeper.
+    if (src.gk && src.gk.text !== 'none') {
+      if ($('#sgk').text() === 'none') {
+        $('#sgk').attr('val', src.gk.val).html(src.gk.text);
+        added++;
+      } else {
+        kept++;
+      }
+    }
+  } else {
+    // Field skills: fill only the empty categories (same #ulother order).
+    var targetFields = $('#ulother').children();
+    src.fields.forEach(function (f, idx) {
+      if (!f || f.text === 'none') return;
+      var row = targetFields.eq(idx);
+      if (!row.length) return;
+      var sp = row.find('span[val]');
+      if (sp.text() === 'none') {
+        sp.attr('val', f.val).html(f.text);
+        added++;
+      } else {
+        kept++;
+      }
+    });
+
+    // Special shots: append the ones not already present (by val), max 9.
+    var existing = {};
+    $('#ulshoot')
+      .children()
+      .each(function () {
+        existing[$(this).find('span[val]').attr('val')] = true;
+      });
+    src.shots.forEach(function (s) {
+      if (!s || !s.val) return;
+      if (existing[s.val]) {
+        kept++;
+        return;
+      }
+      if ($('#ulshoot').children().length >= 9) {
+        kept++;
+        return;
+      }
+      var li =
+        "<li class='sk-item'><button class='sk-del' af='ulshoot' title='Delete' onclick='DelSkillsub(this);'>×</button>" +
+        `<span val="${s.val}">${s.text}</span></li>`;
+      $(li).appendTo($('#ulshoot'));
+      existing[s.val] = true;
+      added++;
+    });
+  }
+
+  alertMsg(
+    '#isfileload',
+    added > 0 ? 'green' : 'red',
+    `Added ${added}, kept ${kept} existing. Click "Apply Special Changes" to save.`,
+  );
 }
 
 function addSkillsub() {
