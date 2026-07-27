@@ -662,17 +662,17 @@ function loadAckAi() {
 
   for (var i = 0; i <= 5; i++) {
     for (var x = 0; x < 4; x++) {
-      添加几率文本(Ai_data_1_2, '#AiEx_select_' + i + '_' + x);
+      addProbabilityText(Ai_data_1_2, '#AiEx_select_' + i + '_' + x);
     }
   }
   for (var i = 6; i <= 8; i++) {
     for (var x = 0; x < 4; x++) {
-      添加几率文本(Ai_data_2_2, '#AiEx_select_' + i + '_' + x);
+      addProbabilityText(Ai_data_2_2, '#AiEx_select_' + i + '_' + x);
     }
   }
   for (var i = 9; i <= 11; i++) {
     for (var x = 0; x < 4; x++) {
-      添加几率文本(Ai_data_3_2, '#AiEx_select_' + i + '_' + x);
+      addProbabilityText(Ai_data_3_2, '#AiEx_select_' + i + '_' + x);
     }
   }
 }
@@ -749,17 +749,17 @@ function loadDefAi() {
 
   for (var i = 0; i <= 5; i++) {
     for (var x = 0; x < 4; x++) {
-      添加几率文本(Ai_data_4_2, '#AiEx1_select_' + i + '_' + x);
+      addProbabilityText(Ai_data_4_2, '#AiEx1_select_' + i + '_' + x);
     }
   }
   for (var i = 6; i <= 8; i++) {
     for (var x = 0; x < 4; x++) {
-      添加几率文本(Ai_data_5_2, '#AiEx1_select_' + i + '_' + x);
+      addProbabilityText(Ai_data_5_2, '#AiEx1_select_' + i + '_' + x);
     }
   }
   for (var i = 9; i <= 11; i++) {
     for (var x = 0; x < 4; x++) {
-      添加几率文本(Ai_data_6_2, '#AiEx1_select_' + i + '_' + x);
+      addProbabilityText(Ai_data_6_2, '#AiEx1_select_' + i + '_' + x);
     }
   }
 }
@@ -831,9 +831,9 @@ function loadGKAi() {
   $('#aitab6').append(str);
 
   for (var x = 0; x < 4; x++) {
-    添加几率文本(Ai_data_7_2, '#AiEx2_select_1_' + x);
-    添加几率文本(Ai_data_8_2, '#AiEx2_select_2_' + x);
-    添加几率文本(Ai_data_9_2, '#AiEx2_select_3_' + x);
+    addProbabilityText(Ai_data_7_2, '#AiEx2_select_1_' + x);
+    addProbabilityText(Ai_data_8_2, '#AiEx2_select_2_' + x);
+    addProbabilityText(Ai_data_9_2, '#AiEx2_select_3_' + x);
   }
 }
 
@@ -884,14 +884,11 @@ function BulidInstructTabHtml() {
     "<div id='Instructedit_a_1'><div><span>Specials view/edit supports original & some hacks.</span></div><div><span>Player:</span>" +
     "<select id='PlayerList' onchange='LoadSkills();'>";
   htmlstr = fillSelectlist_S3(htmlstr, PlayerName_Skill);
-  htmlstr +=
-    "</select><button id='SkillViewType' onclick='ChangeSkillView();'>Toggle Mode</button></div><span id='SkillStr'></span>";
-  htmlstr += "<div id='SkillEdit' style='display:none;'></div>";
+  htmlstr += "</select></div><span id='SkillStr' style='display:none;'></span>";
+  htmlstr += "<div id='SkillEdit'></div>";
   htmlstr += '</div>';
   $('#InstructTab').html(htmlstr);
 }
-
-var SkillViewTypeVar = 1; // mode flag
 
 function GetSkill4EditMode() {
   var xdz = ($('#PlayerList').val() - 1) * 2 + SkillAddr;
@@ -904,14 +901,17 @@ function GetSkill4EditMode() {
   if (gkPlayer.includes(+$('#PlayerList').val())) {
     let val = NesHex[bdz];
     str += `Skill index: ${val} ` + (Skill_GK_[val] || `none`);
-    var selectstr = "<div><span>Special skill:</span><select id='skillGk'>";
+    var selectstr =
+      "<div class='sk-block'><div class='sk-block-h'>GK Special</div>" +
+      "<div class='sk-add'><span>Special skill:</span><select id='skillGk'>";
     Object.keys(Skill_GK_).forEach((k) => {
       selectstr += `<option value="${k}">${Skill_GK_[k]}</option>`;
     });
-    selectstr += `</select><button onclick='addSkillGk();'>Add Skill</button></div>`;
+    selectstr += `</select><button onclick='addSkillGk();'>Add</button></div>`;
     selectstr +=
-      `<button onclick='$(this).next().attr("val", 0).text("none");'>Del (GK)</button>` +
-      `<span id='sgk' val="${val}">${Skill_GK_[val] || `none`}</span><br>`;
+      `<div class='sk-item'><button class='sk-del' title='Delete' onclick='$(this).next().attr("val", 0).text("none");'>×</button>` +
+      `<span id='sgk' val="${val}">${Skill_GK_[val] || `none`}</span></div>`;
+    selectstr += `</div>`;
   } else {
     str += '<div><span>Skill index: ';
     for (var i = 0; i <= 6; i++) {
@@ -924,25 +924,29 @@ function GetSkill4EditMode() {
     str += '</span></div>';
 
     var selectstr =
-      "<div><span>Special skill:</span><select id='skillsub'>";
-    selectstr +=
-      "</select><button onclick='addSkillsub();'>Add Skill</button></div>";
+      "<div class='sk-add'><span>Special skill:</span><select id='skillsub'>";
+    selectstr += "</select><button onclick='addSkillsub();'>Add</button></div>";
 
-    selectstr += "<ul id='ulshoot'>";
+    // Special Shot block
+    selectstr +=
+      "<div class='sk-block'><div class='sk-block-h'>Special Shot</div><ul id='ulshoot'>";
     for (var i = 0; i < skilllistshoot.length; i++) {
       selectstr +=
-        "<li style='display:block;'><button af='ulshoot' onclick='DelSkillsub(this);'>Del (Shot)</button>" +
+        "<li class='sk-item'><button class='sk-del' af='ulshoot' title='Delete' onclick='DelSkillsub(this);'>×</button>" +
         `<span val="${skilllistshoot[i][1]}">${skilllistshoot[i][0]}</span></li>`;
     }
-    selectstr += '</ul>';
+    selectstr += '</ul></div>';
 
-    selectstr += "<ul id='ulother'>";
+    // Field Skills block (Passing / Dribble / Combo / Block / Tackle / Intercept)
+    selectstr +=
+      "<div class='sk-block'><div class='sk-block-h'>Field Skills</div><ul id='ulother'>";
     for (var i = 0; i < skilllistother.length; i++) {
       selectstr +=
-        `<li style='display:block;'><button af='ulother' onclick='DelSkillsub(this);'>Del (${skilllistother[i][1]})</button>` +
+        `<li class='sk-item'><button class='sk-del' af='ulother' title='Delete' onclick='DelSkillsub(this);'>×</button>` +
+        `<span class='sk-tag'>${skilllistother[i][1]}</span>` +
         `<span val="${skilllistother[i][2]}">${skilllistother[i][0]}</span></li>`;
     }
-    selectstr += '</ul>';
+    selectstr += '</ul></div>';
   }
 
   selectstr +=
