@@ -657,7 +657,7 @@ function fillSelectlist_S_10(str, len) {
   return str;
 }
 
-function 添加probability文本(动作, select) {
+function addProbabilityText(动作, select) {
   var temp = [];
   for (var i = 0; i < 动作.length; i++) {
     for (var j = 0; j < 动作.length; j++) {

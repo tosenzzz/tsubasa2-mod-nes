@@ -259,24 +259,67 @@
 
 // 此模块负责存档列表的显示与交互
 (function () {
-  // 无截图时显示的占位样式
-  const PREVIEW_BOX_STYLE =
-    'width:60px;height:45px;display:flex;align-items:center;justify-content:center;' +
-    'background:#e0e0e0;color:#888;font-size:0.7em;line-height:1.1;text-align:center;' +
-    'border-radius:3px;flex:0 0 auto;margin:0;';
-
-  // 空槽位占位（保持行对齐，但不显示任何文字）
-  const PREVIEW_EMPTY_STYLE = 'width:60px;height:45px;flex:0 0 auto;margin:0;';
+  // 注入一次性样式表
+  function ensureStyles() {
+    if (document.getElementById('saveManagerStyles')) return;
+    let style = document.createElement('style');
+    style.id = 'saveManagerStyles';
+    style.textContent = `
+      #saveManagerUI.sm-panel {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        color: #1f2937; box-sizing: border-box;
+      }
+      #saveManagerUI.sm-panel * { box-sizing: border-box; }
+      .sm-header { display:flex; align-items:center; justify-content:space-between; gap:.5rem; }
+      .sm-title { display:flex; align-items:baseline; gap:.5rem; min-width:0; }
+      .sm-title-main { font-weight:700; font-size:1.05rem; }
+      .sm-size { font-size:.78rem; color:#6b7280; white-space:nowrap; }
+      .sm-subtitle { font-size:.72rem; color:#9ca3af; line-height:1.35; margin:.35rem 0 .6rem; }
+      .sm-current { font-size:.8rem; font-weight:600; color:#2563eb; background:#eff6ff;
+        border:1px solid #dbeafe; padding:.35rem .6rem; border-radius:8px; margin-bottom:.6rem; }
+      .sm-list { display:flex; flex-direction:column; gap:.4rem; max-height:52vh;
+        overflow-y:auto; padding:.1rem; margin:0 -.1rem; }
+      .sm-row { display:flex; align-items:center; gap:.6rem; padding:.4rem .5rem;
+        border:1px solid #e5e7eb; border-radius:10px; background:#fff; cursor:pointer;
+        transition:background .12s, border-color .12s, box-shadow .12s; }
+      .sm-row:hover { background:#f9fafb; }
+      .sm-row-active { border-color:#3b82f6; background:#eff6ff; box-shadow:0 0 0 1px #3b82f6 inset; }
+      .sm-row-auto { background:#fafafa; border-style:dashed; }
+      .sm-thumb { width:64px; height:48px; flex:0 0 auto; border-radius:5px;
+        object-fit:cover; background:#111; }
+      .sm-thumb-ph { display:flex; align-items:center; justify-content:center; padding:2px;
+        font-size:.6rem; color:#9ca3af; background:#f3f4f6; text-align:center; line-height:1.1; }
+      .sm-thumb-empty { background:transparent; border:1px dashed #e5e7eb; }
+      .sm-info { flex:1 1 auto; min-width:0; }
+      .sm-slot-label { font-weight:700; font-size:.85rem; line-height:1.2; }
+      .sm-time { font-size:.72rem; color:#6b7280; white-space:nowrap;
+        overflow:hidden; text-overflow:ellipsis; }
+      .sm-time.sm-empty { color:#c0c4cc; font-style:italic; }
+      .sm-actions { display:flex; gap:.3rem; flex:0 0 auto; }
+      .sm-btn { font:inherit; font-size:.78rem; line-height:1; border:none; border-radius:7px;
+        padding:.4rem .7rem; cursor:pointer; transition:filter .12s; }
+      .sm-btn:hover { filter:brightness(.94); }
+      .sm-btn:active { filter:brightness(.88); }
+      .sm-btn-save { background:#10b981; color:#fff; }
+      .sm-btn-load { background:#3b82f6; color:#fff; }
+      .sm-btn-ghost { background:#f3f4f6; color:#374151; }
+      .sm-btn-close { width:100%; margin-top:.8rem; background:#e5e7eb; color:#374151;
+        padding:.55rem; font-weight:600; }
+      @media (prefers-color-scheme: dark) {
+        #saveManagerUI.sm-panel { color:#e5e7eb; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
 
   // 根据截图返回缩略图 HTML
   // hasSave=false（空槽位）→ 透明占位，不显示 "No preview"
   // 有存档但缺截图/加载失败 → 显示 "No preview"
   function previewHtml(screenshot, hasSave) {
-    if (!hasSave) return `<div style="${PREVIEW_EMPTY_STYLE}"></div>`;
-    let placeholder = `<div style="${PREVIEW_BOX_STYLE}">No preview</div>`;
-    if (!screenshot) return placeholder;
-    let onerr = placeholder.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-    return `<img src="${screenshot}" style="width:60px;height:45px;object-fit:cover;margin:0;border-radius:3px;" onerror="this.outerHTML='${onerr}';">`;
+    if (!hasSave) return '<div class="sm-thumb sm-thumb-empty"></div>';
+    let ph = '<div class=&quot;sm-thumb sm-thumb-ph&quot;>No preview</div>';
+    if (!screenshot) return '<div class="sm-thumb sm-thumb-ph">No preview</div>';
+    return `<img class="sm-thumb" src="${screenshot}" onerror="this.outerHTML='${ph}';">`;
   }
 
   function showGameManager() {
@@ -370,34 +413,35 @@
       window.currentSaveSlot = defaultSlot;
       updateCurrentSlotDisplay();
     });
+    ensureStyles();
     let ui = document.createElement('div');
     ui.id = 'saveManagerUI';
+    ui.className = 'sm-panel';
     ui.style.position = 'fixed';
     ui.style.top = '60px';
-    // ui.style.top = '1%';
-    // ui.style.left = '50%';
-    // ui.style.transform = 'translateX(-50%)';
     ui.style.background = '#fff';
-    ui.style.border = '2px solid #888';
-    ui.style.borderRadius = '8px';
-    ui.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
+    ui.style.border = '1px solid #e5e7eb';
+    ui.style.borderRadius = '14px';
+    ui.style.boxShadow = '0 12px 32px rgba(0,0,0,0.18)';
     ui.style.padding = '1rem';
     ui.style.zIndex = '11000';
-    ui.style.maxWidth = '98vw';
+    ui.style.maxWidth = '96vw';
     ui.style.width = '420px';
     ui.style.maxHeight = '90vh';
     ui.style.overflowY = 'auto';
     ui.style.display = 'none';
-    ui.innerHTML = `<span>
-            Save Manager — switch slots by row
-            <span id="saveTotalSize" style="font-size:0.9em;color:#888;margin-left:1em;">(calculating...)</span>
-            <button id="saveManagerGameBtn" style="float:right;">Manage Saves</button>
-        <br>Saves for hacks that treat memory as program [PRG ROM] will be larger.</span>
-        <div id="currentSaveSlotDisplay" style="margin-bottom:0.5rem;font-weight:bold;">
-          Current slot: ${window.currentSaveSlot}
+    ui.innerHTML = `
+        <div class="sm-header">
+          <div class="sm-title">
+            <span class="sm-title-main">Save Manager</span>
+            <span id="saveTotalSize" class="sm-size">(calculating...)</span>
+          </div>
+          <button id="saveManagerGameBtn" class="sm-btn sm-btn-ghost">Manage</button>
         </div>
-        <div id="saveList" style="max-height:300px;overflow-y:auto;"></div>
-        <button id="saveManagerCloseBtn" style="width:100%;margin-top:1rem;">Close</button>`;
+        <div class="sm-subtitle">Click a row to switch slot. Saves for hacks that treat memory as program [PRG ROM] will be larger.</div>
+        <div id="currentSaveSlotDisplay" class="sm-current">Current slot: ${window.currentSaveSlot}</div>
+        <div id="saveList" class="sm-list"></div>
+        <button id="saveManagerCloseBtn" class="sm-btn sm-btn-close">Close</button>`;
 
     let container =
       document.getElementById('fullscreenContainer') || document.body;

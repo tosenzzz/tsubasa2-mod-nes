@@ -60,3 +60,6 @@ if (checknotmobile() == true) {
 } else {
   LoadCSSJSFile(['Mobile.css']);
 }
+
+// Modern skin for header + tab menu (loaded last so it overrides on tie).
+LoadCSSJSFile(['Modern.css']);

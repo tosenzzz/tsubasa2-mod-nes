@@ -335,20 +335,6 @@ function BindSkillStr(lstSkills, lstTypes, ix, bd1, bd2, nm) {
   }
 }
 
-function ChangeSkillView() {
-  if (SkillViewTypeVar == 0) {
-    $('#SkillViewType').html('View Mode');
-    $('#SkillStr').css('display', 'block');
-    $('#SkillEdit').css('display', 'none');
-    SkillViewTypeVar = 1;
-  } else {
-    $('#SkillViewType').html('Edit Mode');
-    $('#SkillStr').css('display', 'none');
-    $('#SkillEdit').css('display', 'block');
-    SkillViewTypeVar = 0;
-  }
-}
-
 var skillCopied = [];
 function bCopy(xdz) {
   let txt = `${toHex16(NesHex[xdz])} ${toHex16(NesHex[xdz + 1])}`;
@@ -564,7 +550,7 @@ function Save_Skills() {
   var SkillByte = [];
   var tmpShotList = [];
   for (var i = 0; i < $('#ulshoot').children().length; i++) {
-    let str = $('#ulshoot').children().eq(i).find('span').attr('val');
+    let str = $('#ulshoot').children().eq(i).find('span[val]').attr('val');
     let val = parseInt(str, 16);
     tmpShotList.push(val);
     SkillByte.push(val);
@@ -612,10 +598,10 @@ function Save_Skills() {
   SkillByte = [];
   var addrtemp = 2;
   // Special Pass
-  if ($('#ulother').children().eq(0).find('span').text() == 'none') {
+  if ($('#ulother').children().eq(0).find('span[val]').text() == 'none') {
     NesHex[dz + addrtemp] = NesHex[dz + addrtemp + 1] = 0x00;
   } else {
-    var cd = $('#ulother').children().eq(0).find('span').attr('val');
+    var cd = $('#ulother').children().eq(0).find('span[val]').attr('val');
     var old = NesHex[ramcheck(dz + addrtemp, NesHex)];
     if (old != cd.num()) {
       NesHex[dz + addrtemp] = xx[cd]?.[0] || 0;
@@ -624,10 +610,10 @@ function Save_Skills() {
   }
   addrtemp += 2;
   // Special Dribble
-  if ($('#ulother').children().eq(1).find('span').text() == 'none') {
+  if ($('#ulother').children().eq(1).find('span[val]').text() == 'none') {
     NesHex[dz + addrtemp] = NesHex[dz + addrtemp + 1] = 0x00;
   } else {
-    var cd = $('#ulother').children().eq(1).find('span').attr('val');
+    var cd = $('#ulother').children().eq(1).find('span[val]').attr('val');
     var old = NesHex[ramcheck(dz + addrtemp, NesHex)];
     if (old != cd.num()) {
       NesHex[dz + addrtemp] = xx[cd]?.[0] || 0;
@@ -636,10 +622,10 @@ function Save_Skills() {
   }
   addrtemp += 2;
   // Special 1-2
-  if ($('#ulother').children().eq(2).find('span').text() == 'none') {
+  if ($('#ulother').children().eq(2).find('span[val]').text() == 'none') {
     NesHex[dz + addrtemp] = NesHex[dz + addrtemp + 1] = 0x00;
   } else {
-    var cd = $('#ulother').children().eq(2).find('span').attr('val');
+    var cd = $('#ulother').children().eq(2).find('span[val]').attr('val');
     var old = NesHex[ramcheck(dz + addrtemp, NesHex)];
     if (old != cd.num()) {
       NesHex[dz + addrtemp] = xx[cd]?.[0] || 0;
@@ -648,10 +634,10 @@ function Save_Skills() {
   }
   addrtemp += 2;
   // Special Block
-  if ($('#ulother').children().eq(3).find('span').text() == 'none') {
+  if ($('#ulother').children().eq(3).find('span[val]').text() == 'none') {
     NesHex[dz + addrtemp] = NesHex[dz + addrtemp + 1] = 0x00;
   } else {
-    var cd = $('#ulother').children().eq(3).find('span').attr('val');
+    var cd = $('#ulother').children().eq(3).find('span[val]').attr('val');
     var old = NesHex[ramcheck(dz + addrtemp, NesHex)];
     if (old != cd.num()) {
       NesHex[dz + addrtemp] = xx[cd]?.[0] || 0;
@@ -660,10 +646,10 @@ function Save_Skills() {
   }
   addrtemp += 2;
   // Special Tackle
-  if ($('#ulother').children().eq(4).find('span').text() == 'none') {
+  if ($('#ulother').children().eq(4).find('span[val]').text() == 'none') {
     NesHex[dz + addrtemp] = NesHex[dz + addrtemp + 1] = 0x00;
   } else {
-    var cd = $('#ulother').children().eq(4).find('span').attr('val');
+    var cd = $('#ulother').children().eq(4).find('span[val]').attr('val');
     var old = NesHex[ramcheck(dz + addrtemp, NesHex)];
     if (old != cd.num()) {
       NesHex[dz + addrtemp] = xx[cd]?.[0] || 0;
@@ -674,10 +660,10 @@ function Save_Skills() {
   }
   addrtemp += 2;
   // Special Intercept
-  if ($('#ulother').children().eq(5).find('span').text() == 'none') {
+  if ($('#ulother').children().eq(5).find('span[val]').text() == 'none') {
     NesHex[dz + addrtemp] = NesHex[dz + addrtemp + 1] = 0x00;
   } else {
-    var cd = $('#ulother').children().eq(5).find('span').attr('val');
+    var cd = $('#ulother').children().eq(5).find('span[val]').attr('val');
     var old = NesHex[ramcheck(dz + addrtemp, NesHex)];
     if (old != cd.num()) {
       NesHex[dz + addrtemp] = xx[cd]?.[0] || 0;
@@ -686,10 +672,10 @@ function Save_Skills() {
   }
   // addrtemp += 2;
   // // Special GK
-  // if ($('#ulother').children().eq(6).find('span').text() == 'none') {
+  // if ($('#ulother').children().eq(6).find('span[val]').text() == 'none') {
   //   NesHex[dz + addrtemp] = NesHex[dz + addrtemp + 1] = 0x00;
   // } else {
-  //   var cd = $('#ulother').children().eq(6).find('span').attr("val");
+  //   var cd = $('#ulother').children().eq(6).find('span[val]').attr("val");
   //   NesHex[dz + addrtemp] = xx[cd]?.[0] || 0;
   //   NesHex[dz + addrtemp + 1] = xx[cd]?.[1] || 0;
   // }
@@ -703,7 +689,9 @@ function DelSkillsub(id) {
   if ($(id).attr('af') == 'ulshoot') {
     $(id).parent().remove();
   } else {
-    $(id).next().html('none');
+    // Field rows now carry a category chip between the × button and the
+    // value span, so target the value span by its `val` attribute.
+    $(id).closest('.sk-item').find('span[val]').html('none');
   }
 }
 
@@ -724,7 +712,7 @@ function addSkillsub() {
       return;
     }
     var selectstr =
-      "<li style='display:block;'><button af='ulshoot' onclick='DelSkillsub(this);'>Del (Shot)</button>" +
+      "<li class='sk-item'><button class='sk-del' af='ulshoot' title='Delete' onclick='DelSkillsub(this);'>×</button>" +
       `<span val="${sid}">${text}</span></li>`;
     $(selectstr).appendTo($('#ulshoot'));
   } else {
@@ -732,18 +720,18 @@ function addSkillsub() {
     $('#ulother')
       .children()
       .eq([sType - 1])
-      .find('span')
+      .find('span[val]')
       .attr('val', sid)
       .html(text);
   }
   // Also strip this skill's mismatched face(s) so the added player doesn't
   // inherit another player's portrait.
   var n = removeFaceForSkill(text);
-  alertMsg(
-    '#isfileload',
-    'green',
-    n > 0 ? `Added "${text}" & removed ${n} face(s)` : `Added "${text}"`,
-  );
+  // alertMsg(
+  //   '#isfileload',
+  //   'green',
+  //   n > 0 ? `Added "${text}" & removed ${n} face(s)` : `Added "${text}"`,
+  // );
 }
 
 // Fill #skillsub with ALL skills, grouped by category. Each entry is
