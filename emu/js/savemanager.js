@@ -274,7 +274,7 @@
       .sm-title { display:flex; align-items:baseline; gap:.5rem; min-width:0; }
       .sm-title-main { font-weight:700; font-size:1.05rem; }
       .sm-size { font-size:.78rem; color:#6b7280; white-space:nowrap; }
-      .sm-subtitle { font-size:.72rem; color:#9ca3af; line-height:1.35; margin:.35rem 0 .6rem; }
+      .sm-subtitle { font-size:.72rem; color:black; line-height:1.35; margin:.35rem 0 .6rem; }
       .sm-current { font-size:.8rem; font-weight:600; color:#2563eb; background:#eff6ff;
         border:1px solid #dbeafe; padding:.35rem .6rem; border-radius:8px; margin-bottom:.6rem; }
       .sm-list { display:flex; flex-direction:column; gap:.4rem; max-height:52vh;
@@ -288,7 +288,7 @@
       .sm-thumb { width:64px; height:48px; flex:0 0 auto; border-radius:5px;
         object-fit:cover; background:#111; }
       .sm-thumb-ph { display:flex; align-items:center; justify-content:center; padding:2px;
-        font-size:.6rem; color:#9ca3af; background:#f3f4f6; text-align:center; line-height:1.1; }
+        font-size:.6rem; color:black; background:#f3f4f6; text-align:center; line-height:1.1; }
       .sm-thumb-empty { background:transparent; border:1px dashed #e5e7eb; }
       .sm-info { flex:1 1 auto; min-width:0; }
       .sm-slot-label { font-weight:700; font-size:.85rem; line-height:1.2; }
@@ -318,7 +318,8 @@
   function previewHtml(screenshot, hasSave) {
     if (!hasSave) return '<div class="sm-thumb sm-thumb-empty"></div>';
     let ph = '<div class=&quot;sm-thumb sm-thumb-ph&quot;>No preview</div>';
-    if (!screenshot) return '<div class="sm-thumb sm-thumb-ph">No preview</div>';
+    if (!screenshot)
+      return '<div class="sm-thumb sm-thumb-ph">No preview</div>';
     return `<img class="sm-thumb" src="${screenshot}" onerror="this.outerHTML='${ph}';">`;
   }
 

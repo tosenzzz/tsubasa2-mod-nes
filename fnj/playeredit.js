@@ -27,12 +27,10 @@ function PlayerEditSelectChange() {
   document.getElementById('PlayerSkincolourSe')[
     NesHex[coloraddr + 0]
   ].selected = true;
-  document.getElementById('PlayerHaircolorSe')[
-    NesHex[coloraddr + 1]
-  ].selected = true;
-  document.getElementById('PlayerCoatcolorSe')[
-    NesHex[coloraddr + 2]
-  ].selected = true;
+  document.getElementById('PlayerHaircolorSe')[NesHex[coloraddr + 1]].selected =
+    true;
+  document.getElementById('PlayerCoatcolorSe')[NesHex[coloraddr + 2]].selected =
+    true;
   document.getElementById('PlayerShortscolorSe')[
     NesHex[coloraddr + 3]
   ].selected = true;
@@ -298,169 +296,136 @@ function bingDVSimg(type) {
       var px = 7;
       switch (id) {
         case 1:
-          document.getElementById('PlayerVSModColorList')[
-            px + 0
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 0].selected =
+            true;
           break;
         case 2:
-          document.getElementById('PlayerVSModColorList')[
-            px + 2
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 2].selected =
+            true;
           break;
         case 3:
-          document.getElementById('PlayerVSModColorList')[
-            px + 3
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 3].selected =
+            true;
           break;
         case 4:
-          document.getElementById('PlayerVSModColorList')[
-            px + 11
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 11].selected =
+            true;
           break;
         case 5:
-          document.getElementById('PlayerVSModColorList')[
-            px + 10
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 10].selected =
+            true;
           break;
         case 6:
-          document.getElementById('PlayerVSModColorList')[
-            px + 21
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 21].selected =
+            true;
           break;
         case 7:
-          document.getElementById('PlayerVSModColorList')[
-            px + 20
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 20].selected =
+            true;
           break;
         case 8:
-          document.getElementById('PlayerVSModColorList')[
-            px + 17
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 17].selected =
+            true;
           break;
         case 9:
-          document.getElementById('PlayerVSModColorList')[
-            px + 16
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 16].selected =
+            true;
           break;
         case 10:
-          document.getElementById('PlayerVSModColorList')[
-            px + 5
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 5].selected =
+            true;
           break;
         case 11:
-          document.getElementById('PlayerVSModColorList')[
-            px + 4
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 4].selected =
+            true;
           break;
         case 12:
-          document.getElementById('PlayerVSModColorList')[
-            px + 13
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 13].selected =
+            true;
           break;
         case 13:
-          document.getElementById('PlayerVSModColorList')[
-            px + 12
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 12].selected =
+            true;
           break;
         case 14:
-          document.getElementById('PlayerVSModColorList')[
-            px + 15
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 15].selected =
+            true;
           break;
         case 15:
-          document.getElementById('PlayerVSModColorList')[
-            px + 14
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 14].selected =
+            true;
           break;
         case 16:
-          document.getElementById('PlayerVSModColorList')[
-            px + 9
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 9].selected =
+            true;
           break;
         case 17:
-          document.getElementById('PlayerVSModColorList')[
-            px + 8
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 8].selected =
+            true;
           break;
         case 18:
-          document.getElementById('PlayerVSModColorList')[
-            px + 7
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 7].selected =
+            true;
           break;
         case 19:
-          document.getElementById('PlayerVSModColorList')[
-            px + 6
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 6].selected =
+            true;
           break;
         case 20:
-          document.getElementById('PlayerVSModColorList')[
-            px + 19
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 19].selected =
+            true;
           break;
         case 21:
-          document.getElementById('PlayerVSModColorList')[
-            px + 18
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 18].selected =
+            true;
           break;
         case 22:
-          document.getElementById('PlayerVSModColorList')[
-            px + 33
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 33].selected =
+            true;
           break;
         case 23:
-          document.getElementById('PlayerVSModColorList')[
-            px + 32
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 32].selected =
+            true;
           break;
         case 24:
-          document.getElementById('PlayerVSModColorList')[
-            px + 31
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 31].selected =
+            true;
           break;
         case 25:
-          document.getElementById('PlayerVSModColorList')[
-            px + 30
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 30].selected =
+            true;
           break;
         case 26:
-          document.getElementById('PlayerVSModColorList')[
-            px + 25
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 25].selected =
+            true;
           break;
         case 27:
-          document.getElementById('PlayerVSModColorList')[
-            px + 27
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 27].selected =
+            true;
           break;
         case 28:
-          document.getElementById('PlayerVSModColorList')[
-            px + 29
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 29].selected =
+            true;
           break;
         case 29:
-          document.getElementById('PlayerVSModColorList')[
-            px + 28
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 28].selected =
+            true;
           break;
         case 30:
-          document.getElementById('PlayerVSModColorList')[
-            px + 23
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 23].selected =
+            true;
           break;
         case 31:
-          document.getElementById('PlayerVSModColorList')[
-            px + 24
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 24].selected =
+            true;
           break;
         case 32:
-          document.getElementById('PlayerVSModColorList')[
-            px + 22
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 22].selected =
+            true;
           break;
         case 33:
-          document.getElementById('PlayerVSModColorList')[
-            px + 26
-          ].selected = true;
+          document.getElementById('PlayerVSModColorList')[px + 26].selected =
+            true;
           break;
       }
 
@@ -566,13 +531,13 @@ function PlayerVSModColorChange() {
   vsbgs = 0;
   var vspicindex = $('#PlayerVSModColorList').get(0).selectedIndex;
   if (vspicindex >= 0 && vspicindex <= 6) {
-    $('#vscc_1').html('GK衣领');
-    $('#vscc_2').html('GK球衣');
+    $('#vscc_1').html('GK Collar');
+    $('#vscc_2').html('GK Jersey');
     vspicgk = true;
     vsbgs = 0x28316;
   } else {
-    $('#vscc_1').html('浅色衣服');
-    $('#vscc_2').html('深色衣服');
+    $('#vscc_1').html('Light-colored clothes');
+    $('#vscc_2').html('Dark clothes');
     vspicgk = false;
     vsbgs = 0x28307;
   }

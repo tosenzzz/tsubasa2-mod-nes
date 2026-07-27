@@ -263,6 +263,15 @@
   border: 1px solid #d1d5db;
   border-radius: 8px;
   padding: 5px 8px;
+  flex: 1;
+}
+.flex {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.flex select {
+  width: 120px;
 }
 #HackDiv select { cursor: pointer; }
 #HackDiv select:hover,
@@ -315,7 +324,7 @@
 #SkillEdit .sk-add {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 8px;
   margin: 4px 0 2px;
 }
@@ -324,6 +333,9 @@
   margin: 0;
   padding: 0;
   list-style: none;
+}
+.wrap td {
+  white-space: wrap;
 }
 
 /* skill row: category chip + value on the left, small red × on the right.

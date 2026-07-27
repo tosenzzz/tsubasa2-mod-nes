@@ -75,7 +75,7 @@ function BulidplayerAbilityEditTabHtml() {
   var playAbilityEditTabHtml = '<div>';
   playAbilityEditTabHtml +=
     "<span>Player:</span><select id='playerAbilitySe' onchange='GetPlayerData(0)'></select><br>";
-  playAbilityEditTabHtml += "<table style='border:1px solid'>";
+  playAbilityEditTabHtml += "<table style='border:1px solid' class='wrap'>";
 
   playAbilityEditTabHtml +=
     "<tr><td>Stamina:</td><td><select id='playerHP'></select></td></tr>";
