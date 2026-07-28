@@ -207,6 +207,7 @@
   background: #ffffff;
   padding: 12px 14px !important;
   margin-top: 8px;
+  overflow: auto;
 }
 
 /* generic action buttons */
@@ -268,10 +269,16 @@
 .flex {
   display: flex;
   align-items: center;
+  flex-wrap: nowrap;
   gap: 8px;
+  width: 100%;
 }
+/* select fills the leftover space of its parent (scales with it), and can
+   shrink below its content width so siblings stay on one line */
 .flex select {
-  width: 120px;
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
 }
 #HackDiv select { cursor: pointer; }
 #HackDiv select:hover,
