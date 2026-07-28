@@ -869,7 +869,7 @@ function BulidInstructTabHtml() {
   htmlstr += '</select></div>';
 
   htmlstr +=
-    "<div><span>Skill Image ↓</span><br><select id='skill__addr' onchange='getskillimgcode();'>";
+    "<div class='flex'><span>Skill Image</span><br><select id='skill__addr' onchange='getskillimgcode();'>";
   htmlstr = fillSelectlist_S2(htmlstr, Skill_o_str);
   htmlstr += "</select><select id='skill__code'>";
   htmlstr = fillSelectlist_S3(htmlstr, Skill_o_txt);
@@ -907,7 +907,7 @@ function GetSkill4EditMode() {
     str += `Skill index: ${val} ` + (Skill_GK_[val] || `none`);
     var selectstr =
       "<div class='sk-block'><div class='sk-block-h'>GK Special</div>" +
-      "<div class='sk-add'><span>Special skill:</span><select id='skillGk'>";
+      "<div class='sk-add flex'><span>Skill:</span><select id='skillGk'>";
     Object.keys(Skill_GK_).forEach((k) => {
       selectstr += `<option value="${k}">${Skill_GK_[k]}</option>`;
     });
@@ -928,7 +928,7 @@ function GetSkill4EditMode() {
     str += '</span></div>';
 
     var selectstr =
-      "<div class='sk-add'><span>Special skill:</span><select id='skillsub'>";
+      "<div class='sk-add flex'><span>Skill:</span><select id='skillsub'>";
     selectstr += "</select><button onclick='addSkillsub();'>Add</button></div>";
 
     // Special Shot block
