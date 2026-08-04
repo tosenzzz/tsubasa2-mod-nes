@@ -516,7 +516,12 @@ function Save_Skills() {
     let val = $('#sgk').attr('val');
     NesHex[pSkAddr] = xx[toHex16(val)]?.[0] || 0;
     NesHex[pSkAddr + 1] = xx[toHex16(val)]?.[1] || 0;
-    ApplyPatch(GK_Master_);
+    // GK_Master_ writes 0x3FD85, which sits INSIDE a Waka-style custom save routine
+    // at SaveRoutineAddr (0x3FD20). Such ROMs already read skill-table GK saves
+    // natively, so applying the patch would only corrupt the routine — skip it then.
+    if (NesHex[SaveRoutineAddr] == 0xff || NesHex[SaveRoutineAddr] == undefined) {
+      ApplyPatch(GK_Master_);
+    }
     LoadSkills();
     alertMsg('#isfileload', 'green', 'Special skills updated successfully!');
     return;

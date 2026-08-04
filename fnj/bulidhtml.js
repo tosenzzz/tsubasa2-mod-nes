@@ -894,6 +894,103 @@ function BulidInstructTabHtml() {
   $('#InstructTab').html(htmlstr);
 }
 
+// Parse the Waka-style per-player GK save code. Two hand-coded dispatch regions
+// (both all-0xFF in vanilla): the SaveRoutineAddr (0x3FD20) block table, and the
+// 0x3BE80 id-dispatch. Returns { playerId(0-127) : { refs:[addr], ptr } } where a
+// player's id is tested (LDA $043C/$043D/$043E / $0300 / ($34) ; CMP #id). `ptr` is
+// the animation pointer for the clean 0x3FD20 blocks when available.
+function ParseGKSaveRoutine() {
+  var out = {};
+  var regions = [
+    [SaveRoutineAddr, SaveRoutineAddr + 0xf4],
+    [0x3be80, 0x3bf80],
+  ];
+  function add(id, addr) {
+    if (!out[id]) out[id] = { refs: [] };
+    out[id].refs.push(addr);
+  }
+  function isIdLoad(i) {
+    // LDA/LDY $043C-$043E, LDA $0300, LDA ($34),Y  -> length of the load opcode
+    if (
+      (NesHex[i] == 0xad || NesHex[i] == 0xac) &&
+      (NesHex[i + 1] == 0x3c || NesHex[i + 1] == 0x3d || NesHex[i + 1] == 0x3e) &&
+      NesHex[i + 2] == 0x04
+    )
+      return 3;
+    if (NesHex[i] == 0xad && NesHex[i + 1] == 0x00 && NesHex[i + 2] == 0x03) return 3;
+    if (NesHex[i] == 0xb1 && NesHex[i + 1] == 0x34) return 2;
+    return 0;
+  }
+  // 1) id-load followed by a CMP/CPX/CPY #id compare-chain
+  for (var r = 0; r < regions.length; r++) {
+    var s = regions[r][0],
+      e = regions[r][1];
+    if (NesHex[s] == 0xff || NesHex[s] == undefined) continue;
+    for (var i = s; i < e; ) {
+      var ld = isIdLoad(i);
+      if (ld) {
+        var j = i + ld;
+        while (
+          j < e &&
+          (NesHex[j] == 0xc9 || NesHex[j] == 0xe0 || NesHex[j] == 0xc0)
+        ) {
+          add(NesHex[j + 1] & 0x7f, j);
+          j += 2;
+          if (NesHex[j] == 0xf0 || NesHex[j] == 0xd0) j += 2;
+          else if (NesHex[j] == 0x18 || NesHex[j] == 0x38) j += 1;
+        }
+        i += ld;
+      } else i += 1;
+    }
+  }
+  // 2) attach animation pointer from the clean 0x3FD20 blocks
+  //    (block tail: A2 lo A9 hi 86 4C 85 4D 4C 36 80)
+  var rs = SaveRoutineAddr,
+    re = SaveRoutineAddr + 0xf4;
+  if (NesHex[rs] != 0xff && NesHex[rs] != undefined) {
+    for (var b = rs; b < re; b++) {
+      if (
+        NesHex[b] == 0xa2 &&
+        NesHex[b + 2] == 0xa9 &&
+        NesHex[b + 4] == 0x86 &&
+        NesHex[b + 5] == 0x4c &&
+        NesHex[b + 8] == 0x4c &&
+        NesHex[b + 9] == 0x36
+      ) {
+        var ptr = (NesHex[b + 3] << 8) | NesHex[b + 1];
+        // back up to the previous block boundary, tag any id-conds in this block
+        var bs2 = rs;
+        for (var k2 = b - 1; k2 > rs; k2--) {
+          if (
+            NesHex[k2] == 0x80 &&
+            NesHex[k2 - 1] == 0x36 &&
+            NesHex[k2 - 2] == 0x4c
+          ) {
+            bs2 = k2 + 1;
+            break;
+          }
+        }
+        var idsrc = 0;
+        for (var m = bs2; m < b; ) {
+          if (NesHex[m] == 0xad) {
+            idsrc = NesHex[m + 1] | (NesHex[m + 2] << 8);
+            m += 3;
+          } else if (NesHex[m] == 0xc9) {
+            if (idsrc == 0x043c || idsrc == 0x043d || idsrc == 0x043e) {
+              var pid2 = NesHex[m + 1] & 0x7f;
+              if (out[pid2]) out[pid2].ptr = ptr;
+            }
+            m += 2;
+          } else if (NesHex[m] == 0x20) {
+            m += 3;
+          } else m += 1;
+        }
+      }
+    }
+  }
+  return out;
+}
+
 function GetSkill4EditMode() {
   var xdz = ($('#PlayerList').val() - 1) * 2 + SkillAddr;
   if (Number.isNaN(xdz)) return;
@@ -916,6 +1013,23 @@ function GetSkill4EditMode() {
       `<div class='sk-item'><button class='sk-del' title='Delete' onclick='$(this).next().attr("val", 0).text("none");'>×</button>` +
       `<span id='sgk' val="${val}">${Skill_GK_[val] || `none`}</span></div>`;
     selectstr += `</div>`;
+    // Waka-style per-player save code (0x3FD20 + 0x3BExx): show if this GK has one.
+    var gkRoutine = ParseGKSaveRoutine();
+    var pid = +$('#PlayerList').val();
+    if (gkRoutine[pid]) {
+      var anim = gkRoutine[pid].ptr
+        ? ` → animation pointer <code>$${toHex16(
+            gkRoutine[pid].ptr >> 8,
+          )}${toHex16(gkRoutine[pid].ptr & 0xff)}</code> (e.g. △ JUMP)`
+        : '';
+      var at = gkRoutine[pid].refs.map((a) => bLnk(a)).join(', ');
+      selectstr +=
+        "<div class='sk-block'><div class='sk-block-h'>Routine Save (Waka 0x3FD20 / 0x3BExx)</div>" +
+        "<div class='sk-item' style='color:#127a12;'>✓ This goalkeeper has a custom save assignment in the Waka save code" +
+        `${anim}. Handled at: ${at}. ` +
+        'Not stored in the skill table above; view/edit in a hex editor.</div></div>';
+    }
+    selectstr += GK_MenuSave_Note;
   } else {
     str += '<div><span>Skill index: ';
     for (var i = 0; i <= 6; i++) {

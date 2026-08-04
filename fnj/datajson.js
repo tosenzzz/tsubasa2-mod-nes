@@ -79,6 +79,25 @@ var Skill_TACKLE_ =
   '81 Skylab Tackle (S),82 Razor Tackle (S),83 Power Tackle,84 Tiger Tackle,01 Skylab Tackle (?)';
 var Skill_ICEPT_ = '81 Skylab Intercept (S),01 Power Intercept (?)';
 var Skill_GK_ = { 1: 'Spin Save', 2: 'Illusion Save', 3: 'Dark Illusion Save' };
+// Native GK saves that can appear in-game but are NOT stored in this skill table.
+// e.g. "△ JUMP" (Triangle Jump) is a GK defense-menu save = GK command id 0x15
+// (RAM $0441), driven by the GK-command subsystem (GK menu, GKcmd 0x395C2, save
+// animation table 0x391F0) — not the skill pointer table. Listed for reference only;
+// only Skill_GK_ (1/2/3) above is read/edited via the skill table below.
+var Skill_GK_Menu_ = [
+  'Rolling Save',
+  '△ JUMP / Triangle Jump (GK cmd id 0x15)',
+  'Illusion Save',
+  'Dark Illusion',
+];
+var GK_MenuSave_Note =
+  "<div class='sk-note' style='margin-top:8px;padding:6px 8px;border:1px dashed #cc9a00;background:#fff8e6;font-size:12px;line-height:1.5;'>" +
+  '⚠ <b>GK defense-menu saves</b> (e.g. <b>△ JUMP / Triangle Jump</b>, GK command id <code>0x15</code>) are driven by the ' +
+  'GK-command subsystem (GK menu, GKcmd <code>0x395C2</code>, save-animation table <code>0x391F0</code>) — <b>not</b> this skill table. ' +
+  'A goalkeeper showing <i>none</i> above may still perform such a save in-game; those cannot be viewed or edited here.<br>' +
+  'Known native GK saves: ' +
+  Skill_GK_Menu_.join(', ') +
+  '.</div>';
 var GK_Master_ = `3D2E5=20 F0 BB;
 37C00=BD 62 D3 48 8A 49 06 AA A9 85 85 37 A9 F2 85 36 20 79 CE AD 3E 04 F0 04 68 A9 00 48 68 60;
 3e97c=20 75 FD;
@@ -143,6 +162,10 @@ var DefendCmdAddr = 0x3956e;
 var GKcmdAddr = 0x395c2;
 var TackleAnimation = 0x2077b;
 var SkillAddr = 0x38e2d;
+// Waka-style per-player GK special-save assignment routine (vanilla = all 0xFF here).
+// Each block: [conds: LDA $043C/$043D/$043E ; CMP #id] A2 lo A9 hi 86 4C 85 4D 4C 36 80
+// -> jump pointer $hi<lo> to a save animation. Parsed by ParseGKSaveRoutine().
+var SaveRoutineAddr = 0x3fd20;
 var PortraitAddr = 0x22b63;
 var NO_PORTRAIT = 'F2 AD B2';
 
